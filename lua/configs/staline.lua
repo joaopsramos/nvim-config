@@ -19,10 +19,10 @@ require('staline').setup {
     },
     mode_colors = {
         n = "#bd93f9",
-        i = "#8be9fd",
-        v = "#50fa7b",
-        c = "#ffb86c",   -- etc..
-        t = "#ff5555"
+        i = "#61afef",
+        v = "#98c379",
+        c = "#d19a66",   -- etc..
+        t = "#e06c75"
     },
     mode_icons = {
         n = " ",

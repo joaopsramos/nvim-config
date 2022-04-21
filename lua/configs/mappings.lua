@@ -18,6 +18,7 @@ vim.cmd([[ map <C-a> ggVG ]])
 -- Terminal
 vim.cmd([[ 
   tmap <Esc> <C-\><C-n><leader>tt<Esc>
+  tnoremap <C-j> <C-\><C-n><C-w>_i
 ]])
 
 -- Telescope
