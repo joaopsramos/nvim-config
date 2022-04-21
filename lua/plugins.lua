@@ -39,4 +39,14 @@ return require('packer').startup(function()
   use "lukas-reineke/lsp-format.nvim"
 
   use {'akinsho/bufferline.nvim', tag = "*"}
+
+  use 'sheerun/vim-polyglot'
+
+  use 'drewtempelmeyer/palenight.vim'
+
+  use 'kassio/neoterm'
+
+  use 'mg979/vim-visual-multi'
+
+  use 'airblade/vim-gitgutter'
 end)

@@ -1,14 +1,24 @@
+-- General
+vim.cmd([[
+  nnoremap G Gzz
+]])
+
 -- Exit with 'q'
-vim.cmd([[ map q :q<CR> ]])
+vim.cmd([[ map Q :q<CR> ]])
 
 -- Save with 'Ctrl + s' on Normal, Insert and Visual modes
 -- Precisa adicionar a linha: stty -ixon , ao seu ~/.bashrc
-vim.cmd([[ nnoremap <C-s> :w<CR> ]])
-vim.cmd([[ inoremap <C-s> <Esc>:w<CR>l ]])
-vim.cmd([[ vnoremap <C-s> <Esc>:w<CR> ]])
+vim.cmd([[nnoremap <C-s> :w<CR>]])
+vim.cmd([[inoremap <C-s> <Esc>:w<CR>l]])
+vim.cmd([[vnoremap <C-s> <Esc>:w<CR>]])
 
 -- Select all with 'Ctrl + a'
 vim.cmd([[ map <C-a> ggVG ]])
+
+-- Terminal
+vim.cmd([[ 
+  tmap <Esc> <C-\><C-n><leader>tt<Esc>
+]])
 
 -- Telescope
 vim.cmd([[
@@ -25,4 +35,28 @@ vim.cmd([[
 
   nnoremap <silent>[b :BufferLineMoveNext<CR>
   nnoremap <silent>]b :BufferLineMovePrev<CR>
+
+  map q :bd<CR>
+]])
+
+-- Neoterm
+vim.cmd([[
+  nnoremap <silent> <leader>tt :Ttoggle<CR><C-w><C-j>i
+  nnoremap <leader>tc :Tclose!<CR>
+
+  nnoremap <leader>alt :A<CR>
+
+  nnoremap <leader>tn :call TestInNeoterm('tn')<CR>
+  nnoremap <leader>tf :call TestInNeoterm('tf')<CR>
+  nnoremap <leader>ts :call TestInNeoterm('ts')<CR>
+  nnoremap <leader>tl :call TestInNeoterm('tl')<CR>
+  nnoremap <leader>tv :TestVisit<CR>
+
+  nnoremap <leader>twf :T find test lib \| entr -cr mix test %<CR>
+  nnoremap <leader>tws :T find test lib \| entr -cr mix test %:<C-r>=line('.')<CR><CR>
+]])
+
+-- Nvimtree
+vim.cmd([[
+  nnoremap <silent> <leader>b :NvimTreeToggle<CR>
 ]])
