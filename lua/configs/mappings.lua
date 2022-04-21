@@ -1,10 +1,11 @@
 -- General
 vim.cmd([[
   nnoremap G Gzz
+  nnoremap <leader>sv :source $MYVIMRC<CR>
 ]])
 
 -- Exit with 'q'
-vim.cmd([[ map Q :q<CR> ]])
+vim.cmd([[ map Q :Tclose!<CR>:q<CR> ]])
 
 -- Save with 'Ctrl + s' on Normal, Insert and Visual modes
 -- Precisa adicionar a linha: stty -ixon , ao seu ~/.bashrc
@@ -57,4 +58,12 @@ vim.cmd([[
 -- Nvimtree
 vim.cmd([[
   nnoremap <silent> <leader>b :NvimTreeToggle<CR>
+]])
+
+-- Split
+vim.cmd([[
+  nnoremap <C-j> <C-W>j
+  nnoremap <C-k> <C-W>k
+  nnoremap <C-l> <C-W>l
+  nnoremap <C-h> <C-W>h
 ]])

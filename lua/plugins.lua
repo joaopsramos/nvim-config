@@ -49,4 +49,6 @@ return require('packer').startup(function()
   use 'mg979/vim-visual-multi'
 
   use 'airblade/vim-gitgutter'
+
+  use 'Shatur/neovim-session-manager'
 end)
