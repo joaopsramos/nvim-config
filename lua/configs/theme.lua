@@ -2,7 +2,7 @@ require('onedark').setup  {
     -- Main options --
     style = 'deep', -- Default theme style. Choose between 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer' and 'light'
     transparent = false,  -- Show/hide background
-    term_colors = true, -- Change terminal color as per the selected theme style
+    term_colors = false, -- Change terminal color as per the selected theme style
     ending_tildes = false, -- Show the end-of-buffer tildes. By default they are hidden
     -- toggle theme style ---
     toggle_style_key = '<leader>ts', -- Default keybinding to toggle
@@ -20,7 +20,20 @@ require('onedark').setup  {
     },
 
     -- Custom Highlights --
-    colors = {}, -- Override default colors
+    colors = {
+        red = "#e06c75",
+        dark_red = "#be5046",
+        green = "#98c379",
+        yellow = "#e5c07b",
+        dark_yellow = "#d19a66",
+        blue = "#61afef",
+        purple = "#c678dd",
+        cyan = "#56b6c2",
+        white = "#abb2bf",
+        black = "#282c34",
+        comment_grey = "#5c6370",
+        gutter_fg_grey = "#4b5263"
+    }, -- Override default colors
     highlights = {}, -- Override highlight groups
 
     -- Plugins Config --
@@ -35,6 +48,4 @@ require('onedark').load()
 
 -- vim.cmd[[colorscheme dracula]]
 
--- vim.cmd[[set termguicolors]]
--- vim.cmd[[set background=dark]]
 -- vim.cmd[[colorscheme palenight]]

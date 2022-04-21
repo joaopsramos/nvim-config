@@ -27,6 +27,8 @@ vim.cmd([[ set ignorecase ]])
 
 vim.cmd([[ let extension = expand('%:e') ]])
 vim.cmd([[ let mapleader = " " ]])
+vim.cmd[[ set background=dark ]]
+vim.cmd[[ set termguicolors ]]
 
 -- Run :PackerCompile after installations
 vim.cmd([[

@@ -30,11 +30,8 @@ vim.cmd([[
 
 -- BufferLine
 vim.cmd([[
-  nnoremap <silent>b[ :BufferLineCycleNext<CR>
-  nnoremap <silent>b] :BufferLineCyclePrev<CR>
-
-  nnoremap <silent>[b :BufferLineMoveNext<CR>
-  nnoremap <silent>]b :BufferLineMovePrev<CR>
+  nnoremap <silent>]b :BufferLineCycleNext<CR>
+  nnoremap <silent>[b :BufferLineCyclePrev<CR>
 
   map q :bd<CR>
 ]])
