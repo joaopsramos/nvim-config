@@ -50,5 +50,7 @@ return require('packer').startup(function()
 
   use 'airblade/vim-gitgutter'
 
-  use 'Shatur/neovim-session-manager'
+  use 'rmagatti/auto-session'
+
+  use 'vim-test/vim-test'
 end)
