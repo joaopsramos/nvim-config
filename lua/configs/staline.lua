@@ -9,7 +9,7 @@ require('staline').setup {
         lsp_client_symbol = " ",
         line_column     = "%p%% [%l/%L]", -- `:h stl` to see all flags.
 
-        fg              = "#44475a",  -- Foreground text color.
+        fg              = "#282a36",  -- Foreground text color.
         bg              = "#282a36",     -- Default background is transparent.
         inactive_color  = "#6272a4",
         inactive_bgcolor = "#282a36",
@@ -22,7 +22,8 @@ require('staline').setup {
         i = "#61afef",
         v = "#98c379",
         c = "#d19a66",   -- etc..
-        t = "#e06c75"
+        t = "#e06c75",
+        r = "#e5c07b"
     },
     mode_icons = {
         n = " ",

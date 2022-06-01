@@ -90,10 +90,22 @@ local on_attach = function(client, bufnr)
 end
 
 elixirls_path = vim.fn.expand('~/.local/share/nvim/lsp_servers/elixir/elixir-ls/language_server.sh')
+tailwindcss_path = vim.fn.expand('~/.local/share/nvim/lsp_servers/tailwindcss_npm/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server')
 
 require'lspconfig'.elixirls.setup{
   -- Unix
   cmd = { elixirls_path },
   capabilities = capabilities,
-  on_attach = on_attach 
+  on_attach = on_attach,
+  settings = {
+    elixirLS = {
+      dialyzerEnabled = false,
+      fetchDeps = false
+    }
+  }
 }
+
+require'lspconfig'.tailwindcss.setup{
+  cmd = { tailwindcss_path }
+}
+

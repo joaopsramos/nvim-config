@@ -40,3 +40,5 @@ vim.cmd([[
 
 vim.g['neoterm_default_mod'] = 'botright'
 vim.cmd([[ let test#strategy = "neoterm"]])
+
+vim.cmd([[ let g:blamer_enabled = 1 ]])

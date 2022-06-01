@@ -46,11 +46,27 @@ return require('packer').startup(function()
 
   use 'kassio/neoterm'
 
-  use 'mg979/vim-visual-multi'
-
   use 'airblade/vim-gitgutter'
 
   use 'rmagatti/auto-session'
 
   use 'vim-test/vim-test'
+
+  use 'simeji/winresizer'
+
+  use 'APZelos/blamer.nvim'
+
+  use 'mattn/emmet-vim'
+
+  use {
+    "folke/trouble.nvim",
+    requires = "kyazdani42/nvim-web-devicons",
+    config = function()
+      require("trouble").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
 end)

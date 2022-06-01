@@ -1,6 +1,5 @@
 -- General
 vim.cmd([[
-  nnoremap G Gzz
   nnoremap <leader>re :so $MYVIMRC<CR>
   nnoremap <C-h> :noh<CR>
 ]])
@@ -10,9 +9,13 @@ vim.cmd([[ map Q :Tclose!<CR>:q<CR> ]])
 
 -- Save with 'Ctrl + s' on Normal, Insert and Visual modes
 -- Precisa adicionar a linha: stty -ixon , ao seu ~/.bashrc
-vim.cmd([[nnoremap <C-s> :w<CR>]])
-vim.cmd([[inoremap <C-s> <Esc>:w<CR>l]])
-vim.cmd([[vnoremap <C-s> <Esc>:w<CR>]])
+vim.cmd([[
+  nnoremap <C-s> :w<CR>
+  inoremap <C-s> <Esc>:w<CR>l
+  vnoremap <C-s> <Esc>:w<CR>
+
+  nnoremap <leader>fm :Format<CR>
+]])
 
 -- Select all with 'Ctrl + a'
 vim.cmd([[ map <C-a> ggVG ]])
@@ -20,9 +23,9 @@ vim.cmd([[ map <C-a> ggVG ]])
 -- Terminal
 vim.cmd([[ 
   nmap  <leader>git <leader>toi<C-j>gitui<CR>
-  tmap <Esc> <C-\><C-n><leader>tt<Esc>
+  tmap <Esc> <C-\><leader>tt<Esc>
   tnoremap <C-j> <C-\><C-n><C-w>_i
-  tmap <C-n> <C-\><C-n><leader>tc
+  tmap <C-n> <C-\><leader>tc
   tnoremap <C-\> <C-\><C-n>
 ]])
 
