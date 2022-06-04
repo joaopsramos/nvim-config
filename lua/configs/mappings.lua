@@ -69,6 +69,13 @@ vim.cmd([[
   nnoremap <silent> <leader>b :NvimTreeToggle<CR>
 ]])
 
+-- Mix
+vim.cmd([[
+  nmap <leader>iex <leader>ttiiex<CR>
+  nmap <leader>iem <leader>ttiiex -S mix<CR>
+  nmap <leader>iep <leader>ttiiex -S mix phx.server<CR>
+]])
+
 -- Split
 -- vim.cmd([[
 --   nnoremap <C-j> <C-W>j
