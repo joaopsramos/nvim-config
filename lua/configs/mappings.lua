@@ -5,7 +5,7 @@ vim.cmd([[
 ]])
 
 -- Exit with 'q'
-vim.cmd([[ map Q :Tclose!<CR>:q<CR> ]])
+vim.cmd([[ map Q :Tclose!<CR>:quitall<CR> ]])
 
 -- Save with 'Ctrl + s' on Normal, Insert and Visual modes
 -- Precisa adicionar a linha: stty -ixon , ao seu ~/.bashrc
@@ -42,7 +42,7 @@ vim.cmd([[
   nnoremap <silent>]b :BufferLineCycleNext<CR>
   nnoremap <silent>[b :BufferLineCyclePrev<CR>
 
-  map q :bd<CR>
+  noremap q :q<CR>
 ]])
 
 -- Neoterm
@@ -83,3 +83,14 @@ vim.cmd([[
 --   nnoremap <C-l> <C-W>l
 --   nnoremap <C-h> <C-W>h
 -- ]])
+
+-- Tabby
+vim.cmd([[
+  nnoredmap <leader>tba :$tabnew<CR>
+  nnoremap <leader>tbc :tabclose<CR>
+  nnoremap <leader>tbo :tabonly<CR>
+  nnoremap <leader>tbn :tabn<CR>
+  nnoremap <leader>tbp :tabp<CR>
+  nnoremap <leader>tmp :-tabmove<CR>
+  nnoremap <leader>tmn :+tabmove<CR>
+]])

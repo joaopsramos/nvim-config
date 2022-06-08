@@ -21,13 +21,15 @@ return require('packer').startup(function()
 
   use 'tamton-aquib/staline.nvim'
 
-  use 'neovim/nvim-lspconfig'
   use 'williamboman/nvim-lsp-installer'
+
+  use 'neovim/nvim-lspconfig'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
   use 'hrsh7th/nvim-cmp'
+
   use 'L3MON4D3/LuaSnip'
 
   use 'norcalli/nvim-colorizer.lua'
@@ -37,8 +39,6 @@ return require('packer').startup(function()
   use 'windwp/nvim-autopairs'
 
   use "lukas-reineke/lsp-format.nvim"
-
-  use {'akinsho/bufferline.nvim', tag = "*"}
 
   use 'sheerun/vim-polyglot'
 
@@ -69,4 +69,13 @@ return require('packer').startup(function()
       }
     end
   }
+
+  use 'SirVer/ultisnips'
+  use 'honza/vim-snippets'
+
+  use 'editorconfig/editorconfig-vim'
+
+  use 'lukas-reineke/indent-blankline.nvim'
+
+  use 'nanozuki/tabby.nvim'
 end)

@@ -42,3 +42,8 @@ vim.g['neoterm_default_mod'] = 'botright'
 vim.cmd([[ let test#strategy = "neoterm"]])
 
 vim.cmd([[ let g:blamer_enabled = 1 ]])
+
+vim.g['UltiSnipsExpandTrigger'] = '<CR>'
+vim.g['UltiSnipsJumpForwardTrigger'] = '<c-b>'
+vim.g['UltiSnipsJumpBackwardTrigger'] = '<c-z>'
+
