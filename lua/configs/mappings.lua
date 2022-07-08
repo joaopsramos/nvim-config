@@ -2,6 +2,7 @@
 vim.cmd([[
   nnoremap <leader>re :so $MYVIMRC<CR>
   nnoremap <C-h> :noh<CR>
+  vnoremap <C-p> s<C-r>0<Esc>
 ]])
 
 -- Exit with 'q'
@@ -13,8 +14,6 @@ vim.cmd([[
   nnoremap <C-s> :w<CR>
   inoremap <C-s> <Esc>:w<CR>l
   vnoremap <C-s> <Esc>:w<CR>
-
-  nnoremap <leader>fm :Format<CR>
 ]])
 
 -- Select all with 'Ctrl + a'
@@ -86,7 +85,7 @@ vim.cmd([[
 
 -- Tabby
 vim.cmd([[
-  nnoredmap <leader>tba :$tabnew<CR>
+  nnoremap <leader>tba :$tabnew<CR>
   nnoremap <leader>tbc :tabclose<CR>
   nnoremap <leader>tbo :tabonly<CR>
   nnoremap <leader>tbn :tabn<CR>

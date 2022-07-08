@@ -78,4 +78,30 @@ return require('packer').startup(function()
   use 'lukas-reineke/indent-blankline.nvim'
 
   use 'nanozuki/tabby.nvim'
+
+  use 'folke/which-key.nvim'
+
+  use({
+    "mhanberg/elixir.nvim",
+    requires = { "neovim/nvim-lspconfig", "nvim-lua/plenary.nvim" }
+  })
+
+  use({
+    "catppuccin/nvim",
+    as = "catppuccin",
+    config = function()
+      require('catppuccin').setup({})
+    end
+  })
+
+  use({
+    'ustrajunior/ex_maps',
+    config = function()
+    require("ex_maps").setup({
+        create_mappings = true,
+        mapping = "mtt",
+    })
+    end
+  })
+
 end)

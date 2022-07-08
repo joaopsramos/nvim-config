@@ -32,7 +32,12 @@ require('onedark').setup  {
         white = "#abb2bf",
         black = "#282c34",
         comment_grey = "#5c6370",
-        gutter_fg_grey = "#4b5263"
+        gutter_fg_grey = "#4b5263",
+        cursor_grey = "#2c323c",
+        visual_grey = "#3e4452",
+        menu_grey = "#3e4452",
+        special_grey = "#3b4048",
+        vertsplit = "#3e4452"
     }, -- Override default colors
     highlights = {}, -- Override highlight groups
 
