@@ -81,10 +81,10 @@ return require('packer').startup(function()
 
   use 'folke/which-key.nvim'
 
-  use({
-    "mhanberg/elixir.nvim",
-    requires = { "neovim/nvim-lspconfig", "nvim-lua/plenary.nvim" }
-  })
+  -- use({
+  --   "mhanberg/elixir.nvim",
+  --   requires = { "neovim/nvim-lspconfig", "nvim-lua/plenary.nvim" }
+  -- })
 
   use({
     "catppuccin/nvim",
@@ -104,4 +104,7 @@ return require('packer').startup(function()
     end
   })
 
+  use 'simrat39/rust-tools.nvim'
+
+  use 'tpope/vim-fugitive'
 end)

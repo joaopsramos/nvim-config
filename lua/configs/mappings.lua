@@ -3,6 +3,7 @@ vim.cmd([[
   nnoremap <leader>re :so $MYVIMRC<CR>
   nnoremap <C-h> :noh<CR>
   vnoremap <C-p> s<C-r>0<Esc>
+  vnoremap <C-y> "+y
 ]])
 
 -- Exit with 'q'
@@ -92,4 +93,27 @@ vim.cmd([[
   nnoremap <leader>tbp :tabp<CR>
   nnoremap <leader>tmp :-tabmove<CR>
   nnoremap <leader>tmn :+tabmove<CR>
+]])
+
+
+-- fugitive
+vim.cmd([[
+  nnoremap <silent> <leader>gg :Git<CR>
+
+  noremap <leader>gl :Git log<CR>
+    
+  nnoremap <leader>gP :Git push -u origin HEAD<CR>
+  nnoremap <leader>gp :Git pull<CR>
+
+  nnoremap <leader>gsw :Git switch
+  nnoremap <leader>gsb :Git switch --create 
+  nnoremap <leader>gsm :Git switch main
+  nnoremap <leader>gsbk :Git switch -
+  
+  nnoremap <leader>gst :Git stash<CR>
+  nnoremap <leader>gsta :Git stash apply<CR>
+  nnoremap <leader>gstb :Git stash pop<CR>
+
+  nnoremap <leader>gbd :Git branch -d
+  nnoremap <leader>gbD :Git branch -D
 ]])

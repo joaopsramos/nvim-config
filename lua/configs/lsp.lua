@@ -33,31 +33,31 @@ end
 
 elixirls_path = vim.fn.expand('~/.local/share/nvim/lsp_servers/elixir/elixir-ls/language_server.sh')
 
-require'elixir'.setup({
-  cmd = { elixirls_path },
-  -- default settings, use the `settings` function to override settings
-  settings = require'elixir'.settings({
-    dialyzerEnabled = false,
-    fetchDeps = true,
-    -- enableTestLenses = true,
-    suggestSpecs = true,
-  }),
-
-  on_attach = on_attach
-})
-
--- require'lspconfig'.elixirls.setup{
---   -- Unix
+-- require'elixir'.setup({
 --   cmd = { elixirls_path },
---   capabilities = capabilities,
---   on_attach = on_attach,
---   settings = {
---     elixirLS = {
---       dialyzerEnabled = false,
---       fetchDeps = false
---     }
---   }
--- }
+--   -- default settings, use the `settings` function to override settings
+--   settings = require'elixir'.settings({
+--     dialyzerEnabled = false,
+--     fetchDeps = true,
+--     -- enableTestLenses = true,
+--     suggestSpecs = true,
+--   }),
+
+--   on_attach = on_attach
+-- })
+
+require'lspconfig'.elixirls.setup{
+  -- Unix
+  cmd = { elixirls_path },
+  capabilities = capabilities,
+  on_attach = on_attach,
+  settings = {
+    elixirLS = {
+      dialyzerEnabled = false,
+      fetchDeps = false
+    }
+  }
+}
 
 require'lspconfig'.tailwindcss.setup{
   capabilities = capabilities
@@ -77,3 +77,9 @@ require'lspconfig'.html.setup{
   }
 }
 
+rust_path = vim.fn.expand('~/.local/share/nvim/lsp_servers/rust/rust-analyzer')
+
+require'lspconfig'.rust_analyzer.setup{
+  cmd = { rust_path },
+  on_attach = on_attach
+}
