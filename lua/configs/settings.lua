@@ -29,6 +29,10 @@ vim.cmd([[ let extension = expand('%:e') ]])
 vim.cmd([[ let mapleader = " " ]])
 vim.cmd[[ set background=dark ]]
 vim.cmd[[ set termguicolors ]]
+vim.cmd([[ 
+  set splitbelow
+  set splitright
+]])
 
 -- Run :PackerCompile after installations
 vim.cmd([[
@@ -40,6 +44,7 @@ vim.cmd([[
 
 vim.g['neoterm_default_mod'] = 'botright'
 vim.cmd([[ let test#strategy = "neoterm"]])
+vim.g.neoterm_automap_keys = false
 
 vim.cmd([[ let g:blamer_enabled = 1 ]])
 

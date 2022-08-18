@@ -48,7 +48,7 @@ vim.cmd([[
 -- Neoterm
 vim.cmd([[
   nnoremap <silent> <leader>tt :Ttoggle<CR><C-w><C-j>
-  nnoremap <silent> <leader>to :Tnew<CR><C-w><C-j>
+  nnoremap <silent> <leader>to :Topen<CR><C-w><C-j>
   nnoremap <leader>tc :Tclose!<CR>
 
   nnoremap <leader>twf :T find test lib \| entr -cr mix test %<CR>
@@ -57,10 +57,10 @@ vim.cmd([[
 
 -- Vim test
 vim.cmd([[
-  nmap <leader>tn :TestNearest<CR><leader>ttG
-  nmap <leader>tf :TestFile<CR><leader>ttG
-  nmap <leader>ts :TestSuite<CR><leader>ttG
-  nmap <leader>tl :TestLast<CR><leader>ttG
+  nmap <leader>tn :TestNearest<CR><leader>toG
+  nmap <leader>tf :TestFile<CR><leader>toG
+  nmap <leader>ts :TestSuite<CR><leader>toG
+  nmap <leader>tl :TestLast<CR><leader>toG
   nmap <leader>tv :TestVisit<CR>
 ]])
 
@@ -102,18 +102,22 @@ vim.cmd([[
 
   noremap <leader>gl :Git log<CR>
     
+  noremap <leader>gci :Git commit -m ""<Left>
+
   nnoremap <leader>gP :Git push -u origin HEAD<CR>
   nnoremap <leader>gp :Git pull<CR>
 
-  nnoremap <leader>gsw :Git switch
+  nnoremap <leader>gsw :Git switch 
   nnoremap <leader>gsb :Git switch --create 
-  nnoremap <leader>gsm :Git switch main
-  nnoremap <leader>gsbk :Git switch -
+  nnoremap <leader>gsm :Git switch main<CR>
+  nnoremap <leader>gsbk :Git switch -<CR>
   
-  nnoremap <leader>gst :Git stash<CR>
+  nnoremap <leader>gsth :Git stash<CR>
   nnoremap <leader>gsta :Git stash apply<CR>
-  nnoremap <leader>gstb :Git stash pop<CR>
+  nnoremap <leader>gstp :Git stash pop<CR>
 
-  nnoremap <leader>gbd :Git branch -d
-  nnoremap <leader>gbD :Git branch -D
+  nnoremap <leader>gbd :Git branch -d 
+  nnoremap <leader>gbD :Git branch -D 
+
+  nmap <leader>gq <C-w>jq
 ]])

@@ -5,6 +5,8 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protoco
 --  capabilities = capabilities
 -- }
 
+require"nvim-lsp-installer".setup{}
+
 -- lsp-format
 require("lsp-format").setup {}
 
