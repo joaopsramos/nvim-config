@@ -27,10 +27,6 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)    
-
-  vim.keymap.set("n", "<space>fp", ":ElixirFromPipe<CR>", map_opts)
-  vim.keymap.set("n", "<space>tp", ":ElixirToPipe<CR>", map_opts)
-  vim.keymap.set("v", "<space>em", ":ElixirExpandMacro<CR>", map_opts)
 end
 
 elixirls_path = vim.fn.expand('~/.local/share/nvim/lsp_servers/elixir/elixir-ls/language_server.sh')
@@ -63,6 +59,12 @@ require'lspconfig'.elixirls.setup{
 
 require'lspconfig'.tailwindcss.setup{
   capabilities = capabilities
+}
+
+require'lspconfig'.ccls.setup{
+  cmd = { 'ccls' },
+  capabilities = capabilities,
+  on_attach = on_attach,
 }
 
 capabilities.textDocument.completion.completionItem.snippetSupport = true
