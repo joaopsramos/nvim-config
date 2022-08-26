@@ -4,7 +4,7 @@ vim.cmd([[
   nnoremap <C-h> :noh<CR>
   vnoremap <C-p> s<C-r>0<Esc>
   vnoremap <C-y> "+y
-  nnoremap <silent> <leader>dab :%bd<CR>:e#<CR>:bd#<CR>
+  nnoremap <silent> <leader>dab :%bd<CR>:e#<CR>
 ]])
 
 -- Exit with 'q'
@@ -24,7 +24,7 @@ vim.cmd([[ map <C-a> ggVG ]])
 -- Terminal
 vim.cmd([[ 
   nmap  <leader>git <leader>toi<C-j>gitui<CR>
-  tmap <Esc> <C-\><leader>tt<Esc>
+  tmap <Esc> <C-\>:Ttoggle<CR><C-w>p
   tnoremap <C-j> <C-\><C-n><C-w>_i
   tmap <C-n> <C-\><leader>tc
   tnoremap <C-\> <C-\><C-n>
