@@ -19,7 +19,7 @@ return require('packer').startup(function()
     run = ':TSUpdate'
   }
 
-  use 'tamton-aquib/staline.nvim'
+  use 'nvim-lualine/lualine.nvim'
 
   use 'williamboman/nvim-lsp-installer'
 
