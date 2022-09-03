@@ -83,7 +83,9 @@ require'lspconfig'.html.setup{
 
 rust_path = vim.fn.expand('~/.local/share/nvim/lsp_servers/rust/rust-analyzer')
 
-require'lspconfig'.rust_analyzer.setup{
-  cmd = { rust_path },
-  on_attach = on_attach
+require'rust-tools'.setup{
+  server = {
+    cmd = { rust_path },
+    on_attach = on_attach
+  }
 }
