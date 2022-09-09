@@ -82,12 +82,13 @@ require("tokyonight").setup({
     on_colors = function(c)
         c.none = "NONE"
         c.bg = "#282a36"
-        c.bg_dark = "#1f2335"
-        c.bg_highlight = "#292e42"
+        c.bg_dark = "#21222b"
+        c.bg_highlight = "#313340"
         c.fg = "#c0caf5"
         c.fg_dark = "#a9b1d6"
         c.fg_gutter = "#3b4261"
-        c.comment = "#565f89"
+        c.selection = "#44475a"
+        c.comment = "#6272a4"
         c.blue = "#7aa2f7"
         c.blue0 = "#3d59a1"
         c.blue1 = "#2ac3de"
@@ -110,6 +111,12 @@ require("tokyonight").setup({
         c.teal = "#1abc9c"
         c.yellow = "#e0af68"
         c.terminal_black = "#414868"
+
+        c.error = c.red
+        c.bg_sidebar = c.bg_dark
+        c.bg_visual = c.selection
+        c.bg_float= c.bg
+        c.bg_statusline = c.bg_dark
 
         c.git = { change = c.orange, add = c.green, delete = c.red }
         c.gitSigns = { change = c.orange, add = c.green, delete = c.red }
