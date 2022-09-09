@@ -46,7 +46,7 @@ return require('packer').startup(function()
 
   use 'kassio/neoterm'
 
-  use 'airblade/vim-gitgutter'
+  use 'lewis6991/gitsigns.nvim'
 
   use 'rmagatti/auto-session'
 
@@ -107,4 +107,6 @@ return require('packer').startup(function()
   use 'simrat39/rust-tools.nvim'
 
   use 'tpope/vim-fugitive'
+
+  use 'folke/tokyonight.nvim'
 end)
