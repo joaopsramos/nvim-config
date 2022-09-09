@@ -84,8 +84,15 @@ require'lspconfig'.html.setup{
 rust_path = vim.fn.expand('~/.local/share/nvim/lsp_servers/rust/rust-analyzer')
 
 require'rust-tools'.setup{
+  capabilities = capabilities,
   server = {
     cmd = { rust_path },
     on_attach = on_attach
   }
+}
+
+require'lspconfig'.tsserver.setup{
+  capabilities = capabilities,
+  on_attach = on_attach,
+  cmd = { "typescript-language-server", "--stdio" }
 }

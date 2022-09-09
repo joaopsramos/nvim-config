@@ -13,5 +13,6 @@ require("configs.lualine")
 require("configs.nvim-cmp")
 require("configs.indent-blankline")
 require("configs.tabby")
+require("configs.gitsigns")
 
 require("configs.utils")
