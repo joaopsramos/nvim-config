@@ -24,6 +24,7 @@ opt.splitright = true
 
 vim.g.mapleader = " "
 vim.g.blamer_enabled = true
+vim.g.blamer_prefix = '👀 '
 vim.g['test#strategy'] = "neoterm"
 
 vim.g.neoterm_default_mod = 'botright'
