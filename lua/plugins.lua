@@ -11,7 +11,7 @@ return require('packer').startup(function()
 
   use {
     'nvim-telescope/telescope.nvim',
-    requires = { {'nvim-lua/plenary.nvim'} }
+    requires = { { 'nvim-lua/plenary.nvim' } }
   }
 
   use {
@@ -40,7 +40,7 @@ return require('packer').startup(function()
 
   use "lukas-reineke/lsp-format.nvim"
 
-  use 'sheerun/vim-polyglot'
+  -- use 'sheerun/vim-polyglot'
 
   use 'drewtempelmeyer/palenight.vim'
 
@@ -97,10 +97,10 @@ return require('packer').startup(function()
   use({
     'ustrajunior/ex_maps',
     config = function()
-    require("ex_maps").setup({
+      require("ex_maps").setup({
         create_mappings = true,
         mapping = "mtt",
-    })
+      })
     end
   })
 
@@ -109,4 +109,6 @@ return require('packer').startup(function()
   use 'tpope/vim-fugitive'
 
   use 'folke/tokyonight.nvim'
+
+  use 'rcarriga/nvim-notify'
 end)

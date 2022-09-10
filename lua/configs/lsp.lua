@@ -1,11 +1,8 @@
 -- Setup lspconfig.
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
--- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
--- require('lspconfig')['<YOUR_LSP_SERVER>'].setup {
---  capabilities = capabilities
--- }
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-require"nvim-lsp-installer".setup{}
+require("nvim-lsp-installer").setup {}
 
 -- lsp-format
 require("lsp-format").setup {}
@@ -13,9 +10,9 @@ require("lsp-format").setup {}
 local on_attach = function(client, bufnr)
   require "lsp-format".on_attach(client)
 
-  local opts = { noremap=true, silent=true }
+  local opts = { noremap = true, silent = true }
 
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>fm', '<cmd>lua vim.lsp.buf.formatting()<CR>:w<CR>', opts)
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>fm', '<cmd>lua vim.lsp.buf.format({async = true})<CR>:w<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cd', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
@@ -26,10 +23,8 @@ local on_attach = function(client, bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)    
+  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 end
-
-elixirls_path = vim.fn.expand('~/.local/share/nvim/lsp_servers/elixir/elixir-ls/language_server.sh')
 
 -- require'elixir'.setup({
 --   cmd = { elixirls_path },
@@ -44,9 +39,9 @@ elixirls_path = vim.fn.expand('~/.local/share/nvim/lsp_servers/elixir/elixir-ls/
 --   on_attach = on_attach
 -- })
 
-require'lspconfig'.elixirls.setup{
+require('lspconfig').elixirls.setup {
   -- Unix
-  cmd = { elixirls_path },
+  cmd = { vim.fn.expand('~/.local/share/nvim/lsp_servers/elixir/elixir-ls/language_server.sh') },
   capabilities = capabilities,
   on_attach = on_attach,
   settings = {
@@ -57,18 +52,17 @@ require'lspconfig'.elixirls.setup{
   }
 }
 
-require'lspconfig'.tailwindcss.setup{
+require('lspconfig').tailwindcss.setup {
   capabilities = capabilities
 }
 
-require'lspconfig'.ccls.setup{
+require('lspconfig').ccls.setup {
   cmd = { 'ccls' },
   capabilities = capabilities,
   on_attach = on_attach,
 }
 
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-require'lspconfig'.html.setup{
+require('lspconfig').html.setup {
   capabilities = capabilities,
   filetypes = { "html", "eelixir", "html-eex", "heex" },
   init_options = {
@@ -81,18 +75,21 @@ require'lspconfig'.html.setup{
   }
 }
 
-rust_path = vim.fn.expand('~/.local/share/nvim/lsp_servers/rust/rust-analyzer')
-
-require'rust-tools'.setup{
+require('rust-tools').setup {
   capabilities = capabilities,
   server = {
-    cmd = { rust_path },
+    cmd = { vim.fn.expand('~/.local/share/nvim/lsp_servers/rust/rust-analyzer') },
     on_attach = on_attach
   }
 }
 
-require'lspconfig'.tsserver.setup{
+require('lspconfig').tsserver.setup {
   capabilities = capabilities,
   on_attach = on_attach,
   cmd = { "typescript-language-server", "--stdio" }
+}
+
+require('lspconfig').sumneko_lua.setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
 }
