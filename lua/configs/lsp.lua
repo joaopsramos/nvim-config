@@ -7,23 +7,27 @@ require("nvim-lsp-installer").setup {}
 -- lsp-format
 require("lsp-format").setup {}
 
-local on_attach = function(client, bufnr)
+local on_attach = function(client, _)
   require "lsp-format".on_attach(client)
+
+  local function buf_set_keymap(...) vim.keymap.set(...) end
 
   local opts = { noremap = true, silent = true }
 
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>fm', '<cmd>lua vim.lsp.buf.format({async = true})<CR>:w<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>cd', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  vim.api.nvim_buf_set_keymap(bufnr, 'n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', 'gD', vim.lsp.buf.declaration, opts)
+  buf_set_keymap('n', 'gd', vim.lsp.buf.definition, opts)
+  buf_set_keymap('n', 'K', vim.lsp.buf.hover, opts)
+  buf_set_keymap('n', 'gi', vim.lsp.buf.implementation, opts)
+  buf_set_keymap('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+  buf_set_keymap('i', '<C-k>', vim.lsp.buf.signature_help, opts)
+  buf_set_keymap('n', '<leader>D', vim.lsp.buf.type_definition, opts)
+  buf_set_keymap('n', '<leader>rn', vim.lsp.buf.rename, opts)
+  buf_set_keymap('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+  buf_set_keymap('n', 'gr', vim.lsp.buf.references, opts)
+  buf_set_keymap('n', '<leader>e', vim.diagnostic.open_float, opts)
+  buf_set_keymap('n', '[d', vim.diagnostic.goto_prev, opts)
+  buf_set_keymap('n', ']d', vim.diagnostic.goto_next, opts)
+  buf_set_keymap('n', '<leader>fm', function() vim.lsp.buf.format({ async = true }) end, opts)
 end
 
 -- require'elixir'.setup({
