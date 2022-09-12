@@ -101,10 +101,10 @@ require("tokyonight").setup({
     c.green = "#9ece6a"
     c.green1 = "#73daca"
     c.green2 = "#41a6b5"
-    c.magenta = "#bb9af7"
+    c.magenta = "#f7768e"
     c.magenta2 = "#ff007c"
     c.orange = "#ff9e64"
-    c.purple = "#9d7cd8"
+    c.purple = "#bd93f9"
     c.red = "#f7768e"
     c.red1 = "#db4b4b"
     c.teal = "#1abc9c"
@@ -119,15 +119,19 @@ require("tokyonight").setup({
 
     c.git = { change = c.orange, add = c.green, delete = c.red }
     c.gitSigns = { change = c.orange, add = c.green, delete = c.red }
+
+    c.diff = { change = c.blue7 }
   end,
 
   --- You can override specific highlights to use other groups or a hex color
   --- fucntion will be called with a Highlights and ColorScheme table
   on_highlights = function(h, c)
-    h.TSType = { fg = c.red }
+    h.TSType = { fg = c.purple }
     h.TSConstBuiltin = { fg = c.orange }
     -- h.TSOperator = {fg = c.orange}
+    h.TSKeyword = { fg = c.red }
     h.TSParameterReference = { fg = c.red }
+    h.TSConstructor = { fg = c.red }
     -- Elixir atoms
     h.Identifier = { fg = c.cyan }
   end,

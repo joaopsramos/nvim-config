@@ -45,12 +45,12 @@ end
 
 require('lspconfig').elixirls.setup {
   -- Unix
-  cmd = { vim.fn.expand('~/.local/share/nvim/lsp_servers/elixir/elixir-ls/language_server.sh') },
+  cmd = { vim.fn.expand('~/.local/share/nvim/lsp_servers/elixirls/elixir-ls/language_server.sh') },
   capabilities = capabilities,
   on_attach = on_attach,
   settings = {
     elixirLS = {
-      dialyzerEnabled = false,
+      dialyzerEnabled = true,
       fetchDeps = false
     }
   }
