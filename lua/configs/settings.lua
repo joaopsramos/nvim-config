@@ -56,3 +56,8 @@ vim.cmd([[
     autocmd BufWritePost plugins.lua source <afile> | PackerCompile
   augroup end
 ]])
+
+-- Highlight on yank
+vim.cmd([[
+  au TextYankPost * silent! lua vim.highlight.on_yank()
+]])

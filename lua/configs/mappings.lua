@@ -121,4 +121,6 @@ vim.cmd([[
   nnoremap <leader>gbD :Git branch -D 
 
   nmap <leader>gq <C-w>jq
+
+  nnoremap <leader>fh :Git log -p -- <C-r>%<CR>
 ]])

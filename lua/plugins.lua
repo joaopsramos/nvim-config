@@ -40,7 +40,7 @@ return require('packer').startup(function(use)
 
   use "lukas-reineke/lsp-format.nvim"
 
-  -- use 'sheerun/vim-polyglot'
+  use 'sheerun/vim-polyglot'
 
   use 'drewtempelmeyer/palenight.vim'
 
@@ -111,4 +111,6 @@ return require('packer').startup(function(use)
   use 'folke/tokyonight.nvim'
 
   use 'rcarriga/nvim-notify'
+
+  use 'AndrewRadev/splitjoin.vim'
 end)

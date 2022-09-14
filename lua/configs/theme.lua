@@ -120,7 +120,12 @@ require("tokyonight").setup({
     c.git = { change = c.orange, add = c.green, delete = c.red }
     c.gitSigns = { change = c.orange, add = c.green, delete = c.red }
 
-    c.diff = { change = c.blue7 }
+    c.diff = {
+      change = "#223159",
+      add = "#283b4d",
+      delete = "#3f2d3d",
+      text = c.blue7
+    }
   end,
 
   --- You can override specific highlights to use other groups or a hex color
