@@ -101,7 +101,7 @@ require("tokyonight").setup({
     c.green = "#9ece6a"
     c.green1 = "#73daca"
     c.green2 = "#41a6b5"
-    c.magenta = "#f7768e"
+    c.magenta = "#bd93f9"
     c.magenta2 = "#ff007c"
     c.orange = "#ff9e64"
     c.purple = "#bd93f9"
@@ -137,6 +137,7 @@ require("tokyonight").setup({
     h.TSKeyword = { fg = c.red }
     h.TSParameterReference = { fg = c.red }
     h.TSConstructor = { fg = c.red }
+    h.TSKeywordFunction = { fg = c.red }
     -- Elixir atoms
     h.Identifier = { fg = c.cyan }
   end,
