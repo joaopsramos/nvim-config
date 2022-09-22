@@ -5,6 +5,10 @@ vim.cmd([[
   vnoremap <C-p> s<C-r>0<Esc>
   vnoremap <C-y> "+y
   nnoremap <silent> <leader>dab :%bd<CR>:e#<CR>
+
+  xnoremap <leader>p "_dP
+
+  inoremap <C-p> <C-o>p
 ]])
 
 -- Exit with 'q'
