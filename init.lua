@@ -5,6 +5,7 @@ require("configs.mappings")
 require("configs.theme")
 
 require("configs.treesitter")
+require("configs.treesitter-context")
 require("configs.telescope")
 require("configs.lsp")
 require("configs.nvim-tree")

@@ -140,6 +140,9 @@ require("tokyonight").setup({
     h.TSKeywordFunction = { fg = c.red }
     -- Elixir atoms
     h.Identifier = { fg = c.cyan }
+
+    -- h.TreesitterContext = { italic = true }
+    h.TreesitterContextLineNumber = { fg = c.red }
   end,
 })
 

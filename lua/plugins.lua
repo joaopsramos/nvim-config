@@ -113,4 +113,6 @@ return require('packer').startup(function(use)
   use 'rcarriga/nvim-notify'
 
   use 'AndrewRadev/splitjoin.vim'
+
+  use 'nvim-treesitter/nvim-treesitter-context'
 end)
