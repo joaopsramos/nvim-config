@@ -114,7 +114,7 @@ require("tokyonight").setup({
     c.error = c.red
     c.bg_sidebar = c.bg_dark
     c.bg_visual = c.selection
-    c.bg_float = c.bg
+    c.bg_float = c.bg_dark
     c.bg_statusline = c.bg_dark
 
     c.git = { change = c.orange, add = c.green, delete = c.red }
