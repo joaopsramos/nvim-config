@@ -1,4 +1,7 @@
 require('telescope').setup {
+  extensions = {
+    fzf = { fuzzy = true, override_generic_sorter = true, override_file_sorter = true, case_mode = 'smart_case' },
+  },
   defaults = {
     -- Default configuration for telescope goes here:
     -- config_key = value,
@@ -12,3 +15,5 @@ require('telescope').setup {
     }
   }
 }
+
+require('telescope').load_extension('fzf')

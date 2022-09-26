@@ -115,4 +115,6 @@ return require('packer').startup(function(use)
   use 'AndrewRadev/splitjoin.vim'
 
   use 'nvim-treesitter/nvim-treesitter-context'
+
+  use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 end)
