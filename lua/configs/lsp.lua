@@ -82,7 +82,7 @@ require('lspconfig').html.setup {
 require('rust-tools').setup {
   capabilities = capabilities,
   server = {
-    cmd = { vim.fn.expand('~/.local/share/nvim/lsp_servers/rust/rust-analyzer') },
+    cmd = { vim.fn.expand('~/.local/share/nvim/lsp_servers/rust_analyzer/rust-analyzer') },
     on_attach = on_attach
   }
 }

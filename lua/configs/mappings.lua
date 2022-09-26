@@ -9,7 +9,14 @@ vim.cmd([[
   xnoremap <leader>p "_dP
 
   inoremap <C-p> <C-o>p
-]])
+
+  nnoremap <A-j> :m .+1<CR>
+  nnoremap <A-k> :m .-2<CR>
+  inoremap <A-j> <Esc>:m .+1<CR>
+  inoremap <A-k> <Esc>:m .-2<CR>
+  vnoremap <A-j> :m '>+1<CR>
+  vnoremap <A-k> :m '<-2<CR>
+  ]])
 
 -- Exit with 'q'
 vim.cmd([[ map Q :Tclose!<CR>:quitall<CR> ]])
