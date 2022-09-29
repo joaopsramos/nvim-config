@@ -10,13 +10,16 @@ vim.cmd([[
 
   inoremap <C-p> <C-o>p
 
+  nnoremap & yiw:%s/\(<C-r>0\)/\1
+  vnoremap & y:%s/\(<C-r>0\)/\1
+
   nnoremap <A-j> :m .+1<CR>
   nnoremap <A-k> :m .-2<CR>
   inoremap <A-j> <Esc>:m .+1<CR>
   inoremap <A-k> <Esc>:m .-2<CR>
   vnoremap <A-j> :m '>+1<CR>
   vnoremap <A-k> :m '<-2<CR>
-  ]])
+]])
 
 -- Exit with 'q'
 vim.cmd([[ map Q :Tclose!<CR>:quitall<CR> ]])
