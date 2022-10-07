@@ -8,7 +8,8 @@ vim.cmd([[
 
   xnoremap <leader>p "_dP
 
-  inoremap <C-p> <C-o>p
+  inoremap <C-p> <Left><C-o>p
+  inoremap <C-j> <C-o>o
 
   nnoremap & yiw:%s/\(<C-r>0\)/\1
   vnoremap & y:%s/\(<C-r>0\)/\1
