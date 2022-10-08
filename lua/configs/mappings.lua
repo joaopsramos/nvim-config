@@ -38,7 +38,6 @@ vim.cmd([[ map <C-a> ggVG ]])
 
 -- Terminal
 vim.cmd([[ 
-  nmap  <leader>git <leader>toi<C-j>gitui<CR>
   tmap <Esc> <C-\>:Ttoggle<CR><C-w>p
   tnoremap <C-j> <C-\><C-n><C-w>_i
   tmap <C-n> <C-\><leader>tc
@@ -47,7 +46,7 @@ vim.cmd([[
 
 -- Telescope
 vim.cmd([[
-  nnoremap <leader><Space> <cmd>lua require('telescope.builtin').find_files()<cr>
+  nnoremap <leader>fi <cmd>lua require('telescope.builtin').find_files()<cr>
   nnoremap <leader>gr <cmd>lua require('telescope.builtin').live_grep()<cr>
   nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
   nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
@@ -63,7 +62,7 @@ vim.cmd([[
 
 -- Neoterm
 vim.cmd([[
-  nnoremap <silent> <leader>tt :Ttoggle<CR><C-w><C-j>
+  nnoremap <silent> <leader>tm :Ttoggle<CR><C-w><C-j>
   nnoremap <silent> <leader>to :Topen<CR><C-w><C-j>
   nnoremap <leader>tc :Tclose!<CR>
 
@@ -105,16 +104,12 @@ vim.cmd([[
   nnoremap <leader>tba :$tabnew<CR>
   nnoremap <leader>tbc :tabclose<CR>
   nnoremap <leader>tbo :tabonly<CR>
-  nnoremap <leader>tbn :tabn<CR>
-  nnoremap <leader>tbp :tabp<CR>
-  nnoremap <leader>tmp :-tabmove<CR>
-  nnoremap <leader>tmn :+tabmove<CR>
 ]])
 
 
 -- fugitive
 vim.cmd([[
-  nnoremap <silent> <leader>gg :Git<CR>
+  nnoremap <silent> <leader>gi :Git<CR>
 
   noremap <leader>gl :Git log<CR>
     
