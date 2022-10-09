@@ -1,43 +1,45 @@
 local opt = vim.opt
+local g = vim.g
 
 opt.encoding = 'utf8'
 opt.mouse = 'a'
 opt.wildmenu = true
 opt.confirm = true
+-- opt.hlsearch = false
 opt.incsearch = true
 opt.title = true
 opt.shiftwidth = 2
 opt.softtabstop = 2
 opt.expandtab = true
-opt.shiftwidth = 2
-opt.softtabstop = 2
-opt.expandtab = true
+opt.smartindent = true
 opt.cursorline = true
 opt.cursorlineopt = 'number'
 opt.ignorecase = true
+opt.smartcase = true
 opt.background = 'dark'
 opt.termguicolors = true
 opt.splitbelow = true
 opt.splitright = true
--- opt.t_Co = 256
--- opt.colorcolumn = 100
+opt.wrap = true
+opt.linebreak = true
 
-vim.g.mapleader = " "
-vim.g.blamer_enabled = true
-vim.g.blamer_prefix = '👀 '
-vim.g.blamer_show_in_visual_modes = 0
-vim.g['test#strategy'] = "neoterm"
+g.mapleader = " "
+g.blamer_enabled = true
+g.blamer_prefix = '👀 '
+g.blamer_show_in_visual_modes = 0
+g['test#strategy'] = "neoterm"
 
-vim.g.neoterm_default_mod = 'botright'
-vim.g.neoterm_automap_keys = false
+g.neoterm_default_mod = 'botright'
+g.neoterm_automap_keys = false
 
-vim.g.UltiSnipsExpandTrigger = '<CR>'
-vim.g.UltiSnipsJumpForwardTrigger = '<C-b>'
-vim.g.UltiSnipsJumpBackwardTrigger = '<C-z>'
+g.UltiSnipsExpandTrigger = '<CR>'
+g.UltiSnipsJumpForwardTrigger = '<C-b>'
+g.UltiSnipsJumpBackwardTrigger = '<C-z>'
 
 vim.cmd([[ 
   syntax on 
   set nu! rnu! 
+  set whichwrap+=<,>,h,l
   let extension = expand('%:e')
 ]])
 

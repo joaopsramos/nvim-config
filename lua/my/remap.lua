@@ -91,21 +91,12 @@ vim.cmd([[
   nmap <leader>iep <leader>ttiiex -S mix phx.server<CR>
 ]])
 
--- Split
--- vim.cmd([[
---   nnoremap <C-j> <C-W>j
---   nnoremap <C-k> <C-W>k
---   nnoremap <C-l> <C-W>l
---   nnoremap <C-h> <C-W>h
--- ]])
-
 -- Tabby
 vim.cmd([[
   nnoremap <leader>tba :$tabnew<CR>
   nnoremap <leader>tbc :tabclose<CR>
   nnoremap <leader>tbo :tabonly<CR>
 ]])
-
 
 -- fugitive
 vim.cmd([[

@@ -1,15 +1,3 @@
-vim.notify = require('notify')
-
-require('nvim-web-devicons').get_icons()
-
--- Colorizer
-require('colorizer').setup()
-
--- Autopairs
-require('nvim-autopairs').setup({
-  enable_check_bracket_line = false
-})
-
 require('which-key').setup({
   plugins = {
     marks = true, -- shows a list of your marks on ' and `

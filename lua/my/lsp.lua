@@ -30,19 +30,6 @@ local on_attach = function(client, _)
   buf_set_keymap('n', '<leader>fm', function() vim.lsp.buf.format({ async = true }) end, opts)
 end
 
--- require'elixir'.setup({
---   cmd = { elixirls_path },
---   -- default settings, use the `settings` function to override settings
---   settings = require'elixir'.settings({
---     dialyzerEnabled = false,
---     fetchDeps = true,
---     -- enableTestLenses = true,
---     suggestSpecs = true,
---   }),
-
---   on_attach = on_attach
--- })
-
 require('lspconfig').elixirls.setup {
   -- Unix
   cmd = { vim.fn.expand('~/.local/share/nvim/lsp_servers/elixirls/elixir-ls/language_server.sh') },
