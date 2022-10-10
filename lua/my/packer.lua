@@ -4,8 +4,6 @@ vim.cmd([[packadd packer.nvim]])
 return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
-  use 'navarasu/onedark.nvim'
-
   use 'kyazdani42/nvim-web-devicons'
   use 'kyazdani42/nvim-tree.lua'
 
@@ -30,7 +28,7 @@ return require('packer').startup(function(use)
   use 'hrsh7th/cmp-cmdline'
   use 'hrsh7th/nvim-cmp'
 
-  use 'L3MON4D3/LuaSnip'
+  -- use 'L3MON4D3/LuaSnip'
 
   use 'norcalli/nvim-colorizer.lua'
 
@@ -41,8 +39,6 @@ return require('packer').startup(function(use)
   use "lukas-reineke/lsp-format.nvim"
 
   use 'sheerun/vim-polyglot'
-
-  use 'drewtempelmeyer/palenight.vim'
 
   use 'kassio/neoterm'
 
@@ -83,14 +79,6 @@ return require('packer').startup(function(use)
   --   "mhanberg/elixir.nvim",
   --   requires = { "neovim/nvim-lspconfig", "nvim-lua/plenary.nvim" }
   -- })
-
-  use({
-    "catppuccin/nvim",
-    as = "catppuccin",
-    config = function()
-      require('catppuccin').setup({})
-    end
-  })
 
   use({
     'ustrajunior/ex_maps',

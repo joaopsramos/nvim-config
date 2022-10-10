@@ -22,12 +22,13 @@ opt.splitbelow = true
 opt.splitright = true
 opt.wrap = true
 opt.linebreak = true
+opt.scrolloff = 2
 
-g.mapleader = " "
+g.mapleader = ' '
 g.blamer_enabled = true
 g.blamer_prefix = '👀 '
 g.blamer_show_in_visual_modes = 0
-g['test#strategy'] = "neoterm"
+g['test#strategy'] = 'neoterm'
 
 g.neoterm_default_mod = 'botright'
 g.neoterm_automap_keys = false

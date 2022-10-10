@@ -87,9 +87,9 @@ vim.cmd([[
 
 -- Mix
 vim.cmd([[
-  nmap <leader>iex <leader>ttiiex<CR>
-  nmap <leader>iem <leader>ttiiex -S mix<CR>
-  nmap <leader>iep <leader>ttiiex -S mix phx.server<CR>
+  nmap <leader>iex <leader>tmiiex<CR>
+  nmap <leader>iem <leader>tmiiex -S mix<CR>
+  nmap <leader>iep <leader>tmiiex -S mix phx.server<CR>
 ]])
 
 -- Tabby
@@ -101,7 +101,7 @@ vim.cmd([[
 
 -- fugitive
 vim.cmd([[
-  nnoremap <silent> <leader>gi :Git<CR>
+  nnoremap <silent> <leader>gi :Git<CR><C-w>10-5j
   noremap <leader>gI :Git 
 
   noremap <leader>gl :Git log<CR>
