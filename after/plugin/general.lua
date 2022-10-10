@@ -1,5 +1,5 @@
 require('notify').setup({
-  background_colour = "CursorLine"
+  background_colour = 'CursorLine'
 })
 
 vim.notify = require('notify')

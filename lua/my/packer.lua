@@ -36,7 +36,7 @@ return require('packer').startup(function(use)
   use 'tpope/vim-commentary'
   use 'windwp/nvim-autopairs'
 
-  use "lukas-reineke/lsp-format.nvim"
+  use 'lukas-reineke/lsp-format.nvim'
 
   use 'sheerun/vim-polyglot'
 
@@ -53,10 +53,10 @@ return require('packer').startup(function(use)
   use 'APZelos/blamer.nvim'
 
   use {
-    "folke/trouble.nvim",
-    requires = "kyazdani42/nvim-web-devicons",
+    'folke/trouble.nvim',
+    requires = 'kyazdani42/nvim-web-devicons',
     config = function()
-      require("trouble").setup {
+      require('trouble').setup {
         -- your configuration comes here
         -- or leave it empty to use the default settings
         -- refer to the configuration section below
@@ -76,16 +76,16 @@ return require('packer').startup(function(use)
   use 'folke/which-key.nvim'
 
   -- use({
-  --   "mhanberg/elixir.nvim",
-  --   requires = { "neovim/nvim-lspconfig", "nvim-lua/plenary.nvim" }
+  --   'mhanberg/elixir.nvim',
+  --   requires = { 'neovim/nvim-lspconfig', 'nvim-lua/plenary.nvim' }
   -- })
 
   use({
     'ustrajunior/ex_maps',
     config = function()
-      require("ex_maps").setup({
+      require('ex_maps').setup({
         create_mappings = true,
-        mapping = "mtt",
+        mapping = 'mtt',
       })
     end
   })

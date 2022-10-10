@@ -61,8 +61,8 @@ require 'treesitter-context'.setup {
   },
   exact_patterns = {
     -- Example for a specific filetype with Lua patterns
-    -- Treat patterns.rust as a Lua pattern (i.e "^impl_item$" will
-    -- exactly match "impl_item" only)
+    -- Treat patterns.rust as a Lua pattern (i.e '^impl_item$' will
+    -- exactly match 'impl_item' only)
     elixir = true,
   },
 

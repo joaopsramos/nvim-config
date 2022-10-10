@@ -3,10 +3,10 @@ vim.cmd([[
   nnoremap <leader>re :so $MYVIMRC<CR>
   nnoremap <C-h> :noh<CR>
   vnoremap <C-p> s<C-r>0<Esc>
-  vnoremap <C-y> "+y
+  vnoremap <C-y> '+y
   nnoremap <silent> <leader>dab :%bd<CR>:e#<CR>
 
-  xnoremap <leader>p "_dP
+  xnoremap <leader>p '_dP
 
   inoremap <C-p> <Left><C-o>p
   inoremap <C-j> <C-o>o
@@ -106,7 +106,7 @@ vim.cmd([[
 
   noremap <leader>gl :Git log<CR>
     
-  noremap <leader>gci :Git commit -m ""<Left>
+  noremap <leader>gci :Git commit -m ''<Left>
 
   nnoremap <leader>gP :Git push -u origin HEAD<CR>
   nnoremap <leader>gp :Git pull<CR>

@@ -2,13 +2,13 @@
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-require("nvim-lsp-installer").setup {}
+require('nvim-lsp-installer').setup {}
 
 -- lsp-format
-require("lsp-format").setup {}
+require('lsp-format').setup {}
 
 local on_attach = function(client, _)
-  require "lsp-format".on_attach(client)
+  require 'lsp-format'.on_attach(client)
 
   local function buf_set_keymap(...) vim.keymap.set(...) end
 
@@ -55,9 +55,9 @@ require('lspconfig').ccls.setup {
 
 require('lspconfig').html.setup {
   capabilities = capabilities,
-  filetypes = { "html", "eelixir", "html-eex", "heex" },
+  filetypes = { 'html', 'eelixir', 'html-eex', 'heex' },
   init_options = {
-    configurationSection = { "html", "css", "javascript" },
+    configurationSection = { 'html', 'css', 'javascript' },
     embeddedLanguages = {
       css = true,
       javascript = true
@@ -77,7 +77,7 @@ require('rust-tools').setup {
 require('lspconfig').tsserver.setup {
   capabilities = capabilities,
   on_attach = on_attach,
-  cmd = { "typescript-language-server", "--stdio" }
+  cmd = { 'typescript-language-server', '--stdio' }
 }
 
 require('lspconfig').sumneko_lua.setup {
