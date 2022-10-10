@@ -10,6 +10,7 @@ vim.cmd([[
 
   inoremap <C-p> <Left><C-o>p
   inoremap <C-j> <C-o>o
+  inoremap <C-z> <C-o>zz
 
   nnoremap & yiw:%s/\(<C-r>0\)/\1
   vnoremap & y:%s/\(<C-r>0\)/\1
@@ -101,6 +102,7 @@ vim.cmd([[
 -- fugitive
 vim.cmd([[
   nnoremap <silent> <leader>gi :Git<CR>
+  noremap <leader>gI :Git 
 
   noremap <leader>gl :Git log<CR>
     
