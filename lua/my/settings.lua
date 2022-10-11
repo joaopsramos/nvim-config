@@ -22,7 +22,7 @@ opt.splitbelow = true
 opt.splitright = true
 opt.wrap = true
 opt.linebreak = true
-opt.scrolloff = 2
+opt.scrolloff = 5
 
 g.mapleader = ' '
 g.blamer_enabled = true

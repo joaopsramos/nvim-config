@@ -106,7 +106,7 @@ vim.cmd([[
 
   noremap <leader>gl :Git log<CR>
     
-  noremap <leader>gci :Git commit -m ''<Left>
+  noremap <leader>gci :Git commit -m ""<Left>
 
   nnoremap <leader>gP :Git push -u origin HEAD<CR>
   nnoremap <leader>gp :Git pull<CR>
