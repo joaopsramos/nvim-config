@@ -2,18 +2,18 @@
 vim.cmd([[
   nnoremap <leader>re :so $MYVIMRC<CR>
   nnoremap <C-h> :noh<CR>
+  vnoremap <C-y> "+y
   vnoremap <C-p> s<C-r>0<Esc>
-  vnoremap <C-y> '+y
   nnoremap <silent> <leader>dab :%bd<CR>:e#<CR>
 
-  xnoremap <leader>p '_dP
+  xnoremap <leader>p "_dP
 
   inoremap <C-p> <Left><C-o>p
   inoremap <C-j> <C-o>o
   inoremap <C-z> <C-o>zz
 
-  nnoremap & yiw:%s/\(<C-r>0\)/\1
-  vnoremap & y:%s/\(<C-r>0\)/\1
+  nnoremap & yiw:%s/\(<C-r>0\)/\/g<Left><Left>1
+  vnoremap & y:%s/\(<C-r>0\)/\/g<Left><Left>1
 
   nnoremap <A-j> :m .+1<CR>
   nnoremap <A-k> :m .-2<CR>
