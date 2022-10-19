@@ -86,6 +86,9 @@ require('tokyonight').setup({
 
     h.TreesitterContext = { bg = c.bg_highlight }
     h.TreesitterContextLineNumber = { fg = c.red }
+
+    h.LineNr = { fg = c.dark5 }
+    h.CursorLineNr = { fg = c.cyan }
   end,
 })
 

@@ -6,6 +6,9 @@ vim.cmd([[
   vnoremap <C-p> s<C-r>0<Esc>
   nnoremap <silent> <leader>dab :%bd<CR>:e#<CR>
 
+  noremap q :q<CR>
+  noremap <C-x> :bd<CR>
+
   xnoremap <leader>p "_dP
 
   inoremap <C-p> <Left><C-o>p
@@ -51,14 +54,6 @@ vim.cmd([[
   nnoremap <leader>gr <cmd>lua require('telescope.builtin').live_grep()<cr>
   nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
   nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
-]])
-
--- BufferLine
-vim.cmd([[
-  nnoremap <silent>]b :BufferLineCycleNext<CR>
-  nnoremap <silent>[b :BufferLineCyclePrev<CR>
-
-  noremap q :q<CR>
 ]])
 
 -- Neoterm
