@@ -94,7 +94,7 @@ return require('packer').startup(function(use)
 
   use 'tpope/vim-fugitive'
 
-  use 'folke/tokyonight.nvim'
+  -- use 'folke/tokyonight.nvim'
 
   use 'rcarriga/nvim-notify'
 
@@ -103,4 +103,6 @@ return require('packer').startup(function(use)
   use 'nvim-treesitter/nvim-treesitter-context'
 
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+
+  use { "catppuccin/nvim", as = "catppuccin" }
 end)
