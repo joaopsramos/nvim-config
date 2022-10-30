@@ -104,7 +104,7 @@ require("catppuccin").setup({
     dark = "macchiato",
   },
   compile_path = vim.fn.stdpath("cache") .. "/catppuccin",
-  transparent_background = true,
+  transparent_background = false,
   term_colors = false,
   dim_inactive = {
     enabled = false,
@@ -133,7 +133,6 @@ require("catppuccin").setup({
     treesitter = true,
     neotest = true,
     which_key = true,
-    -- lualine = true,
     notify = true,
     native_lsp = {
       enabled = true,
@@ -158,16 +157,16 @@ require("catppuccin").setup({
       rosewater = "#F4DBD6",
       flamingo = "#F0C6C6",
       pink = "#F5BDE6",
-      mauve = "#C6A0F6",
-      red = "#ED8796",
-      maroon = "#EE99A0",
-      peach = "#F5A97F",
-      yellow = "#EED49F",
-      green = "#A6DA95",
+      mauve = "#bd93f9",
+      red = "#f7768e",
+      maroon = "#Ee99a0",
+      peach = "#ff9e64",
+      yellow = "#eed49f",
+      green = "#9ece6a",
       teal = "#8BD5CA",
       sky = "#91D7E3",
-      sapphire = "#7DC4E4",
-      blue = "#8AADF4",
+      sapphire = "#7dcfff",
+      blue = "#7aa2f7",
       lavender = "#B7BDF8",
 
       text = "#CAD3F5",
@@ -187,21 +186,38 @@ require("catppuccin").setup({
   },
   custom_highlights = function(c)
     return {
+      Normal = { bg = c.none },
+      NormalNC = { bg = c.none },
       ['@type'] = { fg = c.mauve },
       Constant = { fg = c.mauve },
+      Identifier = { fg = c.mauve },
 
       ['@keyword'] = { fg = c.red },
       ['@keyword.function'] = { fg = c.red },
-      -- h['@parameter'] = { fg = c.yellow }
+      -- ['@parameter'] = { fg = c.peach },
 
       -- Elixir atoms
-      Identifier = { fg = c.blue },
+      ['@symbol'] = { fg = c.sapphire },
 
       TreesitterContext = { bg = c.surface0 },
       TreesitterContextLineNumber = { fg = c.red },
 
       -- LineNr = { fg = c.surface1 },
       CursorLineNr = { fg = c.blue },
+      Folded = { fg = c.red },
+
+      GitSignsChange = { fg = c.peach },
+
+      TelescopeMatching = { fg = c.sapphire },
+      TelescopeSelection = { fg = c.peach, bg = c.none, style = { "bold" } },
+      ['@operator'] = { fg = c.teal },
+      Search = { bg = c.surface1 },
+      CurSearch = { bg = c.peach },
+      IncSearch = { bg = c.red },
+      EndOfBuffer = { fg = c.surface2 },
+      -- NotifyWARNBorder = { fg = c.peach },
+      -- NotifyWARNIcon = { fg = c.peach },
+      -- NotifyWARNTitle = { fg = c.peach, style = { "italic" } },
     }
   end
 })
