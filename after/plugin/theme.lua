@@ -156,16 +156,16 @@ require("catppuccin").setup({
     all = {
       rosewater = "#F4DBD6",
       flamingo = "#F0C6C6",
-      pink = "#F5BDE6",
+      pink = "#ff79c6",
       mauve = "#bd93f9",
-      red = "#f7768e",
+      red = "#ff5555",
       maroon = "#Ee99a0",
       peach = "#ff9e64",
-      yellow = "#eed49f",
-      green = "#9ece6a",
-      teal = "#8BD5CA",
+      yellow = "#f1fa8c",
+      green = "#50fa7b",
+      teal = "#8bd5ca",
       sky = "#91D7E3",
-      sapphire = "#7dcfff",
+      sapphire = "#8be9fd",
       blue = "#7aa2f7",
       lavender = "#B7BDF8",
 
@@ -179,42 +179,63 @@ require("catppuccin").setup({
       surface1 = "#494D64",
       surface0 = "#363A4F",
 
-      base = "#24273A",
-      mantle = "#1E2030",
-      crust = "#181926",
+      base = "#282a36",
+      mantle = "#21222b",
+      crust = "#313340",
     }
   },
   custom_highlights = function(c)
     return {
-      Normal = { bg = c.none },
-      NormalNC = { bg = c.none },
-      ['@type'] = { fg = c.mauve },
+      -- Normal = { bg = c.none },
+      -- NormalNC = { bg = c.none },
       Constant = { fg = c.mauve },
       Identifier = { fg = c.mauve },
 
-      ['@keyword'] = { fg = c.red },
-      ['@keyword.function'] = { fg = c.red },
-      -- ['@parameter'] = { fg = c.peach },
-
-      -- Elixir atoms
+      ['@string'] = { fg = c.yellow },
+      ['@type'] = { fg = c.mauve },
+      ['@keyword'] = { fg = c.pink },
+      ['@keyword.function'] = { fg = c.pink },
+      -- -- ['@parameter'] = { fg = c.peach },
       ['@symbol'] = { fg = c.sapphire },
+      ['@operator'] = { fg = c.pink },
+      ['@function'] = { fg = c.blue },
+      ['@function.call'] = { fg = c.blue },
+      ['@tag'] = { fg = c.pink },
+      ['@tag.attribute'] = { fg = c.yellow },
+
+      htmlTag = { fg = c.mauve },
+      htmlEndTag = { fg = c.mauve },
+      htmlTagName = { fg = c.pink },
+      htmlString = { fg = c.yellow },
+      htmlArg = { fg = c.green },
 
       TreesitterContext = { bg = c.surface0 },
-      TreesitterContextLineNumber = { fg = c.red },
+      TreesitterContextLineNumber = { fg = c.peach },
 
-      -- LineNr = { fg = c.surface1 },
+      -- -- LineNr = { fg = c.surface1 },
       CursorLineNr = { fg = c.blue },
-      Folded = { fg = c.red },
-
-      GitSignsChange = { fg = c.peach },
+      -- Folded = { fg = c.red },
 
       TelescopeMatching = { fg = c.sapphire },
       TelescopeSelection = { fg = c.peach, bg = c.none, style = { "bold" } },
-      ['@operator'] = { fg = c.teal },
+
+      GitSignsChange = { fg = c.peach },
+
       Search = { bg = c.surface1 },
-      CurSearch = { bg = c.peach },
-      IncSearch = { bg = c.red },
-      EndOfBuffer = { fg = c.surface2 },
+      CurSearch = { bg = c.blue },
+      IncSearch = { bg = c.peach },
+      Substitute = { bg = c.none, fg = c.red },
+
+      CmpItemKindField = { fg = c.sapphire },
+      CmpItemKindVariable = { fg = c.peach },
+      CmpItemKindProperty = { fg = c.sapphire },
+      CmpItemKindText = { fg = c.text },
+      CmpItemKindKeyword = { fg = c.pink },
+
+      TabLineSel = { fg = c.green, bg = c.mantle },
+
+      EndOfBuffer = { fg = c.surface1 },
+
       -- NotifyWARNBorder = { fg = c.peach },
       -- NotifyWARNIcon = { fg = c.peach },
       -- NotifyWARNTitle = { fg = c.peach, style = { "italic" } },
