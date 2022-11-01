@@ -105,4 +105,7 @@ return require('packer').startup(function(use)
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 
   use { "catppuccin/nvim", as = "catppuccin" }
+
+  use 'nvim-treesitter/playground'
+  use 'mg979/vim-visual-multi'
 end)

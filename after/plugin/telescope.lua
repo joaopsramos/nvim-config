@@ -3,6 +3,7 @@ require('telescope').setup {
     fzf = { fuzzy = true, override_generic_sorter = true, override_file_sorter = true, case_mode = 'smart_case' },
   },
   defaults = {
+    path_display = { truncate = 1 },
     -- Default configuration for telescope goes here:
     -- config_key = value,
     mappings = {

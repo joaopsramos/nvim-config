@@ -75,9 +75,9 @@
 --   --- You can override specific highlights to use other groups or a hex color
 --   --- fucntion will be called with a Highlights and ColorScheme table
 --   on_highlights = function(h, c)
---     h.Type = { fg = c.purple }
 --     h.Constant = { fg = c.orange }
 
+--     h['@type'] = { fg = c.purple }
 --     h['@keyword'] = { fg = c.red }
 --     h['@keyword.function'] = { fg = c.red }
 --     -- h['@parameter'] = { fg = c.yellow }
@@ -90,6 +90,12 @@
 
 --     h.LineNr = { fg = c.dark5 }
 --     h.CursorLineNr = { fg = c.cyan }
+
+
+--     -- htmlTag = { fg = c.mauve },
+--     -- htmlEndTag = { fg = c.mauve },
+--     h.htmlTagName = { fg = c.purple }
+--     h.htmlArg = { fg = c.red }
 --   end,
 -- })
 
@@ -156,17 +162,17 @@ require("catppuccin").setup({
     all = {
       rosewater = "#F4DBD6",
       flamingo = "#F0C6C6",
-      pink = "#ff79c6",
-      mauve = "#bd93f9",
-      red = "#ff5555",
-      maroon = "#Ee99a0",
-      peach = "#ff9e64",
-      yellow = "#f1fa8c",
-      green = "#50fa7b",
-      teal = "#8bd5ca",
+      pink = "#F5BDE6",
+      mauve = "#C6A0F6",
+      red = "#ED8796",
+      maroon = "#EE99A0",
+      peach = "#F5A97F",
+      yellow = "#EED49F",
+      green = "#A6DA95",
+      teal = "#8BD5CA",
       sky = "#91D7E3",
-      sapphire = "#8be9fd",
-      blue = "#7aa2f7",
+      sapphire = "#8BE9FD",
+      blue = "#8AADF4",
       lavender = "#B7BDF8",
 
       text = "#CAD3F5",
@@ -180,65 +186,68 @@ require("catppuccin").setup({
       surface0 = "#363A4F",
 
       base = "#282a36",
-      mantle = "#21222b",
-      crust = "#313340",
+      mantle = "#1E2030",
+      crust = "#181926",
     }
   },
   custom_highlights = function(c)
     return {
       -- Normal = { bg = c.none },
       -- NormalNC = { bg = c.none },
-      Constant = { fg = c.mauve },
-      Identifier = { fg = c.mauve },
+      -- Constant = { fg = c.mauve },
+      -- Identifier = { fg = c.mauve },
 
-      ['@string'] = { fg = c.yellow },
       ['@type'] = { fg = c.mauve },
-      ['@keyword'] = { fg = c.pink },
-      ['@keyword.function'] = { fg = c.pink },
-      -- -- ['@parameter'] = { fg = c.peach },
+      ['@keyword'] = { fg = c.red },
+      ['@keyword.function'] = { fg = c.red },
+      -- -- -- ['@parameter'] = { fg = c.peach },
       ['@symbol'] = { fg = c.sapphire },
-      ['@operator'] = { fg = c.pink },
-      ['@function'] = { fg = c.blue },
-      ['@function.call'] = { fg = c.blue },
-      ['@tag'] = { fg = c.pink },
-      ['@tag.attribute'] = { fg = c.yellow },
+      -- ['@operator'] = { fg = c.pink },
+      -- ['@function'] = { fg = c.blue },
+      -- ['@function.call'] = { fg = c.blue },
+      -- ['@tag'] = { fg = c.pink },
+      -- ['@tag.attribute'] = { fg = c.yellow },
 
-      htmlTag = { fg = c.mauve },
-      htmlEndTag = { fg = c.mauve },
-      htmlTagName = { fg = c.pink },
-      htmlString = { fg = c.yellow },
-      htmlArg = { fg = c.green },
+      -- htmlTag = { fg = c.mauve },
+      -- htmlEndTag = { fg = c.mauve },
+      -- htmlTagName = { fg = c.pink },
+      -- htmlString = { fg = c.yellow },
+      -- htmlArg = { fg = c.green },
 
       TreesitterContext = { bg = c.surface0 },
-      TreesitterContextLineNumber = { fg = c.peach },
+      TreesitterContextLineNumber = { fg = c.red },
 
-      -- -- LineNr = { fg = c.surface1 },
+      LineNr = { fg = c.surface1 },
       CursorLineNr = { fg = c.blue },
-      -- Folded = { fg = c.red },
 
       TelescopeMatching = { fg = c.sapphire },
       TelescopeSelection = { fg = c.peach, bg = c.none, style = { "bold" } },
 
       GitSignsChange = { fg = c.peach },
 
-      Search = { bg = c.surface1 },
-      CurSearch = { bg = c.blue },
-      IncSearch = { bg = c.peach },
-      Substitute = { bg = c.none, fg = c.red },
+      DiffChange = { bg = '#223159' },
+      DiffAdd = { bg = '#283b4d' },
+      DiffDelete = { bg = '#3f2d3d' },
+      DiffText = { bg = '#394b70' },
 
-      CmpItemKindField = { fg = c.sapphire },
-      CmpItemKindVariable = { fg = c.peach },
-      CmpItemKindProperty = { fg = c.sapphire },
-      CmpItemKindText = { fg = c.text },
-      CmpItemKindKeyword = { fg = c.pink },
+      -- Search = { bg = c.surface1 },
+      -- CurSearch = { bg = c.blue },
+      -- IncSearch = { bg = c.peach },
+      -- Substitute = { bg = c.none, fg = c.red },
+
+      -- CmpItemKindField = { fg = c.sapphire },
+      -- CmpItemKindVariable = { fg = c.peach },
+      -- CmpItemKindProperty = { fg = c.sapphire },
+      -- CmpItemKindText = { fg = c.text },
+      -- CmpItemKindKeyword = { fg = c.pink },
 
       TabLineSel = { fg = c.green, bg = c.mantle },
 
       EndOfBuffer = { fg = c.surface1 },
 
-      -- NotifyWARNBorder = { fg = c.peach },
-      -- NotifyWARNIcon = { fg = c.peach },
-      -- NotifyWARNTitle = { fg = c.peach, style = { "italic" } },
+      NotifyWARNBorder = { fg = c.peach },
+      NotifyWARNIcon = { fg = c.peach },
+      NotifyWARNTitle = { fg = c.peach, style = { "italic" } },
     }
   end
 })
