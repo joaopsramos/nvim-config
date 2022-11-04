@@ -195,7 +195,7 @@ require("catppuccin").setup({
       -- Normal = { bg = c.none },
       -- NormalNC = { bg = c.none },
       -- Constant = { fg = c.mauve },
-      -- Identifier = { fg = c.mauve },
+      Identifier = { fg = c.peach },
 
       ['@type'] = { fg = c.mauve },
       ['@keyword'] = { fg = c.red },
@@ -209,7 +209,7 @@ require("catppuccin").setup({
       -- ['@tag.attribute'] = { fg = c.yellow },
 
       -- htmlTag = { fg = c.mauve },
-      -- htmlEndTag = { fg = c.mauve },
+      htmlEndTag = { fg = c.flamingo },
       -- htmlTagName = { fg = c.pink },
       -- htmlString = { fg = c.yellow },
       -- htmlArg = { fg = c.green },
@@ -245,9 +245,9 @@ require("catppuccin").setup({
 
       EndOfBuffer = { fg = c.surface1 },
 
-      NotifyWARNBorder = { fg = c.peach },
-      NotifyWARNIcon = { fg = c.peach },
-      NotifyWARNTitle = { fg = c.peach, style = { "italic" } },
+      --       NotifyWARNBorder = { fg = c.peach },
+      --       NotifyWARNIcon = { fg = c.peach },
+      --       NotifyWARNTitle = { fg = c.peach, style = { "italic" } },
     }
   end
 })
