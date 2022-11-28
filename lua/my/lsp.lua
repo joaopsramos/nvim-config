@@ -98,3 +98,6 @@ require('lspconfig').sumneko_lua.setup {
     }
   }
 }
+
+require('lspconfig').vls.setup {}
+require('lspconfig').gopls.setup {}

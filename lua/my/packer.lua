@@ -104,8 +104,28 @@ return require('packer').startup(function(use)
 
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 
-  use { "catppuccin/nvim", as = "catppuccin" }
+  use { 'catppuccin/nvim', as = 'catppuccin' }
 
   use 'nvim-treesitter/playground'
   use 'mg979/vim-visual-multi'
+
+  use({
+    'nvim-neotest/neotest',
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'nvim-treesitter/nvim-treesitter',
+      'antoinemadec/FixCursorHold.nvim',
+
+      'jfpedroza/neotest-elixir',
+    },
+    config = function()
+      require('neotest').setup({
+        adapters = {
+          require('neotest-elixir'),
+        }
+      })
+    end
+  })
+
+  use 'ollykel/v-vim'
 end)

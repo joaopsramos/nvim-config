@@ -137,7 +137,7 @@ require("catppuccin").setup({
     nvimtree = true,
     telescope = true,
     treesitter = true,
-    neotest = true,
+    -- neotest = true,
     which_key = true,
     notify = true,
     native_lsp = {
