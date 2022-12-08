@@ -99,5 +99,7 @@ require('lspconfig').sumneko_lua.setup {
   }
 }
 
-require('lspconfig').vls.setup {}
-require('lspconfig').gopls.setup {}
+require('lspconfig').gopls.setup {
+  capabilities = capabilities,
+  on_attach = on_attach
+}

@@ -24,6 +24,9 @@ vim.cmd([[
   inoremap <A-k> <Esc>:m .-2<CR>
   vnoremap <A-j> :m '>+1<CR>
   vnoremap <A-k> :m '<-2<CR>
+
+  nnoremap <A-u> <C-w>p<C-u><C-w>p
+  nnoremap <A-d> <C-w>p<C-d><C-w>p
 ]])
 
 -- Exit with 'q'
@@ -43,7 +46,7 @@ vim.cmd([[ map <C-a> ggVG ]])
 -- Terminal
 vim.cmd([[ 
   tmap <Esc> <C-\>:Ttoggle<CR><C-w>p
-  tnoremap <C-j> <C-\><C-n><C-w>_i
+  tnoremap <C-j> <C-\><C-n><C-w>_
   tmap <C-n> <C-\><leader>tc
   tnoremap <C-\> <C-\><C-n>
 ]])
@@ -58,8 +61,8 @@ vim.cmd([[
 
 -- Neoterm
 vim.cmd([[
-  nnoremap <silent> <leader>tm :Ttoggle<CR><C-w><C-j>
-  nnoremap <silent> <leader>to :Topen<CR><C-w><C-j>
+  nnoremap <silent> <leader>tm :Ttoggle<CR><C-w><C-p>
+  nnoremap <silent> <leader>to :Topen<CR><C-w><C-p>
   nnoremap <leader>tc :Tclose!<CR>
 
   nnoremap <leader>twf :T find test lib \| entr -cr mix test %<CR>
@@ -68,12 +71,25 @@ vim.cmd([[
 
 -- Vim test
 vim.cmd([[
-  nmap <leader>tn :TestNearest<CR><leader>toG
-  nmap <leader>tf :TestFile<CR><leader>toG
-  nmap <leader>ts :TestSuite<CR><leader>toG
-  nmap <leader>tl :TestLast<CR><leader>toG
+  nmap <leader>tn :TestNearest<CR><leader>toG<C-w>p
+  nmap <leader>tf :TestFile<CR><leader>toG<C-w>p
+  nmap <leader>ts :TestSuite<CR><leader>toG<C-w>p
+  nmap <leader>tl :TestLast<CR><leader>toG<C-w>p
   nmap <leader>tv :TestVisit<CR>
 ]])
+
+-- -- Neo test
+-- vim.cmd([[
+--   nnoremap <silent> <leader>nt :lua require('neotest').run.run()<CR>
+--   nnoremap <silent><leader>nf :lua require('neotest').run.run(vim.fn.expand('%'))<CR>
+--   nnoremap <silent> <leader>nd :lua require('neotest').run.run({extra_args = '--failed'})<CR>
+--   nnoremap <silent> <leader>ne :lua require('neotest').output.open({enter = true})<CR>
+--   nnoremap <silent> <leader>na :lua require('neotest').output.open({enter = true, last_run = true})<CR>
+--   nnoremap <silent> <leader>nc :lua require('neotest').run.attach()<CR>
+--   nnoremap <silent> <leader>nb :lua require("neotest").summary.toggle()<CR>
+--   nnoremap <silent> [t :lua require("neotest").jump.prev({ status = 'failed' })<CR>
+--   nnoremap <silent> ]t :lua require("neotest").jump.next({ status = 'failed' })<CR>
+-- ]])
 
 -- Nvimtree
 vim.cmd([[

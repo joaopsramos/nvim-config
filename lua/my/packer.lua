@@ -127,5 +127,5 @@ return require('packer').startup(function(use)
     end
   })
 
-  use 'ollykel/v-vim'
+  use 'RRethy/vim-illuminate'
 end)
