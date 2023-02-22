@@ -93,7 +93,7 @@ vim.cmd([[
 
 -- Nvimtree
 vim.cmd([[
-  nnoremap <silent> <leader>b :NvimTreeToggle<CR>
+  nnoremap <silent> <leader>b :NvimTreeFindFileToggle<CR>
 ]])
 
 -- Mix

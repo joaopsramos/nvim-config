@@ -19,7 +19,8 @@ return require('packer').startup(function(use)
 
   use 'nvim-lualine/lualine.nvim'
 
-  use 'williamboman/nvim-lsp-installer'
+  use 'williamboman/mason.nvim'
+  use 'williamboman/mason-lspconfig.nvim'
 
   use 'neovim/nvim-lspconfig'
   use 'hrsh7th/cmp-nvim-lsp'
@@ -38,7 +39,7 @@ return require('packer').startup(function(use)
 
   use 'lukas-reineke/lsp-format.nvim'
 
-  use 'sheerun/vim-polyglot'
+  -- use 'sheerun/vim-polyglot'
 
   use 'kassio/neoterm'
 
@@ -128,4 +129,8 @@ return require('packer').startup(function(use)
   })
 
   use 'RRethy/vim-illuminate'
+  use 'ray-x/lsp_signature.nvim'
+  use 'nvim-treesitter/nvim-treesitter-textobjects'
+
+  use 'elixir-editors/vim-elixir'
 end)

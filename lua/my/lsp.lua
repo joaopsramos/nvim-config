@@ -1,21 +1,9 @@
--- Setup lspconfig.
-local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-  opts = opts or {}
-  opts.border = opts.border or 'rounded'
-  return orig_util_open_floating_preview(contents, syntax, opts, ...)
-end
-
-require('nvim-lsp-installer').setup {}
-
--- lsp-format
+require('mason').setup {}
+require('mason-lspconfig').setup {}
 require('lsp-format').setup {}
 
 local on_attach = function(client, _)
-  require 'lsp-format'.on_attach(client)
+  require('lsp-format').on_attach(client)
 
   local function buf_set_keymap(...) vim.keymap.set(...) end
 
@@ -37,9 +25,20 @@ local on_attach = function(client, _)
   buf_set_keymap('n', '<leader>fm', function() vim.lsp.buf.format({ async = true }) end, opts)
 end
 
-require('lspconfig').elixirls.setup {
-  -- Unix
-  cmd = { vim.fn.expand('~/.local/share/nvim/lsp_servers/elixirls/elixir-ls/language_server.sh') },
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+  opts = opts or {}
+  opts.border = opts.border or 'rounded'
+  return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end
+
+local nvim_lsp = require('lspconfig')
+
+nvim_lsp.elixirls.setup {
+  -- cmd = { vim.fn.expand('~/.local/share/nvim/lsp_servers/elixirls/elixir-ls/language_server.sh') },
   capabilities = capabilities,
   on_attach = on_attach,
   settings = {
@@ -50,17 +49,17 @@ require('lspconfig').elixirls.setup {
   }
 }
 
-require('lspconfig').tailwindcss.setup {
+nvim_lsp.tailwindcss.setup {
   capabilities = capabilities
 }
 
-require('lspconfig').ccls.setup {
+nvim_lsp.ccls.setup {
   cmd = { 'ccls' },
   capabilities = capabilities,
   on_attach = on_attach,
 }
 
-require('lspconfig').html.setup {
+nvim_lsp.html.setup {
   capabilities = capabilities,
   filetypes = { 'html', 'eelixir', 'html-eex', 'heex' },
   init_options = {
@@ -76,18 +75,18 @@ require('lspconfig').html.setup {
 require('rust-tools').setup {
   capabilities = capabilities,
   server = {
-    cmd = { vim.fn.expand('~/.local/share/nvim/lsp_servers/rust_analyzer/rust-analyzer') },
+    -- cmd = { vim.fn.expand('~/.local/share/nvim/lsp_servers/rust_analyzer/rust-analyzer') },
     on_attach = on_attach
   }
 }
 
-require('lspconfig').tsserver.setup {
+nvim_lsp.tsserver.setup {
   capabilities = capabilities,
   on_attach = on_attach,
   cmd = { 'typescript-language-server', '--stdio' }
 }
 
-require('lspconfig').sumneko_lua.setup {
+nvim_lsp.lua_ls.setup {
   capabilities = capabilities,
   on_attach = on_attach,
   settings = {
@@ -99,7 +98,7 @@ require('lspconfig').sumneko_lua.setup {
   }
 }
 
-require('lspconfig').gopls.setup {
+nvim_lsp.gopls.setup {
   capabilities = capabilities,
   on_attach = on_attach
 }

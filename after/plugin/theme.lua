@@ -197,8 +197,8 @@ require("catppuccin").setup({
       -- Constant = { fg = c.mauve },
       Identifier = { fg = c.peach },
 
-      ['@type'] = { fg = c.mauve },
-      ['@keyword'] = { fg = c.red },
+      Type = { fg = c.mauve },
+      Keyword = { fg = c.red },
       ['@keyword.function'] = { fg = c.red },
       -- -- -- ['@parameter'] = { fg = c.peach },
       ['@symbol'] = { fg = c.sapphire },

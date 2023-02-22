@@ -22,7 +22,10 @@ opt.splitbelow = true
 opt.splitright = true
 opt.wrap = true
 opt.linebreak = true
-opt.scrolloff = 5
+-- opt.scrolloff = 5
+-- Cursor at middle
+opt.scrolloff = 100
+-- opt.ch = 0
 
 g.mapleader = ' '
 g.blamer_enabled = true
