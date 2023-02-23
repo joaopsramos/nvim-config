@@ -27,7 +27,6 @@ opt.linebreak = true
 opt.scrolloff = 100
 -- opt.ch = 0
 
-g.mapleader = ' '
 g.blamer_enabled = true
 g.blamer_prefix = '👀 '
 g.blamer_show_in_visual_modes = 0

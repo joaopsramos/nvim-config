@@ -10,3 +10,4 @@
 --     -- char_blankline = ' ',
 --     -- buftype_exclude = {'terminal'},
 -- }
+return {}
