@@ -46,8 +46,10 @@ return {
     )
     capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-    local function config(ls, ...)
+    local function config(ls, rest_opts)
       local cmd
+      local default_opts = {}
+      rest_opts = rest_opts or default_opts
 
       if type(ls) ~= "table" then
         cmd = { get_ls_cmd(ls) }
@@ -55,7 +57,11 @@ return {
         cmd = ls
       end
 
-      return { capabilities = capabilities, on_attach = on_attach, cmd = cmd, ... }
+      rest_opts.capabilities = capabilities
+      rest_opts.on_attach = on_attach
+      rest_opts.cmd = cmd
+
+      return rest_opts
     end
 
     local nvim_lsp = require('lspconfig')
@@ -87,7 +93,7 @@ return {
     require('rust-tools').setup {
       capabilities = capabilities,
       server = {
-        -- cmd = { vim.fn.expand('~/.local/share/nvim/lsp_servers/rust_analyzer/rust-analyzer') },
+        cmd = { vim.fn.expand('~/.local/share/nvim/mason/bin/rust-analyzer') },
         on_attach = on_attach
       }
     }
@@ -108,6 +114,8 @@ return {
         }
       }
     }))
+
+    nvim_lsp.efm.setup({ filetypes = { 'elixir' }, cmd = { get_ls_cmd('efm-langserver') } })
 
     -- nvim_lsp.gopls.setup(config('gopls'))
 

@@ -1,5 +1,6 @@
 return {
   'RRethy/vim-illuminate',
+  event = 'VeryLazy',
   name = 'illuminate',
   config = function()
     require('illuminate').configure({

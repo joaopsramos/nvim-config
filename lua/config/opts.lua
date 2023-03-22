@@ -39,9 +39,9 @@ g.UltiSnipsExpandTrigger = '<CR>'
 g.UltiSnipsJumpForwardTrigger = '<C-b>'
 g.UltiSnipsJumpBackwardTrigger = '<C-z>'
 
-vim.cmd([[ 
-  syntax on 
-  set nu! rnu! 
+vim.cmd([[
+  syntax on
+  set nu! rnu!
   set whichwrap+=<,>,h,l
   let extension = expand('%:e')
 ]])
