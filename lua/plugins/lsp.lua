@@ -75,7 +75,7 @@ return {
       }
     }))
 
-    nvim_lsp.tailwindcss.setup(config('tailwindcss-language-server'))
+    -- nvim_lsp.tailwindcss.setup(config('tailwindcss-language-server'))
     -- nvim_lsp.ccls.setup(config('ccls'))
 
     nvim_lsp.html.setup(config('vscode-html-language-server', {

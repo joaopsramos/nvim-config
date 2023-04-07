@@ -30,7 +30,7 @@ vim.cmd([[
 ]])
 
 -- Exit with 'q'
-vim.cmd([[ map Q :Tclose!<CR>:quitall<CR> ]])
+vim.cmd([[ map Q :Tclose!<CR>:NvimTreeClose<CR>:quitall<CR> ]])
 
 -- Save with 'Ctrl + s' on Normal, Insert and Visual modes
 -- Precisa adicionar a linha: stty -ixon , ao seu ~/.bashrc
@@ -109,7 +109,7 @@ vim.cmd([[
 
 -- fugitive
 vim.cmd([[
-  nnoremap <silent> <leader>gi :Git<CR><C-w>10-5j
+  nnoremap <silent> <leader>gi :Git<CR><C-w>5-5j
   noremap <leader>gI :Git<space>
 
   noremap <leader>gl :Git log<CR>

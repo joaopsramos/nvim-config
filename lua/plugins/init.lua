@@ -6,6 +6,8 @@ return {
     end
   },
 
+  { 'nvim-zh/colorful-winsep.nvim', opts = { highlight = { bg = '' } } },
+
   'nvim-lua/plenary.nvim',
 
   {
@@ -17,7 +19,7 @@ return {
     }
   },
 
-  { 'norcalli/nvim-colorizer.lua',   config = true },
+  { 'norcalli/nvim-colorizer.lua',  config = true },
   'tpope/vim-surround',
   {
     'numToStr/Comment.nvim',

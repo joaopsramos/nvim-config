@@ -8,6 +8,7 @@
   "cmp-nvim-ultisnips": { "branch": "main", "commit": "43b69a235b2dc54db692049fe0d5cc60c6b58b4b" },
   "cmp-path": { "branch": "main", "commit": "91ff86cd9c29299a64f968ebb45846c485725f23" },
   "cmp_nvim_lsp": { "branch": "main", "commit": "0e6b2ed705ddcff9738ec4ea838141654f12eeef" },
+  "colorful-winsep.nvim": { "branch": "main", "commit": "266369fa65a60b71cf84a875c6a06c2371a588ea" },
   "editorconfig-vim": { "branch": "master", "commit": "5b875ac1aeba22abce3c499c0d5e4f33558fdf2c" },
   "ex_maps": { "branch": "main", "commit": "4777227d14f627451088de6ad2fc07d1fade00d6" },
   "gitsigns.nvim": { "branch": "main", "commit": "b1f9cf7c5c5639c006c937fc1819e09f358210fc" },
