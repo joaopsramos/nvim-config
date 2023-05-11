@@ -39,6 +39,9 @@ return {
           async = true
         })
       end, opts)
+      buf_set_keymap('n', '<leader>fp', ':ElixirFromPipe<CR>', opts)
+      buf_set_keymap('n', '<leader>tp', ':ElixirToPipe<CR>', opts)
+      -- buf_set_keymap('n', '<leader>em', ':ElixirExpandMacro<CR>', opts)
     end
 
     local capabilities = require('cmp_nvim_lsp').default_capabilities(
@@ -66,16 +69,23 @@ return {
 
     local nvim_lsp = require('lspconfig')
 
-    nvim_lsp.elixirls.setup(config('elixir-ls', {
-      settings = {
-        elixirLS = {
-          dialyzerEnabled = true,
-          fetchDeps = false
-        }
-      }
-    }))
+    -- nvim_lsp.elixirls.setup(config('elixir-ls', {
+    --   settings = {
+    --     elixirLS = {
+    --       dialyzerEnabled = true,
+    --       fetchDeps = false
+    --     }
+    --   }
+    -- }))
 
-    -- nvim_lsp.tailwindcss.setup(config('tailwindcss-language-server'))
+    -- nvim_lsp.tailwindcss.setup({
+    --   cmd = { get_ls_cmd("tailwindcss-language-server"), "--stdio" },
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    -- })
+
+    -- nvim_lsp.tailwindcss.setup({
+    -- })
     -- nvim_lsp.ccls.setup(config('ccls'))
 
     nvim_lsp.html.setup(config('vscode-html-language-server', {
@@ -114,6 +124,20 @@ return {
         }
       }
     }))
+
+    require('elixir').setup({
+      credo = { enable = false },
+      elixirls = {
+        settings = require('elixir.elixirls').settings {
+          dialyzerEnabled = true,
+          fetchDeps = false,
+          enableTestLenses = false,
+          suggestSpecs = false,
+        },
+        on_attach = on_attach,
+        capabilities = capabilities
+      }
+    })
 
     nvim_lsp.efm.setup({ filetypes = { 'elixir' }, cmd = { get_ls_cmd('efm-langserver') } })
 

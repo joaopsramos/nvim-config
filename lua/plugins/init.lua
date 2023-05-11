@@ -5,11 +5,8 @@ return {
       require('nvim-web-devicons').get_icons()
     end
   },
-
   { 'nvim-zh/colorful-winsep.nvim', opts = { highlight = { bg = '' } } },
-
   'nvim-lua/plenary.nvim',
-
   {
     'williamboman/mason.nvim',
     config = true,
@@ -18,7 +15,6 @@ return {
       'williamboman/mason-lspconfig.nvim',
     }
   },
-
   { 'norcalli/nvim-colorizer.lua',  config = true },
   'tpope/vim-surround',
   {
@@ -33,18 +29,16 @@ return {
   { 'lukas-reineke/lsp-format.nvim', name = 'lsp-format' },
   -- 'sheerun/vim-polyglot'
   'kassio/neoterm',
-  'rmagatti/auto-session',
+  { 'rmagatti/auto-session', config = true },
   'vim-test/vim-test',
-  { 'simeji/winresizer',        keys = { '<C-e>', mode = 'n' } },
+  { 'simeji/winresizer',     keys = { '<C-e>', mode = 'n' } },
   'APZelos/blamer.nvim',
-
   {
     'folke/trouble.nvim',
     name = 'trouble',
     config = true,
     dependencies = { 'kyazdani42/nvim-web-devicons' }
   },
-
   'editorconfig/editorconfig-vim',
   'lukas-reineke/indent-blankline.nvim',
   'nanozuki/tabby.nvim',
@@ -54,7 +48,6 @@ return {
   'rcarriga/nvim-notify',
   'AndrewRadev/splitjoin.vim',
   'mg979/vim-visual-multi',
-
   -- {
   --   'nvim-neotest/neotest',
   --   config = function()
@@ -76,8 +69,12 @@ return {
       }
     }
   },
+  -- { 'elixir-editors/vim-elixir', ft = { 'elixir', 'eelixir', 'heex' } },
 
-  { 'elixir-editors/vim-elixir', ft = { 'elixir', 'eelixir', 'heex' } },
-
+  {
+    "elixir-tools/elixir-tools.nvim",
+    ft = { "ex", "elixir", "eex", "heex", "surface" },
+    dependencies = { "nvim-lua/plenary.nvim", }
+  },
   'mtdl9/vim-log-highlighting',
 }

@@ -7,13 +7,12 @@ return {
     config = function()
       require('nvim-treesitter.configs').setup({
         -- A list of parser names, or 'all'
-        ensure_installed = { 'lua', 'rust', 'elixir', 'help' },
+        ensure_installed = { 'lua', 'rust', 'elixir' },
         -- Install parsers synchronously (only applied to `ensure_installed`)
         sync_install = false,
         highlight = {
           -- `false` will disable the whole extension
           enable = true,
-
           -- disable = { 'elixir' },
           -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
           -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
@@ -24,10 +23,8 @@ return {
         textobjects = {
           select = {
             enable = true,
-
             -- Automatically jump forward to textobj, similar to targets.vim
             lookahead = true,
-
             keymaps = {
               -- You can use the capture groups defined in textobjects.scm
               ['af'] = '@function.outer',
@@ -46,7 +43,7 @@ return {
             -- mapping query_strings to modes.
             selection_modes = {
               ['@parameter.outer'] = 'v', -- charwise
-              ['@function.outer'] = 'V', -- linewise
+              ['@function.outer'] = 'V',  -- linewise
               ['@class.outer'] = '<c-v>', -- blockwise
             },
             -- If you set this to `true` (default is `false`) then any textobject is
@@ -60,7 +57,6 @@ return {
             -- and should return true of false
             include_surrounding_whitespace = true,
           },
-
           move = {
             enable = true,
             set_jumps = true, -- whether to set jumps in the jumplist
