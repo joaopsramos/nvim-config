@@ -59,6 +59,14 @@ vim.cmd([[
   au TextYankPost * silent! lua vim.highlight.on_yank()
 ]])
 
+-- Go indentation
+vim.cmd([[
+  au FileType go set noexpandtab
+  au FileType go set shiftwidth=4
+  au FileType go set softtabstop=4
+  au FileType go set tabstop=4
+]])
+
 local function add_lines_to_term()
   local buf_ft = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), 'filetype')
   if buf_ft == 'neoterm' then

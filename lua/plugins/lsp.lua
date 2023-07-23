@@ -25,7 +25,7 @@ return {
       buf_set_keymap('n', 'gd', vim.lsp.buf.definition, opts)
       buf_set_keymap('n', 'K', vim.lsp.buf.hover, opts)
       buf_set_keymap('n', 'gi', vim.lsp.buf.implementation, opts)
-      buf_set_keymap('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+      -- buf_set_keymap('n', '<C-k>', vim.lsp.buf.signature_help, opts)
       buf_set_keymap('i', '<C-k>', vim.lsp.buf.signature_help, opts)
       buf_set_keymap('n', '<leader>D', vim.lsp.buf.type_definition, opts)
       buf_set_keymap('n', '<leader>rn', vim.lsp.buf.rename, opts)
@@ -78,11 +78,55 @@ return {
     --   }
     -- }))
 
-    -- nvim_lsp.tailwindcss.setup({
-    --   cmd = { get_ls_cmd("tailwindcss-language-server"), "--stdio" },
-    --   capabilities = capabilities,
-    --   on_attach = on_attach,
-    -- })
+    nvim_lsp.tailwindcss.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+      init_options = {
+        userLanguages = {
+          elixir = "phoenix-heex",
+          heex = "phoenix-heex",
+          svelte = "html",
+          surface = "phoenix-heex",
+        },
+      },
+      handlers = {
+        ["tailwindcss/getConfiguration"] = function(_, _, params, _, bufnr, _)
+          vim.lsp.buf_notify(bufnr, "tailwindcss/getConfigurationResponse", { _id = params._id })
+        end,
+      },
+      settings = {
+        includeLanguages = {
+          typescript = "javascript",
+          typescriptreact = "html",
+          ["html-eex"] = "html",
+          ["phoenix-heex"] = "html",
+          heex = "html",
+          eelixir = "html",
+          elixir = "html",
+          svelte = "html",
+          surface = "html",
+        },
+        tailwindCSS = {
+          lint = {
+            cssConflict = "warning",
+            invalidApply = "error",
+            invalidConfigPath = "error",
+            invalidScreen = "error",
+            invalidTailwindDirective = "error",
+            invalidVariant = "error",
+            recommendedVariantOrder = "warning",
+          },
+          experimental = {
+            classRegex = {
+              [[class= "([^"]*)]],
+              [[class: "([^"]*)]],
+              '~H""".*class="([^"]*)".*"""',
+            },
+          },
+          validate = true,
+        },
+      },
+    })
 
     -- nvim_lsp.tailwindcss.setup({
     -- })
@@ -128,6 +172,7 @@ return {
     require('elixir').setup({
       credo = { enable = false },
       elixirls = {
+        tag = "v0.14.6",
         settings = require('elixir.elixirls').settings {
           dialyzerEnabled = true,
           fetchDeps = false,
@@ -141,7 +186,9 @@ return {
 
     nvim_lsp.efm.setup({ filetypes = { 'elixir' }, cmd = { get_ls_cmd('efm-langserver') } })
 
-    -- nvim_lsp.gopls.setup(config('gopls'))
+    nvim_lsp.pyright.setup(config({ get_ls_cmd('pyright-langserver'), '--stdio' }))
+
+    nvim_lsp.gopls.setup(config('gopls'))
 
     local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
     function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)

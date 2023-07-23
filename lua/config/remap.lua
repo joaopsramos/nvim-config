@@ -135,3 +135,11 @@ vim.cmd([[
 
   nnoremap <leader>fh :Git log -p -- <C-r>%<CR>
 ]])
+
+-- Harpoon
+vim.cmd([[
+  nnoremap <silent> <leader>rm :lua require("harpoon.ui").toggle_quick_menu()<CR>
+  nnoremap <C-m> :lua require("harpoon.mark").add_file()<CR>
+  nnoremap <silent> <C-j> :lua require("harpoon.ui").nav_prev()<CR>
+  nnoremap <silent> <C-k> :lua require("harpoon.ui").nav_next()<CR>
+]])
