@@ -15,7 +15,7 @@ return {
       'williamboman/mason-lspconfig.nvim',
     }
   },
-  { 'norcalli/nvim-colorizer.lua',  config = true },
+  { 'norcalli/nvim-colorizer.lua',  config = true,                     opts = { '*' } },
   'tpope/vim-surround',
   {
     'numToStr/Comment.nvim',
@@ -40,12 +40,12 @@ return {
     dependencies = { 'kyazdani42/nvim-web-devicons' }
   },
   'editorconfig/editorconfig-vim',
-  'lukas-reineke/indent-blankline.nvim',
+  { 'lukas-reineke/indent-blankline.nvim', main = "ibl",                                      opts = {
+    scope = { enabled = false } } },
   'nanozuki/tabby.nvim',
-  { 'ustrajunior/ex_maps',      opts = { create_mappings = true, mapping = 'mtt' } },
-  { 'simrat39/rust-tools.nvim', name = 'rust-tools',                               ft = 'rust' },
+  { 'ustrajunior/ex_maps',                 opts = { create_mappings = true, mapping = 'mtt' } },
+  { 'simrat39/rust-tools.nvim',            name = 'rust-tools',                               ft = 'rust' },
   'tpope/vim-fugitive',
-  'rcarriga/nvim-notify',
   'AndrewRadev/splitjoin.vim',
   'mg979/vim-visual-multi',
   -- {
@@ -71,11 +71,11 @@ return {
   },
   -- { 'elixir-editors/vim-elixir', ft = { 'elixir', 'eelixir', 'heex' } },
 
-  {
-    "elixir-tools/elixir-tools.nvim",
-    ft = { "ex", "elixir", "eex", "heex", "surface" },
-    dependencies = { "nvim-lua/plenary.nvim", }
-  },
+  -- {
+  --   "elixir-tools/elixir-tools.nvim",
+  --   ft = { "ex", "elixir", "eex", "heex", "surface" },
+  --   dependencies = { "nvim-lua/plenary.nvim", }
+  -- },
   'mtdl9/vim-log-highlighting',
   {
     "roobert/tailwindcss-colorizer-cmp.nvim",
@@ -87,5 +87,14 @@ return {
     end
   },
   'nvim-telescope/telescope-live-grep-args.nvim',
-  'ThePrimeagen/harpoon'
+  'ThePrimeagen/harpoon',
+  { "phaazon/hop.nvim", config = true },
+  {
+    "j-hui/fidget.nvim",
+    tag = "legacy",
+    event = "LspAttach",
+    opts = {
+      -- options
+    },
+  }
 }

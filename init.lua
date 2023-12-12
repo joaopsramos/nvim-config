@@ -15,4 +15,3 @@ vim.g.mapleader = ' '
 require('config.opts')
 require('config.remap')
 require('lazy').setup('plugins')
-

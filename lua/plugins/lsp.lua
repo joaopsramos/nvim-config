@@ -39,8 +39,8 @@ return {
           async = true
         })
       end, opts)
-      buf_set_keymap('n', '<leader>fp', ':ElixirFromPipe<CR>', opts)
-      buf_set_keymap('n', '<leader>tp', ':ElixirToPipe<CR>', opts)
+      -- buf_set_keymap('n', '<leader>fp', ':ElixirFromPipe<CR>', opts)
+      -- buf_set_keymap('n', '<leader>tp', ':ElixirToPipe<CR>', opts)
       -- buf_set_keymap('n', '<leader>em', ':ElixirExpandMacro<CR>', opts)
     end
 
@@ -68,6 +68,29 @@ return {
     end
 
     local nvim_lsp = require('lspconfig')
+    local configs = require("lspconfig.configs")
+
+    local lexical_config = {
+      filetypes = { "elixir", "eelixir", },
+      cmd = { "/home/joao/.local/share/nvim/mason/packages/lexical/_build/dev/package/lexical/bin/start_lexical.sh" },
+      settings = {},
+    }
+
+    configs.lexical = {
+      default_config = {
+        filetypes = lexical_config.filetypes,
+        cmd = lexical_config.cmd,
+        root_dir = function(fname)
+          return nvim_lsp.util.root_pattern("mix.exs", ".git")(fname) or vim.loop.os_homedir()
+        end,
+        -- optional settings
+        settings = lexical_config.settings,
+        on_attach = on_attach,
+        capabilities = capabilities,
+      },
+    }
+
+    nvim_lsp.lexical.setup({})
 
     -- nvim_lsp.elixirls.setup(config('elixir-ls', {
     --   settings = {
@@ -78,55 +101,55 @@ return {
     --   }
     -- }))
 
-    nvim_lsp.tailwindcss.setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      init_options = {
-        userLanguages = {
-          elixir = "phoenix-heex",
-          heex = "phoenix-heex",
-          svelte = "html",
-          surface = "phoenix-heex",
-        },
-      },
-      handlers = {
-        ["tailwindcss/getConfiguration"] = function(_, _, params, _, bufnr, _)
-          vim.lsp.buf_notify(bufnr, "tailwindcss/getConfigurationResponse", { _id = params._id })
-        end,
-      },
-      settings = {
-        includeLanguages = {
-          typescript = "javascript",
-          typescriptreact = "html",
-          ["html-eex"] = "html",
-          ["phoenix-heex"] = "html",
-          heex = "html",
-          eelixir = "html",
-          elixir = "html",
-          svelte = "html",
-          surface = "html",
-        },
-        tailwindCSS = {
-          lint = {
-            cssConflict = "warning",
-            invalidApply = "error",
-            invalidConfigPath = "error",
-            invalidScreen = "error",
-            invalidTailwindDirective = "error",
-            invalidVariant = "error",
-            recommendedVariantOrder = "warning",
-          },
-          experimental = {
-            classRegex = {
-              [[class= "([^"]*)]],
-              [[class: "([^"]*)]],
-              '~H""".*class="([^"]*)".*"""',
-            },
-          },
-          validate = true,
-        },
-      },
-    })
+    -- nvim_lsp.tailwindcss.setup({
+    --   capabilities = capabilities,
+    --   on_attach = on_attach,
+    --   init_options = {
+    --     userLanguages = {
+    --       elixir = "phoenix-heex",
+    --       heex = "phoenix-heex",
+    --       svelte = "html",
+    --       surface = "phoenix-heex",
+    --     },
+    --   },
+    --   handlers = {
+    --     ["tailwindcss/getConfiguration"] = function(_, _, params, _, bufnr, _)
+    --       vim.lsp.buf_notify(bufnr, "tailwindcss/getConfigurationResponse", { _id = params._id })
+    --     end,
+    --   },
+    --   settings = {
+    --     includeLanguages = {
+    --       typescript = "javascript",
+    --       typescriptreact = "html",
+    --       ["html-eex"] = "html",
+    --       ["phoenix-heex"] = "html",
+    --       heex = "html",
+    --       eelixir = "html",
+    --       elixir = "html",
+    --       svelte = "html",
+    --       surface = "html",
+    --     },
+    --     tailwindCSS = {
+    --       lint = {
+    --         cssConflict = "warning",
+    --         invalidApply = "error",
+    --         invalidConfigPath = "error",
+    --         invalidScreen = "error",
+    --         invalidTailwindDirective = "error",
+    --         invalidVariant = "error",
+    --         recommendedVariantOrder = "warning",
+    --       },
+    --       experimental = {
+    --         classRegex = {
+    --           [[class= "([^"]*)]],
+    --           [[class: "([^"]*)]],
+    --           '~H""".*class="([^"]*)".*"""',
+    --         },
+    --       },
+    --       validate = true,
+    --     },
+    --   },
+    -- })
 
     -- nvim_lsp.tailwindcss.setup({
     -- })
@@ -169,20 +192,26 @@ return {
       }
     }))
 
-    require('elixir').setup({
-      credo = { enable = false },
-      elixirls = {
-        tag = "v0.14.6",
-        settings = require('elixir.elixirls').settings {
-          dialyzerEnabled = true,
-          fetchDeps = false,
-          enableTestLenses = false,
-          suggestSpecs = false,
-        },
-        on_attach = on_attach,
-        capabilities = capabilities
-      }
-    })
+    -- require('elixir').setup({
+    --   nextls = {
+    --     enable = false,
+    --     on_attach = on_attach,
+    --     capabilities = capabilities
+    --   },
+    --   credo = { enable = false },
+    --   elixirls = {
+    --     enable = true,
+    --     tag = "v0.14.6",
+    --     settings = require('elixir.elixirls').settings {
+    --       dialyzerEnabled = true,
+    --       fetchDeps = false,
+    --       enableTestLenses = false,
+    --       suggestSpecs = false,
+    --     },
+    --     on_attach = on_attach,
+    --     capabilities = capabilities
+    --   }
+    -- })
 
     nvim_lsp.efm.setup({ filetypes = { 'elixir' }, cmd = { get_ls_cmd('efm-langserver') } })
 
