@@ -40,11 +40,15 @@ return {
     dependencies = { 'kyazdani42/nvim-web-devicons' }
   },
   'editorconfig/editorconfig-vim',
-  { 'lukas-reineke/indent-blankline.nvim', main = "ibl",                                      opts = {
-    scope = { enabled = false } } },
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    main = "ibl",
+    opts = {
+      scope = { enabled = false } }
+  },
   'nanozuki/tabby.nvim',
-  { 'ustrajunior/ex_maps',                 opts = { create_mappings = true, mapping = 'mtt' } },
-  { 'simrat39/rust-tools.nvim',            name = 'rust-tools',                               ft = 'rust' },
+  { 'ustrajunior/ex_maps',      opts = { create_mappings = true, mapping = 'mtt' } },
+  { 'simrat39/rust-tools.nvim', name = 'rust-tools',                               ft = 'rust' },
   'tpope/vim-fugitive',
   'AndrewRadev/splitjoin.vim',
   'mg979/vim-visual-multi',
@@ -91,10 +95,16 @@ return {
   { "phaazon/hop.nvim", config = true },
   {
     "j-hui/fidget.nvim",
-    tag = "legacy",
-    event = "LspAttach",
+    tag = "v1.2.0",
+    -- event = "LspAttach",
     opts = {
-      -- options
+      notification = {
+        window = {
+          winblend = 0,
+          x_padding = 1, -- Padding from right edge of window boundary
+          y_padding = 1,
+        }
+      }
     },
   }
 }

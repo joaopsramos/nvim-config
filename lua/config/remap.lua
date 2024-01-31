@@ -96,8 +96,8 @@ vim.cmd([[
 -- Mix
 vim.cmd([[
   nmap <leader>iex <leader>tmiiex<CR>
-  nmap <leader>iem <leader>tmiiex --no-pry -S mix<CR>
-  nmap <leader>iep <leader>tmiiex --no-pry -S mix phx.server<CR>
+  nmap <leader>iem <leader>tmiiex -S mix<CR>
+  nmap <leader>iep <leader>tmiiex -S mix phx.server<CR>
 ]])
 
 -- Tabby
