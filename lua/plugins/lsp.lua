@@ -101,71 +101,71 @@ return {
     --   }
     -- }))
 
-    -- nvim_lsp.tailwindcss.setup({
-    --   capabilities = capabilities,
-    --   on_attach = on_attach,
-    --   init_options = {
-    --     userLanguages = {
-    --       elixir = "phoenix-heex",
-    --       heex = "phoenix-heex",
-    --       svelte = "html",
-    --       surface = "phoenix-heex",
-    --     },
-    --   },
-    --   handlers = {
-    --     ["tailwindcss/getConfiguration"] = function(_, _, params, _, bufnr, _)
-    --       vim.lsp.buf_notify(bufnr, "tailwindcss/getConfigurationResponse", { _id = params._id })
-    --     end,
-    --   },
-    --   settings = {
-    --     includeLanguages = {
-    --       typescript = "javascript",
-    --       typescriptreact = "html",
-    --       ["html-eex"] = "html",
-    --       ["phoenix-heex"] = "html",
-    --       heex = "html",
-    --       eelixir = "html",
-    --       elixir = "html",
-    --       svelte = "html",
-    --       surface = "html",
-    --     },
-    --     tailwindCSS = {
-    --       lint = {
-    --         cssConflict = "warning",
-    --         invalidApply = "error",
-    --         invalidConfigPath = "error",
-    --         invalidScreen = "error",
-    --         invalidTailwindDirective = "error",
-    --         invalidVariant = "error",
-    --         recommendedVariantOrder = "warning",
-    --       },
-    --       experimental = {
-    --         classRegex = {
-    --           [[class= "([^"]*)]],
-    --           [[class: "([^"]*)]],
-    --           '~H""".*class="([^"]*)".*"""',
-    --         },
-    --       },
-    --       validate = true,
-    --     },
-    --   },
-    -- })
+    nvim_lsp.tailwindcss.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+      cmd = { get_ls_cmd("tailwindcss-language-server") },
+      init_options = {
+        userLanguages = {
+          elixir = "phoenix-heex",
+          heex = "phoenix-heex",
+          svelte = "html",
+          surface = "phoenix-heex",
+        },
+      },
+      handlers = {
+        ["tailwindcss/getConfiguration"] = function(_, _, params, _, bufnr, _)
+          vim.lsp.buf_notify(bufnr, "tailwindcss/getConfigurationResponse", { _id = params._id })
+        end,
+      },
+      settings = {
+        tailwindCSS = {
+          lint = {
+            cssConflict = "warning",
+            invalidApply = "error",
+            invalidConfigPath = "error",
+            invalidScreen = "error",
+            invalidTailwindDirective = "error",
+            invalidVariant = "error",
+            recommendedVariantOrder = "warning",
+          },
+          includeLanguages = {
+            typescript = "javascript",
+            typescriptreact = "html",
+            ["html-eex"] = "html",
+            ["phoenix-heex"] = "html",
+            heex = "html",
+            eelixir = "html",
+            elixir = "html",
+            svelte = "html",
+            surface = "html",
+          },
+          experimental = {
+            classRegex = {
+              [[class= "([^"]*)]],
+              [[class: "([^"]*)]],
+              '~H""".*class="([^"]*)".*"""',
+            },
+          },
+          validate = true,
+        },
+      },
+    })
 
-    -- nvim_lsp.tailwindcss.setup({
-    -- })
+    -- nvim_lsp['html-lsp'].setup({})
     -- nvim_lsp.ccls.setup(config('ccls'))
 
-    nvim_lsp.html.setup(config('vscode-html-language-server', {
-      filetypes = { 'html', 'eelixir', 'html-eex', 'heex' },
-      init_options = {
-        configurationSection = { 'html', 'css', 'javascript' },
-        embeddedLanguages = {
-          css = true,
-          javascript = true
-        },
-        provideFormatter = true
-      }
-    }))
+    -- nvim_lsp.html.setup(config('vscode-html-language-server', {
+    --   filetypes = { 'html', 'eelixir', 'html-eex', 'heex' },
+    --   init_options = {
+    --     configurationSection = { 'html', 'css', 'javascript' },
+    --     embeddedLanguages = {
+    --       css = true,
+    --       javascript = true
+    --     },
+    --     provideFormatter = true
+    --   }
+    -- }))
 
     require('rust-tools').setup {
       capabilities = capabilities,

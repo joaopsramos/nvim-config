@@ -13,13 +13,56 @@ return {
     -- 'saadparwaiz1/cmp_luasnip'
   },
   config = function()
+    local lsp_symbols = {
+      Text = "   (Text) ",
+      Method = "   (Method)",
+      Function = "   (Function)",
+      Constructor = "   (Constructor)",
+      Field = " ﴲ  (Field)",
+      Variable = "[] (Variable)",
+      Class = "   (Class)",
+      Interface = " ﰮ  (Interface)",
+      Module = "   (Module)",
+      Property = " 襁 (Property)",
+      Unit = "   (Unit)",
+      Value = "   (Value)",
+      Enum = " 練 (Enum)",
+      Keyword = "   (Keyword)",
+      Snippet = "   (Snippet)",
+      Color = "   (Color)",
+      File = "   (File)",
+      Reference = "   (Reference)",
+      Folder = "   (Folder)",
+      EnumMember = "   (EnumMember)",
+      Constant = " ﲀ  (Constant)",
+      Struct = " ﳤ  (Struct)",
+      Event = "   (Event)",
+      Operator = "   (Operator)",
+      TypeParameter = "   (TypeParameter)",
+    }
+
     local cmp = require 'cmp'
 
     -- require('luasnip.loaders.from_snipmate').lazy_load()
 
     cmp.setup({
       formatting = {
-        format = require("tailwindcss-colorizer-cmp").formatter
+        -- format = require("cmp-tailwind-colors").format
+        format = function(entry, item)
+          if item.kind == "Color" then
+            return require("cmp-tailwind-colors").format(entry, item)
+          else
+            item.kind = lsp_symbols[item.kind]
+            item.menu = ({
+              buffer = "[Buffer]",
+              nvim_lsp = "[LSP]",
+              luasnip = "[Snippet]",
+              ultisnips = "[Snippet]",
+            })[entry.source.name]
+
+            return item
+          end
+        end,
       },
       snippet = {
         -- REQUIRED - you must specify a snippet engine
@@ -44,10 +87,11 @@ return {
       sources = cmp.config.sources({
         { name = 'nvim_lsp' },
         { name = 'ultisnips' }, -- For ultisnips users.
-        { name = 'buffer' },
         -- { name = 'vsnip' }, -- For vsnip users.
         -- { name = 'luasnip' }, -- For luasnip users.
         -- { name = 'snippy' }, -- For snippy users.
+      }, {
+        { name = 'buffer' },
       })
     })
 

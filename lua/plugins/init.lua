@@ -81,14 +81,18 @@ return {
   --   dependencies = { "nvim-lua/plenary.nvim", }
   -- },
   'mtdl9/vim-log-highlighting',
+  -- {
+  --   "roobert/tailwindcss-colorizer-cmp.nvim",
+  --   -- optionally, override the default options:
+  --   config = function()
+  --     require("tailwindcss-colorizer-cmp").setup({
+  --       color_square_width = 2,
+  --     })
+  --   end
+  -- },
   {
-    "roobert/tailwindcss-colorizer-cmp.nvim",
-    -- optionally, override the default options:
-    config = function()
-      require("tailwindcss-colorizer-cmp").setup({
-        color_square_width = 2,
-      })
-    end
+    "js-everts/cmp-tailwind-colors",
+    config = true,
   },
   'nvim-telescope/telescope-live-grep-args.nvim',
   'ThePrimeagen/harpoon',
