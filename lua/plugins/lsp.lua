@@ -218,6 +218,10 @@ return {
     nvim_lsp.pyright.setup(config({ get_ls_cmd('pyright-langserver'), '--stdio' }))
 
     nvim_lsp.gopls.setup(config('gopls'))
+    nvim_lsp.gleam.setup({
+      capabilities = capabilities,
+      on_attach = on_attach
+    })
 
     local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
     function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
