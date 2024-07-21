@@ -147,9 +147,5 @@ return {
     })
 
     vim.api.nvim_command "colorscheme catppuccin"
-
-    require('tabby').setup({
-      -- tabline = require('tabby.presets').active_tab_with_wins,
-    })
   end
 }

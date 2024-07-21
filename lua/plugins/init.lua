@@ -46,7 +46,10 @@ return {
     opts = {
       scope = { enabled = false } }
   },
-  'nanozuki/tabby.nvim',
+  {
+    'nanozuki/tabby.nvim',
+    config = true
+  },
   { 'ustrajunior/ex_maps',      opts = { create_mappings = true, mapping = 'mtt' } },
   { 'simrat39/rust-tools.nvim', name = 'rust-tools',                               ft = 'rust' },
   'tpope/vim-fugitive',

@@ -101,6 +101,27 @@ return {
     --   }
     -- }))
 
+    -- require('elixir').setup({
+    --   nextls = {
+    --     enable = false,
+    --     on_attach = on_attach,
+    --     capabilities = capabilities
+    --   },
+    --   credo = { enable = false },
+    --   elixirls = {
+    --     enable = true,
+    --     tag = "v0.14.6",
+    --     settings = require('elixir.elixirls').settings {
+    --       dialyzerEnabled = true,
+    --       fetchDeps = false,
+    --       enableTestLenses = false,
+    --       suggestSpecs = false,
+    --     },
+    --     on_attach = on_attach,
+    --     capabilities = capabilities
+    --   }
+    -- })
+
     nvim_lsp.tailwindcss.setup({
       capabilities = capabilities,
       on_attach = on_attach,
@@ -191,27 +212,6 @@ return {
         }
       }
     }))
-
-    -- require('elixir').setup({
-    --   nextls = {
-    --     enable = false,
-    --     on_attach = on_attach,
-    --     capabilities = capabilities
-    --   },
-    --   credo = { enable = false },
-    --   elixirls = {
-    --     enable = true,
-    --     tag = "v0.14.6",
-    --     settings = require('elixir.elixirls').settings {
-    --       dialyzerEnabled = true,
-    --       fetchDeps = false,
-    --       enableTestLenses = false,
-    --       suggestSpecs = false,
-    --     },
-    --     on_attach = on_attach,
-    --     capabilities = capabilities
-    --   }
-    -- })
 
     nvim_lsp.efm.setup({ filetypes = { 'elixir' }, cmd = { get_ls_cmd('efm-langserver') } })
 
