@@ -196,7 +196,7 @@ return {
       }
     }
 
-    nvim_lsp.tsserver.setup(config({ get_ls_cmd('typescript-language-server'), '--stdio' }))
+    nvim_lsp.ts_ls.setup(config({ get_ls_cmd('typescript-language-server'), '--stdio' }))
 
     nvim_lsp.lua_ls.setup(config('lua-language-server', {
       settings = {
@@ -216,6 +216,8 @@ return {
     nvim_lsp.efm.setup({ filetypes = { 'elixir' }, cmd = { get_ls_cmd('efm-langserver') } })
 
     nvim_lsp.pyright.setup(config({ get_ls_cmd('pyright-langserver'), '--stdio' }))
+
+    nvim_lsp.gleam.setup(config({ get_ls_cmd('gleam'), 'lsp' }))
 
     nvim_lsp.gopls.setup(config('gopls'))
     nvim_lsp.gleam.setup({
