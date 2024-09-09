@@ -27,6 +27,8 @@ vim.cmd([[
 
   nnoremap <A-u> <C-w>p<C-u><C-w>p
   nnoremap <A-d> <C-w>p<C-d><C-w>p
+
+  nnoremap <leader>so vip:sort<CR>
 ]])
 
 -- Exit with 'q'

@@ -81,7 +81,8 @@ return {
         filetypes = lexical_config.filetypes,
         cmd = lexical_config.cmd,
         root_dir = function(fname)
-          return nvim_lsp.util.root_pattern("mix.exs", ".git")(fname) or vim.loop.os_homedir()
+          return nvim_lsp.util.root_pattern("mix.exs", ".git")(fname) or
+              vim.loop.os_homedir()
         end,
         -- optional settings
         settings = lexical_config.settings,
@@ -136,7 +137,8 @@ return {
       },
       handlers = {
         ["tailwindcss/getConfiguration"] = function(_, _, params, _, bufnr, _)
-          vim.lsp.buf_notify(bufnr, "tailwindcss/getConfigurationResponse", { _id = params._id })
+          vim.lsp.buf_notify(bufnr, "tailwindcss/getConfigurationResponse",
+            { _id = params._id })
         end,
       },
       settings = {
@@ -217,9 +219,8 @@ return {
 
     nvim_lsp.pyright.setup(config({ get_ls_cmd('pyright-langserver'), '--stdio' }))
 
-    nvim_lsp.gleam.setup(config({ get_ls_cmd('gleam'), 'lsp' }))
-
     nvim_lsp.gopls.setup(config('gopls'))
+
     nvim_lsp.gleam.setup({
       capabilities = capabilities,
       on_attach = on_attach
