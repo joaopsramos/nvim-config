@@ -9,9 +9,16 @@ if not vim.loop.fs_stat(lazypath) then
     lazypath,
   })
 end
+
 vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = ' '
 
-require('config.opts')
-require('config.remap')
-require('lazy').setup('plugins')
+if vim.g.vscode then
+  require('vscode-config.opts')
+  require('vscode-config.remap')
+  require('lazy').setup('vscode-plugins')
+else
+  require('config.opts')
+  require('config.remap')
+  require('lazy').setup('plugins')
+end
