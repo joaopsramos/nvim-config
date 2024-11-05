@@ -11,6 +11,15 @@ return {
   'nvim-telescope/telescope-live-grep-args.nvim',
   --revisit
   'ThePrimeagen/harpoon',
+  {
+    'stevearc/conform.nvim',
+    opts = {
+      format_on_save = {
+        timeout_ms = 500,
+        lsp_format = "fallback",
+      },
+    },
+  },
   { 'nvim-zh/colorful-winsep.nvim', opts = {},     event = { "WinLeave" } },
   { 'norcalli/nvim-colorizer.lua',  opts = { '*' } },
   {
@@ -21,9 +30,7 @@ return {
       { 'gb', mode = { 'n', 'v' } },
     }
   },
-  { 'windwp/nvim-autopairs',         opts = {} },
-  -- revisit
-  { 'lukas-reineke/lsp-format.nvim', name = 'lsp-format' },
+  { 'windwp/nvim-autopairs', opts = {} },
   {
     'kassio/neoterm',
     init = function()
@@ -31,14 +38,14 @@ return {
       vim.g.neoterm_automap_keys = false
     end
   },
-  { 'rmagatti/auto-session', lazy = false,                  opts = {} },
+  { 'rmagatti/auto-session', lazy = false, opts = {} },
   {
     'vim-test/vim-test',
     init = function()
       vim.g['test#strategy'] = 'neoterm'
     end
   },
-  { 'simeji/winresizer',     keys = { '<C-e>', mode = 'n' } },
+  { 'simeji/winresizer',   keys = { '<C-e>', mode = 'n' } },
   {
     'APZelos/blamer.nvim',
     init = function()
@@ -97,7 +104,7 @@ return {
   },
   --revisit
   { "js-everts/cmp-tailwind-colors", opts = {}, },
-  { "phaazon/hop.nvim", config = true },
+  { "phaazon/hop.nvim",              config = true },
   {
     "j-hui/fidget.nvim",
     opts = {
