@@ -1,31 +1,19 @@
 return {
-  {
-    'kyazdani42/nvim-web-devicons',
-    config = function()
-      require('nvim-web-devicons').get_icons()
-    end
-  },
-  { 'nvim-zh/colorful-winsep.nvim', opts = { highlight = { bg = '' } } },
+  'kyazdani42/nvim-web-devicons',
+  { 'nvim-zh/colorful-winsep.nvim', opts = {},     event = { "WinLeave" } },
   'nvim-lua/plenary.nvim',
-  {
-    'williamboman/mason.nvim',
-    config = true,
-    cmd = 'Mason',
-    dependencies = {
-      'williamboman/mason-lspconfig.nvim',
-    }
-  },
-  { 'norcalli/nvim-colorizer.lua',  config = true,                     opts = { '*' } },
+  { 'norcalli/nvim-colorizer.lua',  opts = { '*' } },
   'tpope/vim-surround',
+  'tpope/vim-repeat',
   {
     'numToStr/Comment.nvim',
-    config = true,
+    opts = {},
     keys = {
       { 'gc', mode = { 'n', 'v' } },
       { 'gb', mode = { 'n', 'v' } },
     }
   },
-  { 'windwp/nvim-autopairs',         opts = { enable_check_bracket_line = false, map_cr = false } },
+  { 'windwp/nvim-autopairs',         opts = {} },
   { 'lukas-reineke/lsp-format.nvim', name = 'lsp-format' },
   -- 'sheerun/vim-polyglot'
   'kassio/neoterm',
@@ -37,7 +25,7 @@ return {
     'folke/trouble.nvim',
     name = 'trouble',
     config = true,
-    dependencies = { 'kyazdani42/nvim-web-devicons' }
+    dependencies = 'kyazdani42/nvim-web-devicons'
   },
   'editorconfig/editorconfig-vim',
   {

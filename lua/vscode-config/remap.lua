@@ -27,6 +27,7 @@ vim.cmd([[
   nnoremap <leader>gsw :Git switch<space>
   nnoremap <leader>gsb :Git switch --create<space>
   nnoremap <leader>gsm :Git switch main<CR>
+  nnoremap <leader>gsn :Git switch next<CR>
   nnoremap <leader>gsbk :Git switch -<CR>
 
   nnoremap <leader>gsth :Git stash<CR>

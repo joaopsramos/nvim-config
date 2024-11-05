@@ -1,5 +1,9 @@
 return {
   'neovim/nvim-lspconfig',
+  dependencies = {
+    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim"
+  },
   name = 'lspconfig',
   config = function()
     require('lsp-format').setup {}
@@ -25,7 +29,6 @@ return {
       buf_set_keymap('n', 'gd', vim.lsp.buf.definition, opts)
       buf_set_keymap('n', 'K', vim.lsp.buf.hover, opts)
       buf_set_keymap('n', 'gi', vim.lsp.buf.implementation, opts)
-      -- buf_set_keymap('n', '<C-k>', vim.lsp.buf.signature_help, opts)
       buf_set_keymap('i', '<C-k>', vim.lsp.buf.signature_help, opts)
       buf_set_keymap('n', '<leader>D', vim.lsp.buf.type_definition, opts)
       buf_set_keymap('n', '<leader>rn', vim.lsp.buf.rename, opts)
@@ -35,9 +38,7 @@ return {
       buf_set_keymap('n', '[d', vim.diagnostic.goto_prev, opts)
       buf_set_keymap('n', ']d', vim.diagnostic.goto_next, opts)
       buf_set_keymap('n', '<leader>fm', function()
-        vim.lsp.buf.format({
-          async = true
-        })
+        vim.lsp.buf.format({ async = true })
       end, opts)
       -- buf_set_keymap('n', '<leader>fp', ':ElixirFromPipe<CR>', opts)
       -- buf_set_keymap('n', '<leader>tp', ':ElixirToPipe<CR>', opts)
@@ -91,7 +92,7 @@ return {
       },
     }
 
-    nvim_lsp.lexical.setup({})
+    -- nvim_lsp.lexical.setup({})
 
     -- nvim_lsp.elixirls.setup(config('elixir-ls', {
     --   settings = {
