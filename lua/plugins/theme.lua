@@ -1,23 +1,16 @@
 return {
   'catppuccin/nvim',
   name = 'catppuccin',
-  lazy = false,
   priority = 1000,
   config = function()
     require('catppuccin').setup({
-      flavour = "macchiato", -- latte, frappe, macchiato, mocha
-      background = {         -- :h background
+      flavour = "auto", -- latte, frappe, macchiato, mocha
+      background = {    -- :h background
         light = "latte",
         dark = "macchiato",
       },
-      compile_path = vim.fn.stdpath("cache") .. "/catppuccin",
       transparent_background = true,
       term_colors = false,
-      dim_inactive = {
-        enabled = false,
-        shade = "dark",
-        percentage = 0.15,
-      },
       styles = {
         comments = { "italic" },
         conditionals = { "italic" },
@@ -36,6 +29,9 @@ return {
         cmp = true,
         gitsigns = true,
         nvimtree = true,
+        fidget = true,
+        dap = true,
+        dap_ui = true,
         telescope = true,
         treesitter = true,
         -- neotest = true,
@@ -56,8 +52,6 @@ return {
             information = { "underline" },
           },
         },
-        --
-        -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
       },
       color_overrides = {
         all = {
@@ -93,27 +87,14 @@ return {
       },
       custom_highlights = function(c)
         return {
-          -- Normal = { bg = c.none },
-          -- NormalNC = { bg = c.none },
-          -- Constant = { fg = c.mauve },
           Identifier = { fg = c.peach },
           Type = { fg = c.mauve },
           Keyword = { fg = c.red },
           ['@keyword.function'] = { fg = c.red },
-          -- -- -- ['@parameter'] = { fg = c.peach },
           ['@string.special.symbol'] = { fg = c.sapphire },
-          -- ['@operator'] = { fg = c.pink },
-          -- ['@function'] = { fg = c.blue },
-          -- ['@function.call'] = { fg = c.blue },
-          -- ['@tag'] = { fg = c.pink },
-          -- ['@tag.attribute'] = { fg = c.yellow },
           ["@module"] = { fg = c.mauve, style = { "italic" } },
 
-          -- htmlTag = { fg = c.mauve },
           htmlEndTag = { fg = c.flamingo },
-          -- htmlTagName = { fg = c.pink },
-          -- htmlString = { fg = c.yellow },
-          -- htmlArg = { fg = c.green },
 
           TreesitterContext = { bg = c.surface0 },
           TreesitterContextLineNumber = { fg = c.red },
@@ -126,26 +107,13 @@ return {
           DiffAdd = { bg = '#283b4d' },
           DiffDelete = { bg = '#3f2d3d' },
           DiffText = { bg = '#394b70' },
-          -- Search = { bg = c.surface1 },
-          -- CurSearch = { bg = c.blue },
-          -- IncSearch = { bg = c.peach },
-          -- Substitute = { bg = c.none, fg = c.red },
-
-          -- CmpItemKindField = { fg = c.sapphire },
-          -- CmpItemKindVariable = { fg = c.peach },
-          -- CmpItemKindProperty = { fg = c.sapphire },
-          -- CmpItemKindText = { fg = c.text },
-          -- CmpItemKindKeyword = { fg = c.pink },
 
           TabLineSel = { fg = c.green, bg = c.mantle },
           EndOfBuffer = { fg = c.surface1 },
-          --       NotifyWARNBorder = { fg = c.peach },
-          --       NotifyWARNIcon = { fg = c.peach },
-          --       NotifyWARNTitle = { fg = c.peach, style = { "italic" } },
         }
       end
     })
 
-    vim.api.nvim_command "colorscheme catppuccin"
+    vim.cmd.colorscheme "catppuccin"
   end
 }

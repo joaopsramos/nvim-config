@@ -1,16 +1,16 @@
 return {
   'neovim/nvim-lspconfig',
   dependencies = {
+    'hrsh7th/nvim-cmp',
     "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim"
+    "williamboman/mason-lspconfig.nvim",
+    "https://git.sr.ht/~whynothugo/lsp_lines.nvim",
   },
   name = 'lspconfig',
   config = function()
     require('mason').setup()
 
     local function get_ls_cmd(ls)
-      local language_servers_dir = vim.fn.stdpath('data') .. '/mason/bin/'
-      return language_servers_dir .. ls
     end
 
     local nvim_lsp = require('lspconfig')
@@ -119,12 +119,7 @@ return {
       -- vim.keymap.set('n', '<leader>em', ':ElixirExpandMacro<CR>', opts)
     end
 
-    local capabilities = require('cmp_nvim_lsp').default_capabilities(
-      vim.lsp.protocol.make_client_capabilities()
-    )
-    capabilities.textDocument.completion.completionItem.snippetSupport = true
-
-
+    local capabilities = require('cmp_nvim_lsp').default_capabilities()
     local lspconfig = require("lspconfig")
 
     for name, server_config in pairs(servers) do
@@ -173,5 +168,17 @@ return {
       opts.border = opts.border or 'rounded'
       return orig_util_open_floating_preview(contents, syntax, opts, ...)
     end
+
+    require("lsp_lines").setup()
+    vim.diagnostic.config { virtual_text = false, virtual_lines = true }
+
+    vim.keymap.set("", "<leader>vl", function()
+      local config = vim.diagnostic.config() or {}
+      if config.virtual_text then
+        vim.diagnostic.config { virtual_text = false, virtual_lines = true }
+      else
+        vim.diagnostic.config { virtual_text = true, virtual_lines = false }
+      end
+    end, { desc = "Toggle lsp_lines" })
   end
 }

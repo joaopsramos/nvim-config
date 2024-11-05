@@ -38,14 +38,21 @@ return {
       vim.g.neoterm_automap_keys = false
     end
   },
-  { 'rmagatti/auto-session', lazy = false, opts = {} },
+  {
+    'rmagatti/auto-session',
+    lazy = false,
+    init = function()
+      vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+    end,
+    opts = {}
+  },
   {
     'vim-test/vim-test',
     init = function()
       vim.g['test#strategy'] = 'neoterm'
     end
   },
-  { 'simeji/winresizer',   keys = { '<C-e>', mode = 'n' } },
+  { 'simeji/winresizer',     keys = { '<C-e>', mode = 'n' } },
   {
     'APZelos/blamer.nvim',
     init = function()

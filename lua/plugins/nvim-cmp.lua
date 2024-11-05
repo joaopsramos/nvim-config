@@ -2,76 +2,44 @@ return {
   'hrsh7th/nvim-cmp',
   event = 'VeryLazy',
   dependencies = {
-    { 'hrsh7th/cmp-nvim-lsp',                name = 'cmp_nvim_lsp' },
+    'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-path',
     'hrsh7th/cmp-cmdline',
+    { 'L3MON4D3/LuaSnip', build = 'make install_jsregexp' },
+    'saadparwaiz1/cmp_luasnip',
     'honza/vim-snippets',
-    'SirVer/ultisnips',
-    { 'quangnguyen30192/cmp-nvim-ultisnips', config = true },
-    -- { 'L3MON4D3/LuaSnip',     version = '1.*',      build = 'make install_jsregexp' },
-    -- 'saadparwaiz1/cmp_luasnip'
+    'onsails/lspkind.nvim'
   },
   config = function()
-    local lsp_symbols = {
-      Text = "   (Text) ",
-      Method = "   (Method)",
-      Function = "   (Function)",
-      Constructor = "   (Constructor)",
-      Field = " ﴲ  (Field)",
-      Variable = "[] (Variable)",
-      Class = "   (Class)",
-      Interface = " ﰮ  (Interface)",
-      Module = "   (Module)",
-      Property = " 襁 (Property)",
-      Unit = "   (Unit)",
-      Value = "   (Value)",
-      Enum = " 練 (Enum)",
-      Keyword = "   (Keyword)",
-      Snippet = "   (Snippet)",
-      Color = "   (Color)",
-      File = "   (File)",
-      Reference = "   (Reference)",
-      Folder = "   (Folder)",
-      EnumMember = "   (EnumMember)",
-      Constant = " ﲀ  (Constant)",
-      Struct = " ﳤ  (Struct)",
-      Event = "   (Event)",
-      Operator = "   (Operator)",
-      TypeParameter = "   (TypeParameter)",
-    }
+    local cmp = require('cmp')
+    local luasnip = require('luasnip')
+    local lspkind = require('lspkind')
 
-    local cmp = require 'cmp'
-
-    -- require('luasnip.loaders.from_snipmate').lazy_load()
+    require('luasnip.loaders.from_snipmate').lazy_load()
 
     cmp.setup({
       formatting = {
-        -- format = require("cmp-tailwind-colors").format
-        format = function(entry, item)
-          if item.kind == "Color" then
-            return require("cmp-tailwind-colors").format(entry, item)
-          else
-            item.kind = lsp_symbols[item.kind]
-            item.menu = ({
-              buffer = "[Buffer]",
-              nvim_lsp = "[LSP]",
-              luasnip = "[Snippet]",
-              ultisnips = "[Snippet]",
+        format = lspkind.cmp_format({
+          mode = 'symbol_text',
+          maxwidth = 60,
+          before = function(entry, vim_item)
+            vim_item.menu = ({
+              nvim_lsp = '[LSP]',
+              look = '[Dict]',
+              buffer = '[Buffer]',
+              luasnip = '[LuaSnip]',
+              path = '[Path]',
             })[entry.source.name]
 
-            return item
+            return vim_item
           end
-        end,
+        })
       },
       snippet = {
-        -- REQUIRED - you must specify a snippet engine
         expand = function(args)
-          -- vim.fn['vsnip#anonymous'](args.body) -- For `vsnip` users.
-          -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
-          -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
-          vim.fn['UltiSnips#Anon'](args.body) -- For `ultisnips` users.
-        end
+          luasnip.lsp_expand(args.body)
+        end,
       },
       window = {
         completion = cmp.config.window.bordered(),
@@ -82,30 +50,19 @@ return {
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.abort(),
-        ['<Tab>'] = cmp.mapping.confirm({ select = true }) -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        ['<CR>'] = cmp.mapping.confirm({ select = true }) -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
       }),
       sources = cmp.config.sources({
         { name = 'nvim_lsp' },
-        { name = 'ultisnips' }, -- For ultisnips users.
-        -- { name = 'vsnip' }, -- For vsnip users.
-        -- { name = 'luasnip' }, -- For luasnip users.
-        -- { name = 'snippy' }, -- For snippy users.
+        { name = 'luasnip' },
       }, {
         { name = 'buffer' },
+        { name = 'path' },
       })
     })
 
-    -- -- Set configuration for specific filetype.
-    -- cmp.setup.filetype('gitcommit', {
-    --   sources = cmp.config.sources({
-    --     { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-    --   }, {
-    --     { name = 'buffer' },
-    --   })
-    -- })
-
-    -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
-    cmp.setup.cmdline('/', {
+    -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+    cmp.setup.cmdline({ '/', '?' }, {
       mapping = cmp.mapping.preset.cmdline(),
       sources = {
         { name = 'buffer' }
@@ -116,9 +73,11 @@ return {
     cmp.setup.cmdline(':', {
       mapping = cmp.mapping.preset.cmdline(),
       sources = cmp.config.sources({
-        { name = 'path' },
+        { name = 'path' }
+      }, {
         { name = 'cmdline' }
-      })
+      }),
+      matching = { disallow_symbol_nonprefix_matching = false }
     })
   end
 }
