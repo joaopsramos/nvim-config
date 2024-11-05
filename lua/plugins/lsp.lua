@@ -92,7 +92,7 @@ return {
       },
     }
 
-    -- nvim_lsp.lexical.setup({})
+    nvim_lsp.lexical.setup({})
 
     -- nvim_lsp.elixirls.setup(config('elixir-ls', {
     --   settings = {
@@ -190,13 +190,9 @@ return {
     --     provideFormatter = true
     --   }
     -- }))
-
-    require('rust-tools').setup {
-      capabilities = capabilities,
-      server = {
-        cmd = { vim.fn.expand('~/.local/share/nvim/mason/bin/rust-analyzer') },
-        on_attach = on_attach
-      }
+    --
+    vim.g.rustaceanvim = {
+      server = { on_attach = on_attach}
     }
 
     nvim_lsp.ts_ls.setup(config({ get_ls_cmd('typescript-language-server'), '--stdio' }))

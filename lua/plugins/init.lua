@@ -1,10 +1,18 @@
 return {
   'kyazdani42/nvim-web-devicons',
-  { 'nvim-zh/colorful-winsep.nvim', opts = {},     event = { "WinLeave" } },
   'nvim-lua/plenary.nvim',
-  { 'norcalli/nvim-colorizer.lua',  opts = { '*' } },
   'tpope/vim-surround',
   'tpope/vim-repeat',
+  'tpope/vim-fugitive',
+  'AndrewRadev/splitjoin.vim',
+  'mg979/vim-visual-multi',
+  'mtdl9/vim-log-highlighting',
+  --revisit
+  'nvim-telescope/telescope-live-grep-args.nvim',
+  --revisit
+  'ThePrimeagen/harpoon',
+  { 'nvim-zh/colorful-winsep.nvim', opts = {},     event = { "WinLeave" } },
+  { 'norcalli/nvim-colorizer.lua',  opts = { '*' } },
   {
     'numToStr/Comment.nvim',
     opts = {},
@@ -14,35 +22,58 @@ return {
     }
   },
   { 'windwp/nvim-autopairs',         opts = {} },
+  -- revisit
   { 'lukas-reineke/lsp-format.nvim', name = 'lsp-format' },
-  -- 'sheerun/vim-polyglot'
-  'kassio/neoterm',
-  { 'rmagatti/auto-session', config = true },
-  'vim-test/vim-test',
+  {
+    'kassio/neoterm',
+    init = function()
+      vim.g.neoterm_default_mod = 'botright'
+      vim.g.neoterm_automap_keys = false
+    end
+  },
+  { 'rmagatti/auto-session', lazy = false,                  opts = {} },
+  {
+    'vim-test/vim-test',
+    init = function()
+      vim.g['test#strategy'] = 'neoterm'
+    end
+  },
   { 'simeji/winresizer',     keys = { '<C-e>', mode = 'n' } },
-  'APZelos/blamer.nvim',
+  {
+    'APZelos/blamer.nvim',
+    init = function()
+      vim.g.blamer_enabled = true
+      vim.g.blamer_prefix = '👀 '
+      vim.g.blamer_show_in_visual_modes = 0
+      vim.g.blamer_show_in_insert_modes = 0
+    end
+  },
+  -- revisit
   {
     'folke/trouble.nvim',
     name = 'trouble',
-    config = true,
+    opts = {},
     dependencies = 'kyazdani42/nvim-web-devicons'
   },
-  'editorconfig/editorconfig-vim',
+  {
+    'editorconfig/editorconfig-vim',
+    init = function()
+      vim.g.EditorConfig_exclude_patterns = { 'fugitive://.*' }
+    end
+  },
   {
     'lukas-reineke/indent-blankline.nvim',
     main = "ibl",
-    opts = {
-      scope = { enabled = false } }
+    opts = { scope = { enabled = false } }
   },
+  { 'nanozuki/tabby.nvim', dependencies = 'nvim-tree/nvim-web-devicons',      opts = {} },
+  { 'ustrajunior/ex_maps', opts = { create_mappings = true, mapping = 'mtt' } },
   {
-    'nanozuki/tabby.nvim',
-    config = true
+    'mrcjkb/rustaceanvim',
+    version = '^5',
+    lazy = false,
   },
-  { 'ustrajunior/ex_maps',      opts = { create_mappings = true, mapping = 'mtt' } },
-  { 'simrat39/rust-tools.nvim', name = 'rust-tools',                               ft = 'rust' },
-  'tpope/vim-fugitive',
-  'AndrewRadev/splitjoin.vim',
-  'mg979/vim-visual-multi',
+  -- revisit
   -- {
   --   'nvim-neotest/neotest',
   --   config = function()
@@ -53,7 +84,7 @@ return {
   --     'jfpedroza/neotest-elixir',
   --   }
   -- },
-
+  -- revisit
   {
     'ray-x/lsp_signature.nvim',
     name = 'lsp_signature',
@@ -64,34 +95,11 @@ return {
       }
     }
   },
-  -- { 'elixir-editors/vim-elixir', ft = { 'elixir', 'eelixir', 'heex' } },
-
-  -- {
-  --   "elixir-tools/elixir-tools.nvim",
-  --   ft = { "ex", "elixir", "eex", "heex", "surface" },
-  --   dependencies = { "nvim-lua/plenary.nvim", }
-  -- },
-  'mtdl9/vim-log-highlighting',
-  -- {
-  --   "roobert/tailwindcss-colorizer-cmp.nvim",
-  --   -- optionally, override the default options:
-  --   config = function()
-  --     require("tailwindcss-colorizer-cmp").setup({
-  --       color_square_width = 2,
-  --     })
-  --   end
-  -- },
-  {
-    "js-everts/cmp-tailwind-colors",
-    config = true,
-  },
-  'nvim-telescope/telescope-live-grep-args.nvim',
-  'ThePrimeagen/harpoon',
+  --revisit
+  { "js-everts/cmp-tailwind-colors", opts = {}, },
   { "phaazon/hop.nvim", config = true },
   {
     "j-hui/fidget.nvim",
-    tag = "v1.2.0",
-    -- event = "LspAttach",
     opts = {
       notification = {
         window = {

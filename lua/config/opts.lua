@@ -27,14 +27,6 @@ opt.scrolloff = 5
 -- opt.scrolloff = 100
 -- opt.ch = 0
 
-g.blamer_enabled = true
-g.blamer_prefix = '👀 '
-g.blamer_show_in_visual_modes = 0
-g['test#strategy'] = 'neoterm'
-
-g.neoterm_default_mod = 'botright'
-g.neoterm_automap_keys = false
-
 g.UltiSnipsExpandTrigger = '<CR>'
 g.UltiSnipsJumpForwardTrigger = '<C-b>'
 g.UltiSnipsJumpBackwardTrigger = '<C-z>'
@@ -68,16 +60,16 @@ vim.cmd([[
 ]])
 
 local function add_lines_to_term()
-  local buf_ft = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), 'filetype')
-  if buf_ft == 'neoterm' then
-    vim.api.nvim_command('set relativenumber')
-    vim.api.nvim_command('set number')
-  end
+        local buf_ft = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), 'filetype')
+        if buf_ft == 'neoterm' then
+                vim.api.nvim_command('set relativenumber')
+                vim.api.nvim_command('set number')
+        end
 end
 
 local term_group = vim.api.nvim_create_augroup('term_group', { clear = true })
 vim.api.nvim_create_autocmd('BufEnter', {
-  group = term_group,
-  pattern = 'term:/*neoterm*',
-  callback = add_lines_to_term
+        group = term_group,
+        pattern = 'term:/*neoterm*',
+        callback = add_lines_to_term
 })
