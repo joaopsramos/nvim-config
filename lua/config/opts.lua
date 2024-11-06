@@ -27,10 +27,6 @@ opt.scrolloff = 5
 -- opt.scrolloff = 100
 -- opt.ch = 0
 
-g.UltiSnipsExpandTrigger = '<CR>'
-g.UltiSnipsJumpForwardTrigger = '<C-b>'
-g.UltiSnipsJumpBackwardTrigger = '<C-z>'
-
 vim.cmd([[
   syntax on
   set nu! rnu!

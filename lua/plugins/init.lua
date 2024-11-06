@@ -63,12 +63,12 @@ return {
     end
   },
   -- revisit
-  {
-    'folke/trouble.nvim',
-    name = 'trouble',
-    opts = {},
-    dependencies = 'kyazdani42/nvim-web-devicons'
-  },
+  -- {
+  --   'folke/trouble.nvim',
+  --   name = 'trouble',
+  --   opts = {},
+  --   dependencies = 'kyazdani42/nvim-web-devicons'
+  -- },
   {
     'editorconfig/editorconfig-vim',
     init = function()
@@ -123,5 +123,16 @@ return {
         }
       }
     },
+  },
+  {
+    'RRethy/vim-illuminate',
+    event = 'VeryLazy',
+    name = 'illuminate',
+    config = function()
+      require('illuminate').configure({
+        -- under_cursor: whether or not to illuminate under the cursor
+        under_cursor = true,
+      })
+    end
   }
 }

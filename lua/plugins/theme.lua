@@ -44,12 +44,17 @@ return {
             hints = { "italic" },
             warnings = { "italic" },
             information = { "italic" },
+            ok = { "italic" },
           },
           underlines = {
             errors = { "underline" },
             hints = { "underline" },
             warnings = { "underline" },
             information = { "underline" },
+            ok = { "underline" },
+          },
+          inlay_hints = {
+            background = true,
           },
         },
       },
