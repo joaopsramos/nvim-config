@@ -1,5 +1,4 @@
 local opt = vim.opt
-local g = vim.g
 
 opt.encoding = 'utf8'
 opt.mouse = 'a'
@@ -32,14 +31,6 @@ vim.cmd([[
   set nu! rnu!
   set whichwrap+=<,>,h,l
   let extension = expand('%:e')
-]])
-
--- Run :PackerCompile after installations
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-  augroup end
 ]])
 
 -- Highlight on yank
