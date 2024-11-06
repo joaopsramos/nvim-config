@@ -12,6 +12,11 @@ return {
   --revisit
   'ThePrimeagen/harpoon',
   {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {}
+  },
+  {
     'stevearc/conform.nvim',
     opts = {
       format_on_save = {

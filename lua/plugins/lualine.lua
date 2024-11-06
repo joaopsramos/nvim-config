@@ -1,52 +1,60 @@
 return {
-    'nvim-lualine/lualine.nvim',
-    opts = {
-        options = {
-            icons_enabled = true,
-            theme = 'auto',
-            component_separators = {
-                left = '|',
-                right = '|'
-            },
-            section_separators = {
-                left = '',
-                right = ''
-            },
-            disabled_filetypes = {
-                statusline = {},
-                winbar = {}
-            },
-            ignore_focus = {},
-            always_divide_middle = true,
-            globalstatus = true,
-            refresh = {
-                statusline = 1000,
-                tabline = 1000,
-                winbar = 1000
-            }
+  'nvim-lualine/lualine.nvim',
+  dependencies = { 'nvim-tree/nvim-web-devicons' },
+  config = function()
+    -- local custom_tokyonight = require("lualine.themes.tokyonight")
+
+    -- custom_tokyonight.command.fg = "#F5A97F"
+
+    require("lualine").setup({
+      options = {
+        icons_enabled = true,
+        -- theme = custom_tokyonight,
+        theme = 'auto',
+        component_separators = {
+          left = '|',
+          right = '|'
         },
-        sections = {
-            lualine_a = {'mode'},
-            lualine_b = {'branch', 'diff'},
-            lualine_c = {{
-                'filename',
-                path = 1
-            }, 'diagnostics'},
-            lualine_x = {'encoding', 'filetype'},
-            lualine_y = {'location'},
-            lualine_z = {'progress'}
+        section_separators = {
+          left = '',
+          right = ''
         },
-        inactive_sections = {
-            lualine_a = {},
-            lualine_b = {},
-            lualine_c = {'filename'},
-            lualine_x = {'location'},
-            lualine_y = {},
-            lualine_z = {}
+        disabled_filetypes = {
+          statusline = {},
+          winbar = {}
         },
-        tabline = {},
-        winbar = {},
-        inactive_winbar = {},
-        extensions = {}
-    }
+        ignore_focus = {},
+        always_divide_middle = true,
+        globalstatus = true,
+        refresh = {
+          statusline = 1000,
+          tabline = 1000,
+          winbar = 1000
+        }
+      },
+      sections = {
+        lualine_a = { 'mode' },
+        lualine_b = { 'branch', 'diff' },
+        lualine_c = { {
+          'filename',
+          path = 1
+        }, 'diagnostics' },
+        lualine_x = { 'encoding', 'filetype' },
+        lualine_y = { 'location' },
+        lualine_z = { 'progress' }
+      },
+      inactive_sections = {
+        lualine_a = {},
+        lualine_b = {},
+        lualine_c = { 'filename' },
+        lualine_x = { 'location' },
+        lualine_y = {},
+        lualine_z = {}
+      },
+      tabline = {},
+      winbar = {},
+      inactive_winbar = {},
+      extensions = {}
+    })
+  end
 }

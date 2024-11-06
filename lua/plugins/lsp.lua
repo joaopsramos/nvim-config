@@ -135,6 +135,8 @@ return {
       lspconfig[name].setup(server_config)
     end
 
+    require("sg").setup({ on_attach = on_attach })
+
     vim.g.rustaceanvim = {
       server = { on_attach = on_attach }
     }

@@ -9,7 +9,11 @@ return {
     { 'L3MON4D3/LuaSnip', build = 'make install_jsregexp' },
     'saadparwaiz1/cmp_luasnip',
     'honza/vim-snippets',
-    'onsails/lspkind.nvim'
+    'onsails/lspkind.nvim',
+    {
+      "sourcegraph/sg.nvim",
+      dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
+    }
   },
   config = function()
     local cmp = require('cmp')
@@ -56,6 +60,7 @@ return {
       sources = cmp.config.sources({
         { name = 'nvim_lsp' },
         { name = 'luasnip' },
+        { name = 'cody' },
       }, {
         { name = 'buffer' },
         { name = 'path' },
