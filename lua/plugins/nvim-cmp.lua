@@ -10,10 +10,6 @@ return {
     'saadparwaiz1/cmp_luasnip',
     'honza/vim-snippets',
     'onsails/lspkind.nvim',
-    {
-      "sourcegraph/sg.nvim",
-      dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
-    }
   },
   config = function()
     local cmp = require('cmp')

@@ -4,6 +4,10 @@ return {
     'hrsh7th/nvim-cmp',
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
+    {
+      "sourcegraph/sg.nvim",
+      dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope.nvim" },
+    }
   },
   name = 'lspconfig',
   config = function()

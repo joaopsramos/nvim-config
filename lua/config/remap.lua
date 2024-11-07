@@ -1,13 +1,25 @@
+if vim.g.neovide then
+  vim.cmd([[
+     nnoremap <SC-V> "+P
+     vnoremap <SC-c> "+y
+     nnoremap <SC-v> "+P
+     vnoremap <SC-v> "+P
+     cnoremap <SC-v> <C-o>l<C-o>"+<C-o>P<C-o>l
+     inoremap <SC-v> <ESC>l"+Pli
+     tnoremap <SC-v> <C-\\><C-n>"+Pi
+  ]])
+end
+
 -- General
 vim.cmd([[
   nnoremap <leader>re :so $MYVIMRC<CR>
-  nnoremap <C-h> :noh<CR>
+  nnoremap <silent> <C-h> :noh<CR>
   vnoremap <C-y> "+y
   vnoremap <C-p> s<C-r>0<Esc>
   nnoremap <silent> <leader>dab :%bd<CR>:e#<CR>
 
-  noremap q :q<CR>
-  noremap <C-x> :bd<CR>
+  noremap <silent> q :q<CR>
+  noremap <silent> <C-x> :bd<CR>
 
   xnoremap <leader>p "_dP
 
@@ -32,14 +44,14 @@ vim.cmd([[
 ]])
 
 -- Exit with 'q'
-vim.cmd([[ map Q :Tclose!<CR>:NvimTreeClose<CR>:quitall<CR> ]])
+vim.cmd([[ map <silent> Q :Tclose!<CR>:NvimTreeClose<CR>:quitall<CR> ]])
 
 -- Save with 'Ctrl + s' on Normal, Insert and Visual modes
 -- Precisa adicionar a linha: stty -ixon , ao seu ~/.bashrc
 vim.cmd([[
-  nnoremap <C-s> :w<CR>
-  inoremap <C-s> <Esc>:w<CR>l
-  vnoremap <C-s> <Esc>:w<CR>
+  nnoremap <silent> <C-s> :w<CR>
+  inoremap <silent> <C-s> <Esc>:w<CR>l
+  vnoremap <silent> <C-s> <Esc>:w<CR>
 ]])
 
 -- Select all with 'Ctrl + a'
@@ -55,7 +67,7 @@ vim.cmd([[
 
 -- Notify
 vim.cmd([[
-  nnoremap <leader>nd :lua vim.notify.dismiss()<CR>
+  nnoremap <silent> <leader>nd :lua require("notify").dismiss()<CR>
 ]])
 
 -- Neoterm
