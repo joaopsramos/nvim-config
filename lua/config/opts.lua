@@ -29,8 +29,8 @@ opt.scrolloff = 5
 
 if vim.g.neovide then
   opt.linespace = 0
-  vim.o.guifont = "Hack Nerd Font Mono"
-  vim.g.neovide_scale_factor = 0.85
+  vim.o.guifont = "Hack Nerd Font Mono:h12"
+  -- vim.g.neovide_scale_factor = 0.84
   vim.g.neovide_text_gamma = 0.0
   vim.g.neovide_text_contrast = 0.5
   vim.g.neovide_fullscreen = true
@@ -57,7 +57,7 @@ if vim.g.neovide then
 
   -- vim.g.neovide_cursor_vfx_particle_lifetime = 2
 
-  -- -- Helper function for transparency formatting
+  -- Helper function for transparency formatting
   -- local alpha = function()
   --   return string.format("%x", math.floor((255 * vim.g.transparency) or 0.8))
   -- end

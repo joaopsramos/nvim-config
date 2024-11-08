@@ -6,6 +6,7 @@ local telescope_keymaps = {
   { keymap = '<leader>fb', cmd = '<cmd>Telescope buffers<CR>' },
   { keymap = '<leader>fg', cmd = '<cmd>Telescope git_branches<CR>' },
   { keymap = '<leader>sh', cmd = '<cmd>Telescope help_tags<CR>' },
+  { keymap = '<leader>ls', cmd = '<cmd>Telescope lsp_document_symbols<CR>' },
   { keymap = '<leader>ri', cmd = '<cmd>Telescope resume<CR>' },
 }
 
@@ -21,7 +22,7 @@ return {
     local telescope = require("telescope")
     local lga_actions = require("telescope-live-grep-args.actions")
 
-    telescope.setup {
+    telescope.setup({
       extensions = {
         fzf = {
           fuzzy = true,
@@ -56,10 +57,11 @@ return {
           }
         }
       }
-    }
+    })
 
     telescope.load_extension('fzf')
     telescope.load_extension('live_grep_args')
+    telescope.load_extension("noice")
 
     local opts = { noremap = true, silent = true }
 

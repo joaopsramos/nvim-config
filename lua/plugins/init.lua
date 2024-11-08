@@ -11,6 +11,7 @@ return {
   'nvim-telescope/telescope-live-grep-args.nvim',
   --revisit
   'ThePrimeagen/harpoon',
+  'mechatroner/rainbow_csv',
   {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
@@ -57,7 +58,12 @@ return {
       vim.g['test#strategy'] = 'neoterm'
     end
   },
-  { 'simeji/winresizer',     keys = { '<C-e>', mode = 'n' } },
+  {
+    'simeji/winresizer',
+    init = function()
+      vim.g.winresizer_start_key = false
+    end
+  },
   {
     'APZelos/blamer.nvim',
     init = function()
@@ -85,24 +91,26 @@ return {
     main = "ibl",
     opts = { scope = { enabled = false } }
   },
-  { 'nanozuki/tabby.nvim', dependencies = 'nvim-tree/nvim-web-devicons',      opts = {} },
-  { 'ustrajunior/ex_maps', opts = { create_mappings = true, mapping = 'mtt' } },
+  { 'nanozuki/tabby.nvim',   dependencies = 'nvim-tree/nvim-web-devicons',      opts = {} },
+  { 'ustrajunior/ex_maps',   opts = { create_mappings = true, mapping = 'mtt' } },
   {
     'mrcjkb/rustaceanvim',
     version = '^5',
     lazy = false,
   },
   -- revisit
-  -- {
-  --   'nvim-neotest/neotest',
-  --   config = function()
-  --     require('neotest').setup({ adapters = require('neotest-elixir') })
-  --   end,
-  --   dependencies = {
-  --     'nvim-lua/plenary.nvim',
-  --     'jfpedroza/neotest-elixir',
-  --   }
-  -- },
+  {
+    'nvim-neotest/neotest',
+    config = function()
+      require('neotest').setup({
+        adapters = { require('neotest-elixir') }
+      })
+    end,
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'jfpedroza/neotest-elixir',
+    }
+  },
   -- revisit
   {
     'ray-x/lsp_signature.nvim',
@@ -117,18 +125,18 @@ return {
   --revisit
   { "js-everts/cmp-tailwind-colors", opts = {}, },
   { "phaazon/hop.nvim",              config = true },
-  {
-    "j-hui/fidget.nvim",
-    opts = {
-      notification = {
-        window = {
-          winblend = 0,
-          x_padding = 1, -- Padding from right edge of window boundary
-          y_padding = 1,
-        }
-      }
-    },
-  },
+  -- {
+  --   "j-hui/fidget.nvim",
+  --   opts = {
+  --     notification = {
+  --       window = {
+  --         winblend = 0,
+  --         x_padding = 1, -- Padding from right edge of window boundary
+  --         y_padding = 1,
+  --       }
+  --     }
+  --   },
+  -- },
   {
     'RRethy/vim-illuminate',
     event = 'VeryLazy',
@@ -140,36 +148,4 @@ return {
       })
     end
   },
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      "MunifTanjim/nui.nvim",
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
-      "rcarriga/nvim-notify",
-    },
-    config = function()
-      require("noice").setup({
-        lsp = {
-          -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-          override = {
-            ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-            ["vim.lsp.util.stylize_markdown"] = true,
-            ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
-          },
-        },
-        -- you can enable a preset for easier configuration
-        presets = {
-          bottom_search = false,        -- use a classic bottom cmdline for search
-          command_palette = false,      -- position the cmdline and popupmenu together
-          long_message_to_split = true, -- long messages will be sent to a split
-          inc_rename = false,           -- enables an input dialog for inc-rename.nvim
-          lsp_doc_border = false,       -- add a border to hover docs and signature help
-        },
-      })
-    end
-  }
 }

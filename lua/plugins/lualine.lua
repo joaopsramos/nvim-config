@@ -11,14 +11,8 @@ return {
         icons_enabled = true,
         -- theme = custom_tokyonight,
         theme = 'auto',
-        component_separators = {
-          left = '|',
-          right = '|'
-        },
-        section_separators = {
-          left = '',
-          right = ''
-        },
+        component_separators = { left = '|', right = '|' },
+        section_separators = { left = '', right = '' },
         disabled_filetypes = {
           statusline = {},
           winbar = {}
@@ -27,19 +21,29 @@ return {
         always_divide_middle = true,
         globalstatus = true,
         refresh = {
-          statusline = 1000,
-          tabline = 1000,
-          winbar = 1000
+          statusline = 100,
+          tabline = 100,
+          winbar = 100
         }
       },
       sections = {
         lualine_a = { 'mode' },
         lualine_b = { 'branch', 'diff' },
-        lualine_c = { {
-          'filename',
-          path = 1
-        }, 'diagnostics' },
-        lualine_x = { 'encoding', 'filetype' },
+        lualine_c = { 'windows', 'diagnostics' },
+        lualine_x = {
+          {
+            require("noice").api.status.command.get,
+            cond = require("noice").api.status.command.has,
+            color = { fg = "#ff9e64" },
+          },
+          {
+            require("noice").api.status.search.get,
+            cond = require("noice").api.status.search.has,
+            color = { fg = "#8BD5CA" },
+          },
+          'encoding',
+          'filetype'
+        },
         lualine_y = { 'location' },
         lualine_z = { 'progress' }
       },

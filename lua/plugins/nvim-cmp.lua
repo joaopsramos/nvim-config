@@ -6,17 +6,32 @@ return {
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-path',
     'hrsh7th/cmp-cmdline',
-    { 'L3MON4D3/LuaSnip', build = 'make install_jsregexp' },
-    'saadparwaiz1/cmp_luasnip',
+    -- { 'L3MON4D3/LuaSnip', build = 'make install_jsregexp' },
+    -- 'saadparwaiz1/cmp_luasnip',
+    'SirVer/ultisnips',
+    {
+      'quangnguyen30192/cmp-nvim-ultisnips',
+      init = function()
+        vim.g.UltiSnipsExpandTrigger = '<CR>'
+        vim.g.UltiSnipsJumpForwardTrigger = '<C-b>'
+        vim.g.UltiSnipsJumpBackwardTrigger = '<C-B>'
+      end
+    },
     'honza/vim-snippets',
     'onsails/lspkind.nvim',
+    {
+      "MattiasMTS/cmp-dbee",
+      dependencies = { "kndndrj/nvim-dbee" },
+      -- ft = "sql",
+      opts = {},
+    },
   },
   config = function()
     local cmp = require('cmp')
-    local luasnip = require('luasnip')
+    -- local luasnip = require('luasnip')
     local lspkind = require('lspkind')
 
-    require('luasnip.loaders.from_snipmate').lazy_load()
+    -- require('luasnip.loaders.from_snipmate').lazy_load()
 
     cmp.setup({
       formatting = {
@@ -38,7 +53,8 @@ return {
       },
       snippet = {
         expand = function(args)
-          luasnip.lsp_expand(args.body)
+          -- luasnip.lsp_expand(args.body)
+          vim.fn["UltiSnips#Anon"](args.body)
         end,
       },
       window = {
@@ -51,16 +67,24 @@ return {
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-e>'] = cmp.mapping.abort(),
         ['<Tab>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-        ['<CR>'] = cmp.mapping.confirm({ select = true })
       }),
       sources = cmp.config.sources({
         { name = 'nvim_lsp' },
-        { name = 'luasnip' },
+        -- { name = 'luasnip', option = { use_show_condition = false } },
+        { name = 'ultisnips' },
         { name = 'cody' },
       }, {
         { name = 'buffer' },
         { name = 'path' },
       })
+    })
+
+    cmp.setup.filetype('sql', {
+      sources = {
+        { name = 'cmp-dbee' },
+        -- { name = "vim-dadbod-completion" },
+        { name = "buffer" }
+      }
     })
 
     -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).

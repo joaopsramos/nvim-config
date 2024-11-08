@@ -26,17 +26,12 @@ return {
         operators = {},
       },
       integrations = {
-        cmp = true,
-        gitsigns = true,
-        nvimtree = true,
         fidget = true,
-        dap = true,
-        dap_ui = true,
-        telescope = true,
-        treesitter = true,
-        -- neotest = true,
+        mason = true,
+        neotest = true,
         which_key = true,
         notify = true,
+        noice = false,
         native_lsp = {
           enabled = true,
           virtual_text = {
@@ -47,11 +42,11 @@ return {
             ok = { "italic" },
           },
           underlines = {
-            errors = { "italic" },
-            hints = { "underline" },
-            warnings = { "underline" },
-            information = { "underline" },
-            ok = { "underline" },
+            errors = { "undercurl" },
+            hints = { "undercurl" },
+            warnings = { "undercurl" },
+            information = { "undercurl" },
+            ok = { "undercurl" },
           },
           inlay_hints = {
             background = true,
@@ -87,8 +82,10 @@ return {
           surface0 = "#363A4F",
 
           base = "#282a36",
-          mantle = "#1E2030",
-          crust = "#181926",
+          -- mantle = "#1E2030",
+          mantle = "#282a36",
+          -- crust = "#181926",
+          curst = "#282a36",
         }
       },
       custom_highlights = function(c)
@@ -99,7 +96,7 @@ return {
           ['@keyword.function'] = { fg = c.red },
           ['@string.special.symbol'] = { fg = c.sapphire },
           ["@module"] = { fg = c.mauve, style = { "italic" } },
-          ["@operator"] = { fg = c.teal, style = { "italic" } },
+          ["@operator"] = { fg = c.teal },
           ["@punctuation.bracket"] = { fg = c.overlay3 },
 
           htmlEndTag = { fg = c.flamingo },

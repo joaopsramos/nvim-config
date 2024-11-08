@@ -7,7 +7,7 @@ return {
       ensure_installed = { 'lua', 'rust', 'elixir', 'go' },
       -- Install parsers synchronously (only applied to `ensure_installed`)
       sync_install = false,
-      auto_install = true,
+      auto_install = false,
       highlight = {
         enable = true,
         disable = function(lang, buf)
