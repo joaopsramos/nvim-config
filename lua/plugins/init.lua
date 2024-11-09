@@ -98,7 +98,6 @@ return {
     version = '^5',
     lazy = false,
   },
-  -- revisit
   {
     'nvim-neotest/neotest',
     config = function()
@@ -111,16 +110,17 @@ return {
       'jfpedroza/neotest-elixir',
     }
   },
-  -- revisit
   {
     'ray-x/lsp_signature.nvim',
     name = 'lsp_signature',
+    event = 'VeryLazy',
     opts = {
       bind = true, -- This is mandatory, otherwise border config won't get registered.
       handler_opts = {
         border = "rounded"
       }
-    }
+    },
+    config = function(_, opts) require('lsp_signature').setup(opts) end
   },
   --revisit
   { "js-everts/cmp-tailwind-colors", opts = {}, },

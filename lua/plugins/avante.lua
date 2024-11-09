@@ -6,7 +6,7 @@ return {
   opts = {
     provider = "cody",
     behaviour = {
-      auto_apply_diff_after_generation = true,
+      auto_apply_diff_after_generation = false,
     }
   },
   build = "make",

@@ -29,7 +29,7 @@ return {
       sections = {
         lualine_a = { 'mode' },
         lualine_b = { 'branch', 'diff' },
-        lualine_c = { 'windows', 'diagnostics' },
+        lualine_c = { { 'filename', path = 1 }, 'diagnostics' },
         lualine_x = {
           {
             require("noice").api.status.command.get,
