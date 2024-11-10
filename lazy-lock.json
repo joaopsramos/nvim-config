@@ -17,6 +17,7 @@
   "editorconfig-vim": { "branch": "master", "commit": "3c2813f2566d9392ff3614248c5db43c3fda9d5f" },
   "ex_maps": { "branch": "main", "commit": "1ab31a776239ed794632eba4dc54f39a1d8229ba" },
   "gitsigns.nvim": { "branch": "main", "commit": "4daf7022f1481edf1e8fb9947df13bb07c18e89a" },
+  "glance.nvim": { "branch": "master", "commit": "cdf1ec8136cfbdf73edbe1163097223c763a84b7" },
   "harpoon": { "branch": "master", "commit": "1bc17e3e42ea3c46b33c0bbad6a880792692a1b3" },
   "hop.nvim": { "branch": "master", "commit": "1a1eceafe54b5081eae4cb91c723abd1d450f34b" },
   "illuminate": { "branch": "master", "commit": "5eeb7951fc630682c322e88a9bbdae5c224ff0aa" },
