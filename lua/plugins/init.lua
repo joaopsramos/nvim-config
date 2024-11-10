@@ -4,7 +4,6 @@ return {
   'tpope/vim-surround',
   'tpope/vim-repeat',
   'tpope/vim-fugitive',
-  'AndrewRadev/splitjoin.vim',
   'mg979/vim-visual-multi',
   'mtdl9/vim-log-highlighting',
   --revisit
@@ -12,6 +11,14 @@ return {
   --revisit
   'ThePrimeagen/harpoon',
   'mechatroner/rainbow_csv',
+  {
+
+    'AndrewRadev/splitjoin.vim',
+    init = function()
+      vim.g.splitjoin_split_mapping = ''
+      vim.g.splitjoin_join_mapping = ''
+    end
+  },
   {
     "folke/todo-comments.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },

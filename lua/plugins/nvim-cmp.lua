@@ -13,8 +13,8 @@ return {
       'quangnguyen30192/cmp-nvim-ultisnips',
       init = function()
         vim.g.UltiSnipsExpandTrigger = '<CR>'
-        vim.g.UltiSnipsJumpForwardTrigger = '<C-b>'
-        vim.g.UltiSnipsJumpBackwardTrigger = '<C-B>'
+        vim.g.UltiSnipsJumpForwardTrigger = '<Tab>'
+        vim.g.UltiSnipsJumpBackwardTrigger = '<S-Tab>'
       end
     },
     'honza/vim-snippets',

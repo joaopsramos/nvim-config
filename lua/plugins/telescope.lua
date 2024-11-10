@@ -2,11 +2,9 @@ local util = require('helper.functions')
 
 local telescope_keymaps = {
   { keymap = '<leader>fi', cmd = '<cmd>Telescope find_files<CR>' },
-  { keymap = '<leader>gr', cmd = '<cmd>Telescope live_grep_args<CR>' },
-  { keymap = '<leader>fb', cmd = '<cmd>Telescope buffers<CR>' },
-  { keymap = '<leader>fg', cmd = '<cmd>Telescope git_branches<CR>' },
-  { keymap = '<leader>sh', cmd = '<cmd>Telescope help_tags<CR>' },
-  { keymap = '<leader>ls', cmd = '<cmd>Telescope lsp_document_symbols<CR>' },
+  { keymap = 'g/',         cmd = '<cmd>Telescope live_grep_args<CR>' },
+  { keymap = '<C-b>',      cmd = '<cmd>Telescope buffers<CR>' },
+  { keymap = 'gs',         cmd = '<cmd>Telescope lsp_document_symbols<CR>' },
   { keymap = '<leader>ri', cmd = '<cmd>Telescope resume<CR>' },
 }
 
