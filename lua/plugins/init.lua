@@ -98,7 +98,6 @@ return {
     main = "ibl",
     opts = { scope = { enabled = false } }
   },
-  { 'nanozuki/tabby.nvim',   dependencies = 'nvim-tree/nvim-web-devicons',      opts = {} },
   { 'ustrajunior/ex_maps',   opts = { create_mappings = true, mapping = 'mtt' } },
   {
     'mrcjkb/rustaceanvim',
