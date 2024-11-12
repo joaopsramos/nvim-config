@@ -169,6 +169,11 @@ vim.cmd([[
   nnoremap <silent> <C-t> :WinResizerStartResize<CR>
 ]])
 
+-- winresizer
+vim.cmd([[
+  nnoremap <leader><F5> :UndotreeToggle<CR>
+]])
+
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "sql" },
   callback = function()

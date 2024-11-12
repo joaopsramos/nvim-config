@@ -140,7 +140,7 @@ return {
         vim.keymap.set('n', 'gy', vim.lsp.buf.type_definition, opts)
         vim.keymap.set('n', 'gI', vim.lsp.buf.implementation, opts)
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-        vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, opts)
+        vim.keymap.set('i', '<C-h>', vim.lsp.buf.signature_help, opts)
         vim.keymap.set('n', 'cd', vim.lsp.buf.rename, opts)
         vim.keymap.set('n', 'g.', vim.lsp.buf.code_action, opts)
         vim.keymap.set('n', '<leader>gr', '<cmd>Glance references<CR>', opts)

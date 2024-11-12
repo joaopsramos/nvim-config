@@ -1,5 +1,5 @@
 return {
-  { "rcarriga/nvim-notify", opts = {} },
+  -- { "rcarriga/nvim-notify", opts = {} },
   {
     "folke/noice.nvim",
     event = "VeryLazy",
@@ -9,7 +9,7 @@ return {
       -- OPTIONAL:
       --   `nvim-notify` is only needed, if you want to use the notification view.
       --   If not available, we use `mini` as the fallback
-      "rcarriga/nvim-notify",
+      -- "rcarriga/nvim-notify",
     },
     config = function()
       require("noice").setup({
@@ -22,6 +22,7 @@ return {
           },
           signature = { enabled = false },
         },
+        -- notify = { view = "messages" },
         -- you can enable a preset for easier configuration
         presets = {
           bottom_search = false,        -- use a classic bottom cmdline for search

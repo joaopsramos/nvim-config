@@ -11,6 +11,7 @@ return {
   --revisit
   'ThePrimeagen/harpoon',
   'mechatroner/rainbow_csv',
+  'mbbill/undotree',
   {
 
     'AndrewRadev/splitjoin.vim',
