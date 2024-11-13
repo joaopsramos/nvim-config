@@ -1,178 +1,142 @@
+local util = require('helper.utils')
+
 if vim.g.neovide then
-  vim.cmd([[
-     nnoremap <SC-V> "+P
-     vnoremap <SC-c> "+y
-     nnoremap <SC-v> "+P
-     vnoremap <SC-v> "+P
-     cnoremap <SC-v> <C-r>+
-     inoremap <SC-v> <C-r>+
-     tnoremap <SC-v> <C-\><C-n>"+Pi
-  ]])
+  util.keymap('n', '<SC-V>', '"+P')
+  util.keymap('v', '<SC-c>', '"+y')
+  util.keymap('n', '<SC-v>', '"+P')
+  util.keymap('v', '<SC-v>', '"+P')
+  util.keymap('c', '<SC-v>', '<C-r>+')
+  util.keymap('i', '<SC-v>', '<C-r>+')
+  util.keymap('t', '<SC-v>', '<C-\\><C-n>"+Pi')
 end
 
 -- General
-vim.cmd([[
-  nnoremap <leader>re :so $MYVIMRC<CR>
-  nnoremap <silent> <C-h> :noh<CR>
-  vnoremap <C-y> "+y
-  vnoremap <C-p> s<C-r>0<Esc>
-  nnoremap <silent> <leader>dab :%bd<CR>:e#<CR>
+util.keymap('', 'q', ':q<CR>')
+util.keymap('n', 'Q', ':Tclose!<CR>:NvimTreeClose<CR>:quitall<CR> ')
+util.keymap('', '<C-x>', ':bd<CR>')
+util.keymap('n', '<leader>dab', ':%bd<CR>:e#<CR>', { desc = 'Delete all buffers except current' })
 
-  noremap <silent> q :q<CR>
-  noremap <silent> <C-x> :bd<CR>
+util.keymap('n', '<C-a>', 'ggVG', { desc = "Select all" })
 
-  xnoremap <leader>p "_dP
+util.keymap('n', '<C-s>', ':w<CR>')
+util.keymap('i', '<C-s>', ':w<CR>')
+util.keymap('v', '<C-s>', ':w<CR>')
 
-  inoremap <C-p> <Left><C-o>p
-  inoremap <C-j> <C-o>o
-  inoremap <C-z> <C-o>zz
+util.keymap('v', '<C-y>', '"+y')
+util.keymap('i', '<C-p>', '<Left><C-o>p')
+util.keymap('v', '<C-p>', 's<C-r>0<Esc>')
+util.keymap('n', '<C-h>', ':noh<CR>')
 
-  nnoremap & yiw:%s/\(<C-r>0\)/\/g<Left><Left>1
-  vnoremap & y:%s/\(<C-r>0\)/\/g<Left><Left>1
+util.keymap('i', '<C-j>', '<C-o>o')
+util.keymap('i', '<C-z>', '<C-o>zz')
 
-  nnoremap <silent> <A-j> :m .+1<CR>
-  nnoremap <silent> <A-k> :m .-2<CR>
-  inoremap <silent> <A-j> <Esc>:m .+1<CR>
-  inoremap <silent> <A-k> <Esc>:m .-2<CR>
-  vnoremap <silent> <A-j> :m '>+1<CR>
-  vnoremap <silent> <A-k> :m '<-2<CR>
+util.keymap('n', '&', 'yiw:%s/\\(<C-r>0\\)/\\/g<Left><Left>1', { silent = false })
+util.keymap('v', '&', 'y:%s/\\(<C-r>0\\)/\\/g<Left><Left>1', { silent = false })
 
-  nnoremap <silent> <A-u> <C-w>p<C-u><C-w>p
-  nnoremap <silent> <A-d> <C-w>p<C-d><C-w>p
+util.keymap('n', '<A-j>', ':m .+1<CR>')
+util.keymap('n', '<A-k>', ':m .-2<CR>')
+util.keymap('i', '<A-j>', '<Esc>:m .+1<CR>')
+util.keymap('i', '<A-k>', '<Esc>:m .-2<CR>')
+util.keymap('v', '<A-j>', ':m \'>+1<CR>')
+util.keymap('v', '<A-k>', ':m \'<-2<CR>')
 
-  nnoremap <silent> <leader>so vip:sort<CR>
-]])
+util.keymap('n', '<A-u>', '<C-w>p<C-u><C-w>p')
+util.keymap('n', '<A-d>', '<C-w>p<C-d><C-w>p')
 
--- Exit with 'q'
-vim.cmd([[ map <silent> Q :Tclose!<CR>:NvimTreeClose<CR>:quitall<CR> ]])
+util.keymap('n', '<leader>so', 'vip:sort<CR>', { desc = "Sort lines" })
 
--- Save with 'Ctrl + s' on Normal, Insert and Visual modes
--- Precisa adicionar a linha: stty -ixon , ao seu ~/.bashrc
-vim.cmd([[
-  nnoremap <silent> <C-s> :w<CR>
-  inoremap <silent> <C-s> <Esc>:w<CR>l
-  vnoremap <silent> <C-s> <Esc>:w<CR>
-]])
-
--- Select all with 'Ctrl + a'
-vim.cmd([[ map <C-a> ggVG ]])
+util.keymap('n', '<leader>gq', '<C-w>j:q<CR>', { desc = "" })
 
 -- Terminal
-vim.cmd([[
-  tmap <silent> <Esc> <C-\><C-w>p:Tclose<CR>
-  tnoremap <C-j> <C-\><C-n><C-w>_
-  tmap <C-n> <C-\><leader>tc
-  tnoremap <C-\> <C-\><C-n>
-]])
+util.keymap('t', '<C-\\>', '<C-\\><C-n>')
+util.keymap('t', '<C-n>', '<C-\\><C-n><leader>tc')
+util.keymap('t', '<Esc>', '<C-\\><C-n>:Tclose<CR>', { desc = "Close terminal" })
+util.keymap('t', '<C-j>', '<C-\\><C-n><C-w>_')
 
 -- Notify
-vim.cmd([[
-  nnoremap <silent> <leader>nd :lua require("notify").dismiss()<CR>
-]])
+util.keymap('n', '<leader>nd', ':lua require("notify").dismiss()<CR>', { desc = "Dismiss notifications" })
 
 -- Neoterm
-vim.cmd([[
-  nnoremap <silent> <leader>tm :Ttoggle<CR><C-w><C-p>
-  nnoremap <silent> <leader>to :Topen<CR><C-w><C-p>
-  nnoremap <leader>tc :Tclose!<CR>
-
-  nnoremap <leader>twf :T find test lib \| entr -cr mix test %<CR>
-  nnoremap <leader>tws :T find test lib \| entr -cr mix test %:<C-r>=line('.')<CR><CR>
-]])
+util.keymap('n', '<leader>tm', ':Ttoggle<CR><C-w><C-p>', { desc = "Toggle terminal" })
+util.keymap('n', '<leader>to', ':Topen<CR><C-w><C-p>', { desc = "Open terminal" })
+util.keymap('n', '<leader>tc', ':Tclose!<CR>', { desc = "Close terminal" })
 
 -- Vim test
-vim.cmd([[
-  nmap <silent> <leader>tn :TestNearest<CR><leader>toG<C-w>p
-  nmap <silent> <leader>tf :TestFile<CR><leader>toG<C-w>p
-  nmap <silent> <leader>ts :TestSuite<CR><leader>toG<C-w>p
-  nmap <silent> <leader>tl :TestLast<CR><leader>toG<C-w>p
-  nmap <silent> <leader>tv :TestVisit<CR>
-]])
+util.keymap('n', '<leader>tn', ':TestNearest<CR><leader>toG<C-w>p', { desc = "Test nearest", remap = true })
+util.keymap('n', '<leader>tf', ':TestFile<CR><leader>toG<C-w>p', { desc = "Test file", remap = true })
+util.keymap('n', '<leader>ts', ':TestSuite<CR><leader>toG<C-w>p', { desc = "Test suite", remap = true })
+util.keymap('n', '<leader>tl', ':TestLast<CR><leader>toG<C-w>p', { desc = "Test last", remap = true })
+util.keymap('n', '<leader>tv', ':TestVisit<CR>', { desc = "Test visit", remap = true })
 
 -- Neo test
-vim.cmd([[
-  nnoremap <silent> <leader>nt :lua require('neotest').run.run()<CR>
-  nnoremap <silent><leader>nf :lua require('neotest').run.run(vim.fn.expand('%'))<CR>
-  nnoremap <silent> <leader>nl :lua require('neotest').run.run_last({extra_args = '--failed'})<CR>
-  nnoremap <silent> <leader>ne :lua require('neotest').output.open({enter = true})<CR>
-  nnoremap <silent> <leader>na :lua require('neotest').output.open({enter = true, last_run = true})<CR>
-  nnoremap <silent> <leader>nc :lua require('neotest').run.attach()<CR>
-  nnoremap <silent> <leader>nb :lua require("neotest").summary.toggle()<CR>
-  nnoremap <silent> [t :lua require("neotest").jump.prev({ status = 'failed' })<CR>
-  nnoremap <silent> ]t :lua require("neotest").jump.next({ status = 'failed' })<CR>
-]])
+util.keymap('n', '<leader>nt', ":lua require('neotest').run.run()<CR>", { desc = 'Test nearest' })
+util.keymap('n', '<leader>nf', ":lua require('neotest').run.run(vim.fn.expand('%'))<CR>", { desc = 'Test file' })
+-- util.keymap('n', '<leader>nl', ":lua require('neotest').run.run_last({extra_args = '--failed'})<CR>",
+--   { desc = 'Test failed' })
+util.keymap('n', '<leader>nl', ":lua require('neotest').run.run_last()<CR>", { desc = 'Run last test' })
+util.keymap('n', '<leader>ne', ":lua require('neotest').output.open({enter = true})<CR>", { desc = 'Open test output' })
+util.keymap('n', '<leader>na', ":lua require('neotest').output.open({enter = true, last_run = true})<CR>",
+  { desc = 'Open output of last test run' })
+util.keymap('n', '<leader>nc', ":lua require('neotest').run.attach()<CR>", { desc = 'Attach to current running tests' })
+util.keymap('n', '<leader>nb', ":lua require('neotest').summary.toggle()<CR>", { desc = 'Toggle test summary' })
+util.keymap('n', '[t', ":lua require('neotest').jump.prev({ status = 'failed' })<CR>", { desc = 'Prev failed test' })
+util.keymap('n', ']t', ":lua require('neotest').jump.next({ status = 'failed' })<CR>", { desc = 'Next failed test' })
 
 -- Nvimtree
-vim.cmd([[
-  nnoremap <silent> <leader>b :NvimTreeFindFileToggle<CR>
-]])
+util.keymap('n', '<leader>b', ":NvimTreeFindFileToggle<CR>", { desc = 'Toggle NvimTree' })
 
 -- Mix
-vim.cmd([[
-  nmap <leader>iex <leader>tmiiex<CR>
-  nmap <leader>iem <leader>tmiiex -S mix<CR>
-  nmap <leader>iep <leader>tmiiex -S mix phx.server<CR>
-]])
+util.keymap('n', '<leader>iex', "<leader>tmiiex<CR>", { desc = 'Run iex', remap = true })
+util.keymap('n', '<leader>iem', "<leader>tmiiex -S mix<CR>", { desc = 'Run iex with mix', remap = true })
+util.keymap('n', '<leader>iep', "<leader>tmiiex -S mix phx.server<CR>", { desc = 'Run phoenix server', remap = true })
 
 -- Tabby
-vim.cmd([[
-  nnoremap <leader>tba :$tabnew<CR>
-  nnoremap <leader>tbc :tabclose<CR>
-  nnoremap <leader>tbo :tabonly<CR>
-]])
+util.keymap('n', '<leader>tba', ':$tabnew<CR>')
+util.keymap('n', '<leader>tbc', ':tabclose<CR>')
+util.keymap('n', '<leader>tbo', ':tabonly<CR>')
 
 -- fugitive
-vim.cmd([[
-  nnoremap <silent> <leader>gi :Git<CR><C-w>5-5j
-  noremap <silent> <leader>gI :Git<space>
+util.keymap('n', '<leader>gi', ':Git<CR><C-w>5-5j', { desc = 'Open git' })
+util.keymap('', '<leader>gI', ':Git<space>', { desc = 'Run git command', silent = false })
 
-  noremap <silent> <leader>gl :Git log<CR>
+util.keymap('', '<leader>gl', ':Git log<CR>', { desc = 'Git log' })
 
-  noremap <leader>gci :Git commit -m ""<Left>
+util.keymap('', '<leader>gci', ':Git commit -m ""<Left>', { desc = 'Git commit', silent = false })
 
-  nnoremap <silent> <leader>gP :Git push -u origin HEAD<CR>
-  nnoremap <silent> <leader>gp :Git pull<CR>
+util.keymap('n', '<leader>gP', ':Git push -u origin HEAD<CR>', { desc = 'Git push' })
+util.keymap('n', '<leader>gp', ':Git pull<CR>', { desc = 'Git pull' })
 
-  nnoremap <leader>gsw :Git switch<space>
-  nnoremap <leader>gsb :Git switch --create<space>
-  nnoremap <silent> <leader>gsm :Git switch main<CR>
-  nnoremap <silent> <leader>gsn :Git switch next<CR>
-  nnoremap <silent> <leader>gsk :Git switch -<CR>
+util.keymap('n', '<leader>gsw', ':Git switch<space>', { desc = "Git switch", silent = false })
+util.keymap('n', '<leader>gsb', ':Git switch --create<space>', { desc = "Git switch --create", silent = false })
+util.keymap('n', '<leader>gsm', ':Git switch main<CR>', { desc = 'Git switch main' })
+util.keymap('n', '<leader>gsn', ':Git switch next<CR>', { desc = 'Git switch next' })
+util.keymap('n', '<leader>gsk', ':Git switch -<CR>', { desc = 'Git switch back' })
 
-  nnoremap <silent> <leader>gsth :Git stash<CR>
-  nnoremap <silent> <leader>gsta :Git stash apply<CR>
-  nnoremap <silent> <leader>gstp :Git stash pop<CR>
+util.keymap('n', '<leader>gsth', ':Git stash<CR>', { desc = 'Git stash' })
+util.keymap('n', '<leader>gsta', ':Git stash apply<CR>', { desc = 'Git stash apply' })
+util.keymap('n', '<leader>gstp', ':Git stash pop<CR>', { desc = 'Git stash pop' })
 
-  nnoremap <leader>gbd :Git branch -d<space>
-  nnoremap <leader>gbD :Git branch -D<space>
+util.keymap('n', '<leader>gbd', ':Git branch -d<space>', { desc = "Git branch -d", silent = false })
+util.keymap('n', '<leader>gbD', ':Git branch -D<space>', { desc = "Git branch -D", silent = false })
 
-  nmap <silent> <leader>gq <C-w>jq
-
-  nnoremap <leader>fh :Git log -p -- <C-r>%<CR>
-]])
+util.keymap('n', '<leader>fh', ':Git log -p -- <C-r>%<CR>', { desc = "Git file history" })
 
 -- Harpoon
-vim.cmd([[
-  nnoremap <silent> <leader>rm :lua require("harpoon.ui").toggle_quick_menu()<CR>
-  nnoremap <silent> <C-l> :lua require("harpoon.mark").add_file()<CR>:lua require('notify')('File added', 'info', {title = 'Harpoon'})<CR>
-  nnoremap <silent> <C-j> :lua require("harpoon.ui").nav_prev()<CR>
-  nnoremap <silent> <C-k> :lua require("harpoon.ui").nav_next()<CR>
-]])
+util.keymap('n', '<leader>rm', ":lua require('harpoon.ui').toggle_quick_menu()<CR>", { desc = 'Harpoon quick menu' })
+util.keymap('n', '<C-l>',
+  ":lua require('harpoon.mark').add_file()<CR>:lua vim.api.nvim_notify('File added', vim.log.levels.INFO, {title = 'Harpoon'})<CR>",
+  { desc = 'Harpoon add file' })
+util.keymap('n', '<C-j>', ":lua require('harpoon.ui').nav_prev()<CR>", { desc = 'Harpoon nav prev' })
+util.keymap('n', '<C-k>', ":lua require('harpoon.ui').nav_next()<CR>", { desc = 'Harpoon nav next' })
 
 -- Hop
-vim.cmd([[
-  nnoremap <silent> <leader>j :HopWord<CR>
-]])
+util.keymap('n', '<leader>j', ":HopWord<CR>", { desc = 'Jump' })
 
 -- winresizer
-vim.cmd([[
-  nnoremap <silent> <C-t> :WinResizerStartResize<CR>
-]])
+util.keymap('n', '<C-t>', ":WinResizerStartResize<CR>", { desc = 'Start resize' })
 
 -- winresizer
-vim.cmd([[
-  nnoremap <leader><F5> :UndotreeToggle<CR>
-]])
+util.keymap('n', '<leader>u', ':UndotreeToggle<CR>:UndotreeFocus<CR>', { desc = 'Undotree toggle and focus' })
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "sql" },

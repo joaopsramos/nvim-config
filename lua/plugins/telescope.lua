@@ -1,4 +1,4 @@
-local util = require('helper.functions')
+local util = require('helper.utils')
 
 local telescope_keymaps = {
   { keymap = '<C-p>',      cmd = '<cmd>Telescope find_files<CR>' },
