@@ -79,6 +79,7 @@ util.keymap('n', '<leader>na', ":lua require('neotest').output.open({enter = tru
   { desc = 'Open output of last test run' })
 util.keymap('n', '<leader>nc', ":lua require('neotest').run.attach()<CR>", { desc = 'Attach to current running tests' })
 util.keymap('n', '<leader>nb', ":lua require('neotest').summary.toggle()<CR>", { desc = 'Toggle test summary' })
+util.keymap('n', '<leader>np', ":lua require('neotest').run.stop()<CR>", { desc = 'Stop running tests' })
 util.keymap('n', '[t', ":lua require('neotest').jump.prev({ status = 'failed' })<CR>", { desc = 'Prev failed test' })
 util.keymap('n', ']t', ":lua require('neotest').jump.next({ status = 'failed' })<CR>", { desc = 'Next failed test' })
 

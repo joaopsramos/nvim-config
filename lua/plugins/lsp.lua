@@ -110,14 +110,12 @@ return {
         server_config = {}
       end
       server_config = vim.tbl_deep_extend("force", {}, {
-        -- on_attach = on_attach,
         capabilities = capabilities,
       }, server_config)
 
       lspconfig[name].setup(server_config)
     end
 
-    -- require("sg").setup({ on_attach = on_attach })
     require("sg").setup()
 
     vim.g.rustaceanvim = {

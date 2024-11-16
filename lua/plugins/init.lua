@@ -27,6 +27,8 @@ return {
   },
   {
     'stevearc/conform.nvim',
+    event = { "BufWritePre" },
+    cmd = { "ConformInfo" },
     opts = {
       format_on_save = {
         timeout_ms = 500,
@@ -119,19 +121,19 @@ return {
   },
   {
     'ray-x/lsp_signature.nvim',
-    name = 'lsp_signature',
-    event = 'VeryLazy',
+    -- event = 'VeryLazy', Lazy loading not working
     opts = {
       bind = true, -- This is mandatory, otherwise border config won't get registered.
+      hint_enable = false,
       handler_opts = {
         border = "rounded"
       }
-    },
-    config = function(_, opts) require('lsp_signature').setup(opts) end
+    }
   },
   --revisit
   { "js-everts/cmp-tailwind-colors", opts = {}, },
   { "phaazon/hop.nvim",              config = true },
+  -- Noice do the same thing
   -- {
   --   "j-hui/fidget.nvim",
   --   opts = {
