@@ -1,5 +1,5 @@
 return {
-  -- { "rcarriga/nvim-notify", opts = {} },
+  -- { "rcarriga/nvim-notify", opts = { top_down = false } },
   {
     "folke/noice.nvim",
     event = "VeryLazy",

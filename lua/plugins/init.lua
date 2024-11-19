@@ -54,14 +54,7 @@ return {
       vim.g.neoterm_automap_keys = false
     end
   },
-  {
-    'rmagatti/auto-session',
-    lazy = false,
-    init = function()
-      vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
-    end,
-    opts = {}
-  },
+  { 'rmagatti/auto-session', lazy = false, opts = {} },
   {
     'vim-test/vim-test',
     init = function()
@@ -101,7 +94,7 @@ return {
     main = "ibl",
     opts = { scope = { enabled = false } }
   },
-  { 'ustrajunior/ex_maps',   opts = { create_mappings = true, mapping = 'mtt' } },
+  { 'ustrajunior/ex_maps',           opts = { create_mappings = true, mapping = 'mtt' } },
   {
     'mrcjkb/rustaceanvim',
     version = '^5',
