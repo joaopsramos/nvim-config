@@ -75,9 +75,9 @@ util.keymap('n', '<leader>nf', ":lua require('neotest').run.run(vim.fn.expand('%
 --   { desc = 'Test failed' })
 util.keymap('n', '<leader>nl', ":lua require('neotest').run.run_last()<CR>", { desc = 'Run last test' })
 util.keymap('n', '<leader>ne', ":lua require('neotest').output.open({enter = true})<CR>", { desc = 'Open test output' })
-util.keymap('n', '<leader>na', ":lua require('neotest').output.open({enter = true, last_run = true})<CR>",
+util.keymap('n', '<leader>nc', ":lua require('neotest').output.open({enter = true, last_run = true})<CR>",
   { desc = 'Open output of last test run' })
-util.keymap('n', '<leader>nc', ":lua require('neotest').run.attach()<CR>", { desc = 'Attach to current running tests' })
+util.keymap('n', '<leader>na', ":lua require('neotest').run.attach()<CR>", { desc = 'Attach to current running tests' })
 util.keymap('n', '<leader>nb', ":lua require('neotest').summary.toggle()<CR>", { desc = 'Toggle test summary' })
 util.keymap('n', '<leader>np', ":lua require('neotest').run.stop()<CR>", { desc = 'Stop running tests' })
 util.keymap('n', '[t', ":lua require('neotest').jump.prev({ status = 'failed' })<CR>", { desc = 'Prev failed test' })
