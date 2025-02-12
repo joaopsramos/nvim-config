@@ -19,7 +19,7 @@ util.keymap('n', '<leader>dab', ':%bd<CR>:e#<CR>', { desc = 'Delete all buffers 
 util.keymap('n', '<C-a>', 'ggVG', { desc = "Select all" })
 
 util.keymap('n', '<C-s>', ':w<CR>')
-util.keymap('i', '<C-s>', ':w<CR>')
+util.keymap('i', '<C-s>', '<Esc>:w<CR>')
 util.keymap('v', '<C-s>', ':w<CR>')
 
 util.keymap('v', '<C-y>', '"+y')

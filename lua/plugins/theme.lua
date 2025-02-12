@@ -115,6 +115,8 @@ return {
 
           TabLineSel = { fg = c.green, bg = c.mantle },
           EndOfBuffer = { fg = c.surface1 },
+
+          IblScope = { fg = c.overlay0 }
         }
       end
     })

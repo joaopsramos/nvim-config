@@ -77,22 +77,17 @@ return {
     end
   },
   -- revisit
-  -- {
-  --   'folke/trouble.nvim',
-  --   name = 'trouble',
-  --   opts = {},
-  --   dependencies = 'kyazdani42/nvim-web-devicons'
-  -- },
+  {
+    'folke/trouble.nvim',
+    name = 'trouble',
+    opts = {},
+    dependencies = 'kyazdani42/nvim-web-devicons'
+  },
   {
     'editorconfig/editorconfig-vim',
     init = function()
       vim.g.EditorConfig_exclude_patterns = { 'fugitive://.*' }
     end
-  },
-  {
-    'lukas-reineke/indent-blankline.nvim',
-    main = "ibl",
-    opts = { scope = { enabled = false } }
   },
   { 'ustrajunior/ex_maps',           opts = { create_mappings = true, mapping = 'mtt' } },
   {

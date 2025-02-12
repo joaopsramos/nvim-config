@@ -57,9 +57,12 @@ return {
             runtime = { version = 'LuaJIT', },
             diagnostics = { globals = { 'vim' } },
             workspace = {
+              checkThirdParty = false,
               library = {
-                vim.api.nvim_get_runtime_file('', true),
-                vim.api.nvim_get_runtime_file('/lua/vim/lsp', true),
+                vim.env.VIMRUNTIME,
+                "${3rd}/busted/library",
+                -- vim.api.nvim_get_runtime_file('', true),
+                -- vim.api.nvim_get_runtime_file('/lua/vim/lsp', true),
               },
             },
           }
@@ -67,6 +70,10 @@ return {
       },
 
       efm = { filetypes = { 'elixir' } },
+
+      ts_ls = {},
+
+      emmet_language_server = {},
 
       tailwindcss = {
         init_options = {
@@ -116,7 +123,7 @@ return {
       lspconfig[name].setup(server_config)
     end
 
-    require("sg").setup()
+    -- require("sg").setup()
 
     vim.g.rustaceanvim = {
       -- server = { on_attach = on_attach }
