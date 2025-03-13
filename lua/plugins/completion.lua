@@ -72,7 +72,6 @@ return {
         { name = 'nvim_lsp' },
         -- { name = 'luasnip', option = { use_show_condition = false } },
         { name = 'ultisnips' },
-        -- { name = 'cody' },
       }, {
         { name = 'buffer' },
         { name = 'path' },
