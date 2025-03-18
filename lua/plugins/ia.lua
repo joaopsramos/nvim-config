@@ -1,4 +1,27 @@
 return {
+  {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("codecompanion").setup({
+        adapters = {
+          copilot = function()
+            return require("codecompanion.adapters").extend("copilot", {
+              name = "copilot-claude", -- Give this adapter a different name to differentiate it from the default ollama adapter
+              schema = {
+                model = {
+                  default = "claude-3.5-sonnet",
+                },
+              },
+            })
+          end,
+        },
+      })
+    end,
+  },
   -- {
   --   "zbirenbaum/copilot.lua",
   --   event = "InsertEnter",

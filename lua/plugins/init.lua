@@ -98,13 +98,24 @@ return {
   {
     'nvim-neotest/neotest',
     config = function()
+      local golang_opts = {}
+
       require('neotest').setup({
-        adapters = { require('neotest-elixir') }
+        adapters = {
+          require('neotest-elixir'),
+          require('neotest-golang')(golang_opts)
+        }
       })
     end,
     dependencies = {
       'nvim-lua/plenary.nvim',
       'jfpedroza/neotest-elixir',
+
+      -- Go
+      'nvim-neotest/nvim-nio',
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      { "fredrikaverpil/neotest-golang", version = "*" }
     }
   },
   {
