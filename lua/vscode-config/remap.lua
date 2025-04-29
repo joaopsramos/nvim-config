@@ -14,10 +14,10 @@ vim.cmd([[
 
   nnoremap <leader>so vip:sort<CR>
 
-  map <leader>tn <Cmd>lua require('vscode').call('extension.elixirRunTestAtCursor')<CR><leader>tm
-  map <leader>tf <Cmd>lua require('vscode').call('extension.elixirRunTestFile')<CR><leader>tm
-  map <leader>tl <Cmd>lua require('vscode').call('extension.elixirRunLastTestCommand')<CR><leader>tm
-  map <leader>tv <Cmd>lua require('vscode').call('extension.elixirJumpToTest')<CR>
+  nnoremap <leader>tn <Cmd>lua require('vscode').call('testing.runAtCursor')<CR>
+  nnoremap <leader>tf <Cmd>lua require('vscode').call('testing.runCurrentFile')<CR>
+  nnoremap <leader>ts <Cmd>lua require('vscode').call('testing.runAll')<CR>
+  nnoremap <leader>tl <Cmd>lua require('vscode').call('testing.reRunLastRun')<CR>
 
   noremap <leader>gci :Git commit -m ""<Left>
 
@@ -40,4 +40,15 @@ vim.cmd([[
   nnoremap <leader>fh :Git log -p -- <C-r>%<CR>
 
   vnoremap <leader>y "+y
+
+  noremap gs <Cmd>lua require('vscode').action('workbench.action.gotoSymbol')<CR>
+  noremap g/ <Cmd>lua require('vscode').action('workbench.action.findInFiles')<CR>
+
+  noremap gy <Cmd>lua require('vscode').action('editor.action.goToTypeDefinition')<CR>
+  noremap gI <Cmd>lua require('vscode').action('editor.action.goToImplementation')<CR>
+  noremap cd <Cmd>lua require('vscode').action('editor.action.rename')<CR>
+  noremap g. <Cmd>lua require('vscode').action('editor.action.quickFix')<CR>
+  noremap <leader>gr <Cmd>lua require('vscode').action('editor.action.referenceSearch.trigger')<CR>
+  noremap [d <Cmd>lua require('vscode').action('editor.action.marker.prev')<CR>
+  noremap ]d <Cmd>lua require('vscode').action('editor.action.marker.next')<CR>
 ]])

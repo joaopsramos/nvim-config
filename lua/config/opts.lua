@@ -68,6 +68,10 @@ if vim.g.neovide then
   -- vim.g.neovide_window_blurred = true
 end
 
+-- nvim-ufo
+vim.o.foldlevel = 99
+vim.o.foldlevelstart = 99
+
 vim.cmd([[
   syntax on
   set nu! rnu!

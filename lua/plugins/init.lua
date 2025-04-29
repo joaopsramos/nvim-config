@@ -120,10 +120,10 @@ return {
   },
   {
     'ray-x/lsp_signature.nvim',
-    -- event = 'VeryLazy', Lazy loading not working
+    event = 'InsertEnter',
     opts = {
       bind = true, -- This is mandatory, otherwise border config won't get registered.
-      hint_enable = false,
+      hint_enable = true,
       handler_opts = {
         border = "rounded"
       }
@@ -156,4 +156,5 @@ return {
       })
     end
   },
+  { 'kevinhwang91/nvim-ufo', dependencies = 'kevinhwang91/promise-async', config = true }
 }
