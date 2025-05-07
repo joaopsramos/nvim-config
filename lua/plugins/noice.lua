@@ -21,6 +21,9 @@ return {
             ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
           },
           signature = { enabled = false },
+          hover = {
+            enabled = false
+          },
         },
         -- notify = { view = "messages" },
         -- you can enable a preset for easier configuration

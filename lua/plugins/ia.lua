@@ -25,7 +25,7 @@ return {
   --             name = "lm-studio", -- Give this adapter a different name to differentiate it from the default ollama adapter
   --             schema = {
   --               model = {
-  --                 default = "qwen2.5-coder-7b-instruct",
+  --                 default = "qwen3-8b@q3_k_l",
   --               },
   --             },
   --           })
@@ -65,7 +65,7 @@ return {
       provider = "openai",
       openai = {
         endpoint = "http://localhost:1234/v1",
-        model = "qwen2.5-coder-7b-instruct",
+        model = "qwen3-8b@q3_k_l",
       },
       copilot = {
         model = "claude-3.5-sonnet",

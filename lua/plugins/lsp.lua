@@ -15,16 +15,29 @@ return {
       return language_servers_dir .. ls
     end
 
-    local nvim_lsp = require('lspconfig')
-
     local servers = {
+      gleam = true,
+
+      docker_compose_language_service = { filetypes = { "yaml" } },
+
+      pyright = {},
+
+      efm = { filetypes = { 'elixir' } },
+
+      ts_ls = {},
+
+      emmet_language_server = {},
+
       lexical = {
-        filetypes = { "elixir", "eelixir", "heex" },
-        cmd = { "/home/joao/.local/share/nvim/mason/packages/lexical/_build/dev/package/lexical/bin/start_lexical.sh" },
-        root_dir = function(fname)
-          return nvim_lsp.util.root_pattern("mix.exs", ".git")(fname) or vim.loop.cwd()
-        end,
+        cmd = { get_ls_cmd("lexical") },
       },
+      -- lexical = {
+      --   filetypes = { "elixir", "eelixir", "heex" },
+      --   cmd = { "/home/joao/.local/share/nvim/mason/packages/lexical/_build/dev/package/lexical/bin/start_lexical.sh" },
+      --   root_dir = function(fname)
+      --     return nvim_lsp.util.root_pattern("mix.exs", ".git")(fname) or vim.loop.cwd()
+      --   end,
+      -- },
 
       -- elixirls = {
       --   cmd = {get_ls_cmd("elixir-ls")},
@@ -45,8 +58,6 @@ return {
         }
       },
 
-      gleam = true,
-
       lua_ls = {
         settings = {
           Lua = {
@@ -64,12 +75,6 @@ return {
           }
         }
       },
-
-      efm = { filetypes = { 'elixir' } },
-
-      ts_ls = {},
-
-      emmet_language_server = {},
 
       tailwindcss = {
         init_options = {
@@ -106,7 +111,6 @@ return {
     }
 
     local capabilities = require('cmp_nvim_lsp').default_capabilities()
-    local lspconfig = require("lspconfig")
 
     for name, server_config in pairs(servers) do
       if server_config == true then
@@ -116,7 +120,8 @@ return {
         capabilities = capabilities,
       }, server_config)
 
-      lspconfig[name].setup(server_config)
+      vim.lsp.config[name] = server_config
+      vim.lsp.enable(name)
     end
 
     vim.g.rustaceanvim = {
@@ -143,8 +148,8 @@ return {
         util.keymap('n', 'g.', vim.lsp.buf.code_action, { desc = "Code actions" })
         util.keymap('n', '<leader>gr', '<cmd>Glance references<CR>', { desc = "References" })
         util.keymap('n', 'gh', vim.diagnostic.open_float, { desc = "Open diagnostic" })
-        util.keymap('n', '[d', vim.diagnostic.goto_prev, { desc = "Go to prev diagnostic" })
-        util.keymap('n', ']d', vim.diagnostic.goto_next, { desc = "Go to next diagnostic" })
+        util.keymap('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, { desc = "Go to prev diagnostic" })
+        util.keymap('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, { desc = "Go to next diagnostic" })
         util.keymap('n', '<leader>fm', function() vim.lsp.buf.format({ async = true }) end, { desc = "Format file" })
         -- vim.keymap.set('n', '<leader>fp', ':ElixirFromPipe<CR>', opts)
         -- vim.keymap.set('n', '<leader>tp', ':ElixirToPipe<CR>', opts)
@@ -152,10 +157,11 @@ return {
       end
     })
 
+    -- Organize imports and format Go files
     vim.api.nvim_create_autocmd("BufWritePre", {
       pattern = "*.go",
       callback = function()
-        local params = vim.lsp.util.make_range_params()
+        local params = vim.lsp.util.make_range_params(nil, "utf-8")
         params.context = { only = { "source.organizeImports" } }
         -- buf_request_sync defaults to a 1000ms timeout. Depending on your
         -- machine and codebase, you may want longer. Add an additional
@@ -166,8 +172,7 @@ return {
         for cid, res in pairs(result or {}) do
           for _, r in pairs(res.result or {}) do
             if r.edit then
-              local enc = (vim.lsp.get_client_by_id(cid) or {})
-                  .offset_encoding or "utf-16"
+              local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or "utf-16"
               vim.lsp.util.apply_workspace_edit(r.edit, enc)
             end
           end
