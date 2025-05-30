@@ -46,6 +46,34 @@ return {
       }
     end
 
+
+    dap.adapters.lldb = {
+      type = "server",
+      port = "${port}",
+      executable = {
+        command = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
+        args = { "--port", "${port}" },
+        detached = false,
+      }
+    }
+    dap.configurations.rust = {
+      {
+        name = "Debug an executable",
+        type = "lldb",
+        request = "launch",
+        program = function()
+          local path = vim.fn.input({
+            prompt = 'Path to executable: ',
+            default = vim.fn.getcwd() .. '/',
+            completion = 'file'
+          })
+          return (path and path ~= "") and path or dap.ABORT
+        end,
+        cwd = "${workspaceFolder}",
+        stopOnEntry = false,
+      },
+    }
+
     vim.keymap.set("n", "<F6>", dap.toggle_breakpoint)
     vim.keymap.set("n", "<F7>", dap.run_to_cursor)
 

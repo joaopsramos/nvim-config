@@ -27,6 +27,19 @@ opt.scrolloff = 5
 -- opt.scrolloff = 100
 -- opt.ch = 0
 
+vim.g.clipboard = {
+  name = "wl-clipboard",
+  copy = {
+    ["+"] = "wl-copy",
+    ["*"] = "wl-copy",
+  },
+  paste = {
+    ["+"] = "wl-paste",
+    ["*"] = "wl-paste",
+  },
+  cache_enabled = 0,
+}
+
 if vim.g.neovide then
   opt.linespace = 0
   vim.o.guifont = "Hack Nerd Font Mono:h12"
@@ -93,7 +106,7 @@ vim.cmd([[
 ]])
 
 local function add_lines_to_term()
-  local buf_ft = vim.api.nvim_buf_get_option(vim.api.nvim_get_current_buf(), 'filetype')
+  local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = vim.api.nvim_get_current_buf() })
   if buf_ft == 'neoterm' then
     vim.api.nvim_command('set relativenumber')
     vim.api.nvim_command('set number')
@@ -105,4 +118,9 @@ vim.api.nvim_create_autocmd('BufEnter', {
   group = term_group,
   pattern = 'term:/*neoterm*',
   callback = add_lines_to_term
+})
+
+-- Disable comments continuation
+vim.api.nvim_create_autocmd('BufWinEnter', {
+  command = 'set formatoptions-=cro',
 })
