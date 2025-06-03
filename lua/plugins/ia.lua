@@ -46,66 +46,71 @@ return {
   --     })
   --   end
   -- },
-  {
-    "supermaven-inc/supermaven-nvim",
-    config = {
-      keymaps = {
-        accept_suggestion = "<M-l>",
-        clear_suggestion = "<C-]>",
-        accept_word = "<M-h>",
-      },
-    },
-  },
-  {
-    "yetone/avante.nvim",
-    event = "VeryLazy",
-    lazy = false,
-    version = "*", -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
-    opts = {
-      provider = "openai",
-      openai = {
-        endpoint = "http://localhost:1234/v1",
-        model = "qwen3-8b@q3_k_l",
-      },
-      copilot = {
-        model = "claude-3.5-sonnet",
-      },
-      behaviour = {
-        auto_apply_diff_after_generation = false,
-      }
-    },
-    build = "make",
-    dependencies = {
-      "stevearc/dressing.nvim",
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      "nvim-tree/nvim-web-devicons",
-      "nvim-telescope/telescope.nvim",
-      {
-        -- support for image pasting
-        "HakonHarnes/img-clip.nvim",
-        event = "VeryLazy",
-        opts = {
-          -- recommended settings
-          default = {
-            embed_image_as_base64 = false,
-            prompt_for_file_name = false,
-            drag_and_drop = {
-              insert_mode = true,
-            },
-            -- required for Windows users
-            use_absolute_path = true,
-          },
-        },
-      },
-      {
-        -- Make sure to set this up properly if you have lazy=true
-        'MeanderingProgrammer/render-markdown.nvim',
-        opts = {
-          file_types = { "markdown", "Avante" },
-        },
-        ft = { "markdown", "Avante" },
-      },
-    },
-  }
+  -- {
+  --   "supermaven-inc/supermaven-nvim",
+  --   config = {
+  --     keymaps = {
+  --       accept_suggestion = "<M-l>",
+  --       clear_suggestion = "<C-]>",
+  --       accept_word = "<M-h>",
+  --     },
+  --   },
+  -- },
+  -- {
+  --   "yetone/avante.nvim",
+  --   event = "VeryLazy",
+  --   lazy = false,
+  --   version = "*", -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
+  --   opts = {
+  --     provider = "openai",
+  --     ollama = {
+  --       endpoint = "http://localhost:1234/v1",
+  --       model = "qwen2.5-coder",
+  --     },
+  --     openai = {
+  --       endpoint = "http://localhost:1234/v1",
+  --       model = "qwen3-8b@q3_k_l",
+  --     },
+  --     copilot = {
+  --       model = "claude-3.5-sonnet",
+  --     },
+  --     behaviour = {
+  --       auto_apply_diff_after_generation = false,
+  --       enable_cursor_planning_mode = true
+  --     }
+  --   },
+  --   build = "make",
+  --   dependencies = {
+  --     "stevearc/dressing.nvim",
+  --     "nvim-lua/plenary.nvim",
+  --     "MunifTanjim/nui.nvim",
+  --     "nvim-tree/nvim-web-devicons",
+  --     "nvim-telescope/telescope.nvim",
+  --     {
+  --       -- support for image pasting
+  --       "HakonHarnes/img-clip.nvim",
+  --       event = "VeryLazy",
+  --       opts = {
+  --         -- recommended settings
+  --         default = {
+  --           embed_image_as_base64 = false,
+  --           prompt_for_file_name = false,
+  --           drag_and_drop = {
+  --             insert_mode = true,
+  --           },
+  --           -- required for Windows users
+  --           use_absolute_path = true,
+  --         },
+  --       },
+  --     },
+  --     {
+  --       -- Make sure to set this up properly if you have lazy=true
+  --       'MeanderingProgrammer/render-markdown.nvim',
+  --       opts = {
+  --         file_types = { "markdown", "Avante" },
+  --       },
+  --       ft = { "markdown", "Avante" },
+  --     },
+  --   },
+  -- }
 }
