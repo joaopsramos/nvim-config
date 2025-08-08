@@ -60,12 +60,33 @@ return {
           {
             "navic",
             color_correction = "dynamic",
-            navic_opts = nil
+            navic_opts = {
+              highlight = true,
+            }
           }
         }
       },
       inactive_winbar = {},
       extensions = {}
     })
+
+    local bg = "#282a36"
+    local fg = "#CAD3F5"
+    local accent = "#8AADF4"
+
+    local groups = {
+      "File", "Module", "Namespace", "Package", "Class", "Method", "Property",
+      "Field", "Constructor", "Enum", "Interface", "Function", "Variable",
+      "Constant", "String", "Number", "Boolean", "Array", "Object", "Key",
+      "Null", "EnumMember", "Struct", "Event", "Operator", "TypeParameter",
+      "Text", "Separator"
+    }
+
+    for _, grp in ipairs(groups) do
+      vim.api.nvim_set_hl(0, "NavicIcons" .. grp, { default = true, bg = bg, fg = accent })
+    end
+
+    vim.api.nvim_set_hl(0, "NavicText", { default = true, bg = bg, fg = fg })
+    vim.api.nvim_set_hl(0, "NavicSeparator", { default = true, bg = bg, fg = fg })
   end
 }
