@@ -21,6 +21,11 @@ return {
     local lga_actions = require("telescope-live-grep-args.actions")
 
     telescope.setup({
+      pickers = {
+        find_files = {
+          find_command = { "rg", "--files" }
+        }
+      },
       extensions = {
         fzf = {
           fuzzy = true,
