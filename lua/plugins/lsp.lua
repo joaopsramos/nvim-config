@@ -16,6 +16,8 @@ return {
     end
 
     local servers = {
+      jsonls = true,
+
       gleam = true,
 
       docker_compose_language_service = { filetypes = { "yaml" } },
@@ -125,11 +127,26 @@ return {
     end
 
     vim.g.rustaceanvim = {
-      -- server = { on_attach = on_attach }
+      server = {
+        -- on_attach = on_attach,
+        -- default_settings = {
+        --   ["rust-analyzer"] = {
+        --     checkOnSave = false
+        --   }
+        -- }
+      }
     }
 
     vim.api.nvim_create_autocmd('LspAttach', {
-      callback = function(_)
+      callback = function(event)
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+        local bufnr = event.buf
+
+        if client.server_capabilities.documentSymbolProvider then
+          local navic = require("nvim-navic")
+          navic.attach(client, bufnr)
+        end
+
         -- Delete defaults
         -- vim.keymap.del('n', 'grn', { buffer = args.buf })
         -- vim.keymap.del('n', 'gra', { buffer = args.buf })

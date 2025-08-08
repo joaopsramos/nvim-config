@@ -156,5 +156,6 @@ return {
       })
     end
   },
-  { 'kevinhwang91/nvim-ufo', dependencies = 'kevinhwang91/promise-async', config = true }
+  { 'kevinhwang91/nvim-ufo', dependencies = 'kevinhwang91/promise-async', config = true },
+  { 'SmiteshP/nvim-navic',   dependencies = 'neovim/nvim-lspconfig', },
 }

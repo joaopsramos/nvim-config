@@ -27,18 +27,20 @@ opt.scrolloff = 5
 -- opt.scrolloff = 100
 -- opt.ch = 0
 
-vim.g.clipboard = {
-  name = "wl-clipboard",
-  copy = {
-    ["+"] = "wl-copy",
-    ["*"] = "wl-copy",
-  },
-  paste = {
-    ["+"] = "wl-paste",
-    ["*"] = "wl-paste",
-  },
-  cache_enabled = 0,
-}
+if os.getenv("XDG_CURRENT_DESKTOP") == "Hyprland" then
+  vim.g.clipboard = {
+    name = "wl-clipboard",
+    copy = {
+      ["+"] = "wl-copy",
+      ["*"] = "wl-copy",
+    },
+    paste = {
+      ["+"] = "wl-paste",
+      ["*"] = "wl-paste",
+    },
+    cache_enabled = 0,
+  }
+end
 
 if vim.g.neovide then
   opt.linespace = 0
@@ -46,7 +48,7 @@ if vim.g.neovide then
   -- vim.g.neovide_scale_factor = 0.84
   vim.g.neovide_text_gamma = 0.0
   vim.g.neovide_text_contrast = 0.5
-  vim.g.neovide_fullscreen = true
+  vim.g.neovide_fullscreen = false
   vim.g.neovide_cursor_vfx_mode = ""
   vim.g.neovide_cursor_vfx_particle_density = 10.0
   vim.g.neovide_floating_shadow = false

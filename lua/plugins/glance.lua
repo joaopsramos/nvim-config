@@ -8,6 +8,8 @@ return {
       height = 18, -- Height of the window
       zindex = 45,
 
+      preview_win_context = true,
+
       -- By default glance will open preview "embedded" within your active window
       -- when `detached` is enabled, glance will render above all existing windows
       -- and won't be restiricted by the width of your active window
@@ -35,7 +37,7 @@ return {
       },
       theme = {             -- This feature might not work properly in nvim-0.7.2
         enable = true,      -- Will generate colors for the plugin based on your current colorscheme
-        mode = 'auto',      -- 'brighten'|'darken'|'auto', 'auto' will set mode based on the brightness of your colorscheme
+        mode = 'darken',    -- 'brighten'|'darken'|'auto', 'auto' will set mode based on the brightness of your colorscheme
       },
       mappings = {
         list = {
