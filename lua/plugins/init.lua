@@ -152,7 +152,7 @@ return {
     config = function()
       require('illuminate').configure({
         -- under_cursor: whether or not to illuminate under the cursor
-        under_cursor = false,
+        -- under_cursor = false,
       })
     end
   },
