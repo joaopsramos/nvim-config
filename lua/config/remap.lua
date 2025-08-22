@@ -11,6 +11,7 @@ if vim.g.neovide then
 end
 
 -- General
+util.keymap('', '<C-q>', 'q')
 util.keymap('', 'q', ':q<CR>')
 util.keymap('n', 'Q', ':Tclose!<CR>:NvimTreeClose<CR>:quitall<CR> ')
 util.keymap('', '<C-x>', ':bd<CR>')

@@ -6,6 +6,15 @@ return {
 
     -- custom_tokyonight.command.fg = "#F5A97F"
 
+    local function macro_recording()
+      local recording_register = vim.fn.reg_recording()
+      if recording_register == '' then
+        return ''
+      else
+        return 'Recording @' .. recording_register
+      end
+    end
+
     require("lualine").setup({
       options = {
         icons_enabled = true,
@@ -31,6 +40,7 @@ return {
         lualine_b = { 'branch', 'diff' },
         lualine_c = { { 'filename', path = 1 }, 'diagnostics' },
         lualine_x = {
+          macro_recording,
           {
             require("noice").api.status.command.get,
             cond = require("noice").api.status.command.has,
@@ -60,9 +70,7 @@ return {
           {
             "navic",
             color_correction = "dynamic",
-            navic_opts = {
-              highlight = true,
-            }
+            navic_opts = nil
           }
         }
       },

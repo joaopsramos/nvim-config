@@ -36,8 +36,9 @@ return {
       },
     },
   },
-  { 'nvim-zh/colorful-winsep.nvim', opts = {},     event = { "WinLeave" } },
-  { 'norcalli/nvim-colorizer.lua',  opts = { '*' } },
+  -- bug when deleting all buffers
+  -- { 'nvim-zh/colorful-winsep.nvim', opts = {},     event = { "WinLeave" } },
+  { 'norcalli/nvim-colorizer.lua', opts = { '*' } },
   {
     'numToStr/Comment.nvim',
     opts = {},
@@ -46,7 +47,7 @@ return {
       { 'gb', mode = { 'n', 'v' } },
     }
   },
-  { 'windwp/nvim-autopairs', opts = {} },
+  { 'windwp/nvim-autopairs',       opts = {} },
   {
     'kassio/neoterm',
     init = function()
@@ -54,7 +55,7 @@ return {
       vim.g.neoterm_automap_keys = false
     end
   },
-  { 'rmagatti/auto-session', lazy = false, opts = {} },
+  { 'rmagatti/auto-session', lazy = false,                                      opts = {} },
   {
     'vim-test/vim-test',
     init = function()
@@ -89,7 +90,7 @@ return {
       vim.g.EditorConfig_exclude_patterns = { 'fugitive://.*' }
     end
   },
-  { 'ustrajunior/ex_maps',           opts = { create_mappings = true, mapping = 'mtt' } },
+  { 'ustrajunior/ex_maps',   opts = { create_mappings = true, mapping = 'mtt' } },
   {
     'mrcjkb/rustaceanvim',
     version = '^5',
@@ -157,5 +158,18 @@ return {
     end
   },
   { 'kevinhwang91/nvim-ufo', dependencies = 'kevinhwang91/promise-async', config = true },
-  { 'SmiteshP/nvim-navic',   dependencies = 'neovim/nvim-lspconfig', },
+  {
+    'SmiteshP/nvim-navic',
+    dependencies = 'neovim/nvim-lspconfig',
+    opts = {
+      highlight = true,
+      format_text = function(text)
+        if #text <= 30 then
+          return text
+        end
+
+        return string.sub(text, 1, 40) .. ".." .. string.sub(text, #text - 5, #text)
+      end
+    }
+  },
 }

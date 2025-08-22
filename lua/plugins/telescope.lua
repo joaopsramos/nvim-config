@@ -50,6 +50,7 @@ return {
         }
       },
       defaults = {
+        path_display = { "filename_first" },
         mappings = {
           i = {
             -- map actions.which_key to <C-h> (default: <C-/>)
