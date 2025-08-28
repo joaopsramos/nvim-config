@@ -32,7 +32,9 @@ return {
 
       lexical = {
         cmd = { get_ls_cmd("lexical") },
+        filetypes = { "elixir", "eelixir", "heex" },
       },
+
       -- lexical = {
       --   filetypes = { "elixir", "eelixir", "heex" },
       --   cmd = { "/home/joao/.local/share/nvim/mason/packages/lexical/_build/dev/package/lexical/bin/start_lexical.sh" },
