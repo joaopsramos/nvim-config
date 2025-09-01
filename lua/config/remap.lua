@@ -11,10 +11,10 @@ if vim.g.neovide then
 end
 
 -- General
-util.keymap('', '<C-q>', 'q')
-util.keymap('', 'q', ':q<CR>')
-util.keymap('n', 'Q', ':Tclose!<CR>:NvimTreeClose<CR>:quitall<CR> ')
-util.keymap('', '<C-x>', ':bd<CR>')
+util.keymap('n', '<C-q>', 'q')
+util.keymap('n', 'q', ':q<CR>')
+util.keymap('n', 'Q', ':Tclose!<CR>:quitall<CR>')
+util.keymap('n', '<C-x>', ':bd<CR>')
 util.keymap('n', '<leader>dab', ':%bd<CR>:e#<CR>', { desc = 'Delete all buffers except current' })
 
 util.keymap('n', '<C-a>', 'ggVG', { desc = "Select all" })
@@ -84,8 +84,8 @@ util.keymap('n', '<leader>np', ":lua require('neotest').run.stop()<CR>", { desc 
 util.keymap('n', '[t', ":lua require('neotest').jump.prev({ status = 'failed' })<CR>", { desc = 'Prev failed test' })
 util.keymap('n', ']t', ":lua require('neotest').jump.next({ status = 'failed' })<CR>", { desc = 'Next failed test' })
 
--- Nvimtree
-util.keymap('n', '<leader>b', ":NvimTreeFindFileToggle<CR>", { desc = 'Toggle NvimTree' })
+-- File explorer
+util.keymap('n', '<leader>b', function() Snacks.picker.explorer() end, { desc = 'Toggle NvimTree' })
 
 -- Mix
 util.keymap('n', '<leader>iex', "<leader>tmiiex<CR>", { desc = 'Run iex', remap = true })

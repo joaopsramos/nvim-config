@@ -1,51 +1,74 @@
 return {
-  -- {
-  --   "olimorris/codecompanion.nvim",
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "nvim-treesitter/nvim-treesitter",
-  --     "folke/noice.nvim"
-  --   },
-  --   init = function()
-  --     require("plugins.ai.extensions.companion-notification").init()
-  --   end,
-  --   config = function()
-  --     require("codecompanion").setup({
-  --       strategies = {
-  --         chat = { adapter = "lm_studio" },
-  --         inline = { adapter = "lm_studio" },
-  --         cmd = { adapter = "lm_studio" },
-  --       },
-  --       adapters = {
-  --         lm_studio = function()
-  --           return require("codecompanion.adapters").extend("openai_compatible", {
-  --             env = {
-  --               url = "http://localhost:1234",
-  --             },
-  --             name = "lm-studio", -- Give this adapter a different name to differentiate it from the default ollama adapter
-  --             schema = {
-  --               model = {
-  --                 default = "qwen3-8b@q3_k_l",
-  --               },
-  --             },
-  --           })
-  --         end,
-  --       },
-  --     })
-  --   end,
-  -- },
-  -- {
-  --   "zbirenbaum/copilot.lua",
-  --   event = "InsertEnter",
-  --   cmd = "Copilot",
-  --   config = function()
-  --     require("copilot").setup({
-  --       suggestion = {
-  --         auto_trigger = true,
-  --       },
-  --     })
-  --   end
-  -- },
+  {
+    "olimorris/codecompanion.nvim",
+    opts = {
+      strategies = {
+        chat = {
+          adapter = {
+            name = "copilot",
+            model = "claude-sonnet-4",
+          },
+        },
+        inline = {
+          adapter = {
+            name = "copilot",
+            model = "claude-sonnet-4",
+          },
+        },
+        cmd = {
+          adapter = {
+            name = "copilot",
+            model = "claude-sonnet-4",
+          },
+        },
+      }
+    },
+    init = function()
+      require("plugins.ai.extensions.companion-notification").init()
+    end,
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      {
+        'MeanderingProgrammer/render-markdown.nvim',
+        ft = { "markdown", "codecompanion" },
+      },
+      {
+        "echasnovski/mini.diff",
+        config = function()
+          local diff = require("mini.diff")
+          diff.setup({
+            -- Disabled by default
+            source = diff.gen_source.none(),
+          })
+        end,
+      },
+      {
+        "HakonHarnes/img-clip.nvim",
+        opts = {
+          filetypes = {
+            codecompanion = {
+              prompt_for_file_name = false,
+              template = "[Image]($FILE_PATH)",
+              use_absolute_path = true,
+            },
+          },
+        },
+      },
+    },
+  },
+  {
+    "zbirenbaum/copilot.lua",
+    event = "InsertEnter",
+    cmd = "Copilot",
+    config = function()
+      require("copilot").setup({
+        suggestion = {
+          auto_trigger = true,
+        },
+      })
+    end
+  },
   -- {
   --   "supermaven-inc/supermaven-nvim",
   --   config = {
@@ -58,34 +81,32 @@ return {
   -- },
   -- {
   --   "yetone/avante.nvim",
-  --   event = "VeryLazy",
-  --   lazy = false,
-  --   version = "*", -- Set this to "*" to always pull the latest release version, or set it to false to update to the latest code changes.
-  --   opts = {
-  --     provider = "openai",
-  --     ollama = {
-  --       endpoint = "http://localhost:1234/v1",
-  --       model = "qwen2.5-coder",
+  --   build        = "make",
+  --   lazy         = true,
+  --   event        = "VeryLazy",
+  --   version      = false, -- Never set this value to "*"! Never!
+  --   opts         = {
+  --     instructions_file = "avante.md",
+  --     provider = "copilot",
+  --     providers = {
+  --       copilot = {
+  --         endpoint = "https://api.anthropic.com",
+  --         model = "claude-sonnet-4",
+  --       },
   --     },
-  --     openai = {
-  --       endpoint = "http://localhost:1234/v1",
-  --       model = "qwen3-8b@q3_k_l",
-  --     },
-  --     copilot = {
-  --       model = "claude-3.5-sonnet",
-  --     },
-  --     behaviour = {
-  --       auto_apply_diff_after_generation = false,
-  --       enable_cursor_planning_mode = true
-  --     }
   --   },
-  --   build = "make",
   --   dependencies = {
-  --     "stevearc/dressing.nvim",
   --     "nvim-lua/plenary.nvim",
   --     "MunifTanjim/nui.nvim",
-  --     "nvim-tree/nvim-web-devicons",
-  --     "nvim-telescope/telescope.nvim",
+  --     --- The below dependencies are optional,
+  --     "echasnovski/mini.pick",         -- for file_selector provider mini.pick
+  --     "nvim-telescope/telescope.nvim", -- for file_selector provider telescope
+  --     "hrsh7th/nvim-cmp",              -- autocompletion for avante commands and mentions
+  --     "ibhagwan/fzf-lua",              -- for file_selector provider fzf
+  --     "stevearc/dressing.nvim",        -- for input provider dressing
+  --     "folke/snacks.nvim",             -- for input provider snacks
+  --     "nvim-tree/nvim-web-devicons",   -- or echasnovski/mini.icons
+  --     "zbirenbaum/copilot.lua",        -- for providers='copilot'
   --     {
   --       -- support for image pasting
   --       "HakonHarnes/img-clip.nvim",
