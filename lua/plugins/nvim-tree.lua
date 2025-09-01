@@ -1,6 +1,6 @@
 return {
   'kyazdani42/nvim-tree.lua',
-  enabled = false,
+  enabled = true,
   event = 'VeryLazy',
   name = 'nvim-tree',
   opts = {

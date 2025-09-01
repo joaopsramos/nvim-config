@@ -3,7 +3,7 @@ return {
   priority = 1000,
   lazy = false,
   opts = {
-    explorer = {},
+    explorer = { enabled = false },
     -- indent = {
     --   char = "▏",
     --   animate = { enabled = false }
@@ -14,10 +14,30 @@ return {
           -- filename_first = true,
           truncate = 60,
         }
-      }
+      },
+      win = {
+        input = {
+          keys = {
+            ["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
+            ["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
+          },
+        },
+      },
+      sources = {
+        explorer = {
+          win = {
+            list = {
+              wo = {
+                number = true,
+                relativenumber = true,
+              },
+            },
+          },
+        },
+      },
     },
     image = {},
-    words = { enabled = true },
+    words = {},
   },
   keys = {
     { "<C-p>",      function() Snacks.picker.files() end,       desc = "Find Files" },
