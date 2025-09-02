@@ -16,8 +16,8 @@ return {
       width = 45,
       side = 'left',
       preserve_window_proportions = false,
-      number = false,
-      relativenumber = false,
+      number = true,
+      relativenumber = true,
       signcolumn = 'yes',
     },
     renderer = {
