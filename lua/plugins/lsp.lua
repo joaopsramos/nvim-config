@@ -31,7 +31,7 @@ return {
       emmet_language_server = {},
 
       lexical = {
-        cmd = { get_ls_cmd("lexical") },
+        cmd = { get_ls_cmd("expert") },
         filetypes = { "elixir", "eelixir", "heex" },
       },
 
@@ -144,7 +144,7 @@ return {
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         local bufnr = event.buf
 
-        if client.server_capabilities.documentSymbolProvider then
+        if client and client.server_capabilities.documentSymbolProvider then
           local navic = require("nvim-navic")
           navic.attach(client, bufnr)
         end

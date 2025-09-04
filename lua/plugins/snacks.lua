@@ -12,12 +12,14 @@ return {
     vim.print = _G.dd
   end,
   opts = {
+    lazygit = {},
     explorer = { enabled = false },
     -- indent = {
     --   char = "▏",
     --   animate = { enabled = false }
     -- },
     picker = {
+      ui_select = true,
       formatters = {
         file = {
           -- filename_first = true,
