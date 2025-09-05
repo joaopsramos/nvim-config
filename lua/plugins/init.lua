@@ -124,7 +124,7 @@ return {
     event = 'InsertEnter',
     opts = {
       bind = true, -- This is mandatory, otherwise border config won't get registered.
-      hint_enable = true,
+      hint_enable = false,
       handler_opts = {
         border = "rounded"
       }
@@ -172,4 +172,22 @@ return {
       end
     }
   },
+  {
+    'tpope/vim-projectionist',
+    event = 'VeryLazy',
+    config = function()
+      vim.g.projectionist_heuristics = {
+        ["mix.exs"] = {
+          ["lib/*.ex"] = {
+            type = "src",
+            alternate = "test/{}_test.exs",
+          },
+          ["test/*_test.exs"] = {
+            type = "src",
+            alternate = "lib/{}.ex",
+          }
+        }
+      }
+    end
+  }
 }
