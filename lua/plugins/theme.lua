@@ -109,7 +109,7 @@ return {
           TelescopeSelection = { fg = c.peach, bg = c.none, style = { "bold" } },
           GitSignsChange = { fg = c.peach },
           DiffChange = { bg = '#223159' },
-          DiffAdd = { bg = '#283b4d' },
+          -- DiffAdd = { bg = '#283b4d' },
           DiffDelete = { bg = '#3f2d3d' },
           DiffText = { bg = '#394b70' },
 
