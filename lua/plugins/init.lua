@@ -55,7 +55,14 @@ return {
       vim.g.neoterm_automap_keys = false
     end
   },
-  { 'rmagatti/auto-session', lazy = false,                                      opts = {} },
+  -- { 'rmagatti/auto-session', lazy = false,                                      opts = {} },
+  {
+    "olimorris/persisted.nvim",
+    lazy = false,
+    opts = {
+      autoload = true
+    }
+  },
   {
     'vim-test/vim-test',
     init = function()
@@ -90,7 +97,7 @@ return {
       vim.g.EditorConfig_exclude_patterns = { 'fugitive://.*' }
     end
   },
-  { 'ustrajunior/ex_maps',   opts = { create_mappings = true, mapping = 'mtt' } },
+  { 'ustrajunior/ex_maps',           opts = { create_mappings = true, mapping = 'mtt' } },
   {
     'mrcjkb/rustaceanvim',
     version = '^5',
