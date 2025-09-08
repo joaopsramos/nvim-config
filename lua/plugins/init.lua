@@ -182,7 +182,7 @@ return {
   {
     'tpope/vim-projectionist',
     event = 'VeryLazy',
-    config = function()
+    init = function()
       vim.g.projectionist_heuristics = {
         ["mix.exs"] = {
           ["lib/*.ex"] = {
@@ -190,7 +190,7 @@ return {
             alternate = "test/{}_test.exs",
           },
           ["test/*_test.exs"] = {
-            type = "src",
+            type = "test",
             alternate = "lib/{}.ex",
           }
         }
