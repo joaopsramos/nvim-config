@@ -12,6 +12,7 @@ return {
     vim.print = _G.dd
   end,
   opts = {
+    bigfile = {},
     lazygit = {},
     explorer = { enabled = false },
     -- indent = {

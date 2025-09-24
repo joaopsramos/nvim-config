@@ -171,11 +171,17 @@ return {
     opts = {
       highlight = true,
       format_text = function(text)
-        if #text <= 30 then
+        if #text <= 40 then
           return text
         end
 
-        return string.sub(text, 1, 40) .. ".." .. string.sub(text, #text - 5, #text)
+        local prefix_len = 35
+        local max_suffix_len = 5
+
+        local sufix_len = math.min(max_suffix_len, #text - prefix_len)
+
+        -- subtract 2 more to account for the ".."
+        return string.sub(text, 1, prefix_len - 2) .. ".." .. string.sub(text, -sufix_len)
       end
     }
   },
