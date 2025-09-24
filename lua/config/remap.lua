@@ -26,7 +26,8 @@ util.keymap('v', '<C-s>', ':w<CR>')
 util.keymap('v', '<C-y>', '"+y')
 util.keymap('i', '<C-p>', '<Left><C-o>p')
 util.keymap('v', '<C-p>', 's<C-r>0<Esc>')
-util.keymap('n', '<C-h>', ':noh<CR>')
+-- util.keymap('n', '<C-h>', ':noh<CR>')
+util.keymap('n', '<Esc>', ':noh<CR>')
 
 util.keymap('i', '<C-j>', '<C-o>o')
 util.keymap('i', '<C-z>', '<C-o>zz')
@@ -85,8 +86,8 @@ util.keymap('n', '[t', ":lua require('neotest').jump.prev({ status = 'failed' })
 util.keymap('n', ']t', ":lua require('neotest').jump.next({ status = 'failed' })<CR>", { desc = 'Next failed test' })
 
 -- File explorer
--- util.keymap('n', '<leader>b', function() Snacks.picker.explorer() end, { desc = 'Toggle NvimTree' })
-util.keymap('n', '<leader>b', ":NvimTreeFindFileToggle<CR>", { desc = 'Toggle NvimTree' })
+-- util.keymap('n', '<leader>e', function() Snacks.picker.explorer() end, { desc = 'Toggle NvimTree' })
+util.keymap('n', '<leader>e', ":NvimTreeFindFileToggle<CR>", { desc = 'Toggle NvimTree' })
 
 -- Mix
 util.keymap('n', '<leader>iex', "<leader>tmiiex<CR>", { desc = 'Run iex', remap = true })
