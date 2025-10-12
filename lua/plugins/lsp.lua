@@ -2,13 +2,10 @@ return {
   'neovim/nvim-lspconfig',
   dependencies = {
     'hrsh7th/nvim-cmp',
-    "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
+    { "mason-org/mason.nvim", opts = {} },
   },
-  name = 'lspconfig',
   config = function()
     require('mason').setup()
-    local util = require('helper.utils')
 
     local function get_ls_cmd(ls)
       local language_servers_dir = vim.fn.stdpath('data') .. '/mason/bin/'
@@ -17,24 +14,16 @@ return {
 
     local servers = {
       jsonls = true,
-
       gleam = true,
-
       docker_compose_language_service = { filetypes = { "yaml" } },
-
       pyright = {},
-
       efm = { filetypes = { 'elixir' } },
-
       ts_ls = {},
-
       emmet_language_server = {},
-
-      lexical = {
-        cmd = { get_ls_cmd("expert") },
+      expert = {
+        -- cmd = { get_ls_cmd("expert") },
         filetypes = { "elixir", "eelixir", "heex" },
       },
-
       -- lexical = {
       --   filetypes = { "elixir", "eelixir", "heex" },
       --   cmd = { "/home/joao/.local/share/nvim/mason/packages/lexical/_build/dev/package/lexical/bin/start_lexical.sh" },
@@ -42,7 +31,6 @@ return {
       --     return nvim_lsp.util.root_pattern("mix.exs", ".git")(fname) or vim.loop.cwd()
       --   end,
       -- },
-
       -- elixirls = {
       --   cmd = {get_ls_cmd("elixir-ls")},
       --   settings = {
@@ -52,7 +40,6 @@ return {
       --     }
       --   }
       -- },
-
       gopls = {
         settings = {
           gopls = {
@@ -61,7 +48,6 @@ return {
           }
         }
       },
-
       lua_ls = {
         settings = {
           Lua = {
@@ -79,7 +65,6 @@ return {
           }
         }
       },
-
       tailwindcss = {
         init_options = {
           userLanguages = {
@@ -138,6 +123,9 @@ return {
         -- }
       }
     }
+  end,
+  init = function()
+    local util = require('helper.utils')
 
     vim.api.nvim_create_autocmd('LspAttach', {
       callback = function(event)
@@ -165,7 +153,7 @@ return {
         util.keymap('i', '<C-h>', vim.lsp.buf.signature_help, { desc = "Signature help" })
         util.keymap('n', 'cd', vim.lsp.buf.rename, { desc = "Rename (change definition)" })
         util.keymap('n', 'g.', vim.lsp.buf.code_action, { desc = "Code actions" })
-        util.keymap('n', '<leader>gr', '<cmd>Glance references<CR>', { desc = "References" })
+        util.keymap('n', '<leader>gr', function() Snacks.picker.lsp_references() end, { desc = "References" })
         util.keymap('n', 'gh', vim.diagnostic.open_float, { desc = "Open diagnostic" })
         util.keymap('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, { desc = "Go to prev diagnostic" })
         util.keymap('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, { desc = "Go to next diagnostic" })

@@ -1,5 +1,6 @@
 return {
   "dnlhc/glance.nvim",
+  enabled = false,
   config = function()
     local glance = require('glance')
     local actions = glance.actions
