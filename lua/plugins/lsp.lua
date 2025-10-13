@@ -20,17 +20,15 @@ return {
       efm = { filetypes = { 'elixir' } },
       ts_ls = {},
       emmet_language_server = {},
+      typescript_language_server = {},
       expert = {
         -- cmd = { get_ls_cmd("expert") },
-        filetypes = { "elixir", "eelixir", "heex" },
+        -- filetypes = { "elixir", "eelixir", "heex" },
       },
-      -- lexical = {
-      --   filetypes = { "elixir", "eelixir", "heex" },
-      --   cmd = { "/home/joao/.local/share/nvim/mason/packages/lexical/_build/dev/package/lexical/bin/start_lexical.sh" },
-      --   root_dir = function(fname)
-      --     return nvim_lsp.util.root_pattern("mix.exs", ".git")(fname) or vim.loop.cwd()
-      --   end,
-      -- },
+      lexical = {
+        cmd = { get_ls_cmd("lexical") },
+        -- filetypes = { "elixir", "eelixir", "heex" },
+      },
       -- elixirls = {
       --   cmd = {get_ls_cmd("elixir-ls")},
       --   settings = {
