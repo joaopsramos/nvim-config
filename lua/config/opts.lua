@@ -126,3 +126,13 @@ vim.api.nvim_create_autocmd('BufEnter', {
 vim.api.nvim_create_autocmd('BufWinEnter', {
   command = 'set formatoptions-=cro',
 })
+
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  callback = function()
+    vim.cmd([[
+      Tclose!
+    ]])
+
+    pcall(vim.cmd, "CopilotChatClose")
+  end,
+})

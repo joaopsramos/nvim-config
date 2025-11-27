@@ -60,63 +60,9 @@ return {
         },
       },
     },
+    keys = {
+      { "<leader>aa", ":CopilotChat<CR>",             desc = "Open AI Assistant",                mode = { 'n' } },
+      { "<leader>aa", ":CopilotChat<CR>i#selection ", desc = "Open AI Assistant with selection", mode = { 'v' } },
+    },
   },
-  -- {
-  --   "olimorris/codecompanion.nvim",
-  --   opts = {
-  --     strategies = {
-  --       chat = {
-  --         adapter = {
-  --           name = "copilot",
-  --           model = "gpt-4.1",
-  --         },
-  --       },
-  --       inline = {
-  --         adapter = {
-  --           name = "copilot",
-  --           model = "gpt-4.1",
-  --         },
-  --       },
-  --       cmd = {
-  --         adapter = {
-  --           name = "copilot",
-  --           model = "gpt-4.1",
-  --         },
-  --       },
-  --     }
-  --   },
-  --   init = function()
-  --     require("plugins.ai.extensions.companion-notification").init()
-  --   end,
-  --   dependencies = {
-  --     "nvim-lua/plenary.nvim",
-  --     "nvim-treesitter/nvim-treesitter",
-  --     {
-  --       'MeanderingProgrammer/render-markdown.nvim',
-  --       ft = { "markdown", "codecompanion" },
-  --     },
-  --     {
-  --       "echasnovski/mini.diff",
-  --       config = function()
-  --         local diff = require("mini.diff")
-  --         diff.setup({
-  --           -- Disabled by default
-  --           source = diff.gen_source.none(),
-  --         })
-  --       end,
-  --     },
-  --     {
-  --       "HakonHarnes/img-clip.nvim",
-  --       opts = {
-  --         filetypes = {
-  --           codecompanion = {
-  --             prompt_for_file_name = false,
-  --             template = "[Image]($FILE_PATH)",
-  --             use_absolute_path = true,
-  --           },
-  --         },
-  --       },
-  --     },
-  --   },
-  -- }
 }
