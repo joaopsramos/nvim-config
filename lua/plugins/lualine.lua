@@ -24,7 +24,7 @@ return {
         section_separators = { left = '', right = '' },
         disabled_filetypes = {
           statusline = {},
-          winbar = {}
+          winbar = { "Avante", "AvanteSelectedFiles", "AvanteInput" }
         },
         ignore_focus = {},
         always_divide_middle = true,

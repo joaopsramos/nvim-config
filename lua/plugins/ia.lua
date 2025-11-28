@@ -18,51 +18,66 @@ return {
     },
   },
   {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    dependencies = {
-      { "nvim-lua/plenary.nvim", branch = "master" },
-    },
-    build = "make tiktoken",
-    init = function()
-      vim.api.nvim_create_autocmd('BufEnter', {
-        pattern = 'copilot-*',
-        callback = function()
-          vim.opt_local.relativenumber = false
-          vim.opt_local.number = false
-          -- vim.opt_local.conceallevel = 0
-        end,
-      })
-    end,
+    "yetone/avante.nvim",
+    build = "make",
+    event = "VeryLazy",
+    version = false, -- Never set this value to "*"! Never!
     opts = {
-      model = 'gpt-4.1',
-      -- window = {
-      --   layout = 'float',
-      --   width = 80,         -- Fixed width in columns
-      --   height = 20,        -- Fixed height in rows
-      --   border = 'rounded', -- 'single', 'double', 'rounded', 'solid'
-      --   title = 'AI Assistant',
-      --   zindex = 100,       -- Ensure window stays on top
-      -- },
-      headers = {
-        user = ' 🤡 You ',
-        assistant = '🤖 Copilot ',
-        tool = '🔧 Tool ',
+      selector = {
+        provider = "snacks"
       },
-      separator = '-',
-      auto_fold = true, -- Automatically folds non-assistant messages
-      mappings = {
-        complete = {
-          insert = "<Tab>",
-        },
-        close = {
-          normal = "<C-c>",
-          insert = "<C-c>",
+      instructions_file = "avante.md",
+      provider = "copilot",
+      providers = {
+        copilot = {
+          --   endpoint = "https://api.anthropic.com",
+          model = "gpt-4.1",
+          --   timeout = 30000, -- Timeout in milliseconds
+          --   extra_request_body = {
+          --     temperature = 0.75,
+          --     max_tokens = 20480,
+          --   },
         },
       },
+      mode = "legacy",
+      auto_suggestions_provider = false,
+      behaviour = {
+        auto_apply_diff_after_generation = true,
+      }
     },
-    keys = {
-      { "<leader>aa", ":CopilotChat<CR>",             desc = "Open AI Assistant",                mode = { 'n' } },
-      { "<leader>aa", ":CopilotChat<CR>i#selection ", desc = "Open AI Assistant with selection", mode = { 'v' } },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      --- The below dependencies are optional,
+      "hrsh7th/nvim-cmp",            -- autocompletion for avante commands and mentions
+      "folke/snacks.nvim",           -- for input provider snacks
+      "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+      "zbirenbaum/copilot.lua",      -- for providers='copilot'
+      {
+        -- support for image pasting
+        "HakonHarnes/img-clip.nvim",
+        event = "VeryLazy",
+        opts = {
+          -- recommended settings
+          default = {
+            embed_image_as_base64 = false,
+            prompt_for_file_name = false,
+            drag_and_drop = {
+              insert_mode = true,
+            },
+            -- required for Windows users
+            use_absolute_path = true,
+          },
+        },
+      },
+      {
+        -- Make sure to set this up properly if you have lazy=true
+        'MeanderingProgrammer/render-markdown.nvim',
+        opts = {
+          file_types = { "markdown", "Avante" },
+        },
+        ft = { "markdown", "Avante" },
+      },
     },
-  },
+  }
 }

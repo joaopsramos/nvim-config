@@ -32,6 +32,7 @@ return {
         which_key = true,
         notify = true,
         noice = false,
+        -- avante = true,
         native_lsp = {
           enabled = true,
           virtual_text = {
@@ -116,7 +117,21 @@ return {
           TabLineSel = { fg = c.green, bg = c.mantle },
           EndOfBuffer = { fg = c.surface1 },
 
-          IblScope = { fg = c.overlay0 }
+          IblScope = { fg = c.overlay0 },
+
+          AvanteTitle = { bg = c.lavender, fg = c.base },
+          AvanteReversedTitle = { bg = c.none, fg = c.lavender },
+          AvanteSubtitle = { bg = c.peach, fg = c.base },
+          AvanteReversedSubtitle = { bg = c.none, fg = c.peach },
+          AvanteThirdTitle = { bg = c.blue, fg = c.base },
+          AvanteReversedThirdTitle = { bg = c.none, fg = c.blue },
+          AvanteInlineHint = { fg = c.red },
+          AvanteSidebarWinSeparator = { link = "WinSeparator" },
+
+          AvanteConflictCurrent = { bg = '#283b4d' },
+          AvanteConflictIncoming = { bg = '#223159' },
+          AvanteConflictAncestor = { bg = '#394b70' },
+          AvanteConflictDelete = { bg = '#3f2d3d' },
         }
       end
     })
