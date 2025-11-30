@@ -127,6 +127,7 @@ return {
           AvanteReversedThirdTitle = { bg = c.none, fg = c.blue },
           AvanteInlineHint = { fg = c.red },
           AvanteSidebarWinSeparator = { link = "WinSeparator" },
+          AvantePromptInputBorder = { fg = c.blue },
 
           AvanteConflictCurrent = { bg = '#283b4d' },
           AvanteConflictIncoming = { bg = '#223159' },

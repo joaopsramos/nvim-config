@@ -18,6 +18,28 @@ return {
     },
   },
   {
+    "folke/sidekick.nvim",
+    opts = {
+      nes = {
+        enabled = false,
+      },
+      cli = {
+        mux = {
+          backend = "tmux",
+          enabled = true,
+        },
+      },
+    },
+    keys = {
+      {
+        "<c-.>",
+        function() require("sidekick.cli").toggle() end,
+        desc = "Sidekick Toggle",
+        mode = { "n", "t", "i", "x" },
+      },
+    },
+  },
+  {
     "yetone/avante.nvim",
     build = "make",
     event = "VeryLazy",
@@ -43,7 +65,12 @@ return {
       auto_suggestions_provider = false,
       behaviour = {
         auto_apply_diff_after_generation = true,
-      }
+      },
+      windows = {
+        edit = {
+          border = "rounded",
+        },
+      },
     },
     dependencies = {
       "nvim-lua/plenary.nvim",

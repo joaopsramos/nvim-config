@@ -51,9 +51,17 @@ util.keymap('n', '<leader>gq', '<C-w>j:q<CR>', { desc = "" })
 
 -- Terminal
 util.keymap('t', '<C-\\>', '<C-\\><C-n>')
-util.keymap('t', '<C-n>', '<C-\\><C-n><leader>tc')
-util.keymap('t', '<Esc>', '<C-\\><C-n>:Tclose<CR>', { desc = "Close terminal" })
-util.keymap('t', '<C-j>', '<C-\\><C-n><C-w>_')
+
+vim.api.nvim_create_autocmd('TermOpen', {
+  pattern = '*',
+  callback = function()
+    local buffer_name = vim.api.nvim_buf_get_name(0)
+    if buffer_name:match('neoterm') then
+      util.keymap('t', '<Esc>', '<C-\\><C-n>:Tclose<CR>', { desc = "Close terminal", buffer = true })
+      util.keymap('t', '<C-j>', '<C-\\><C-n><C-w>_', { buffer = true })
+    end
+  end,
+})
 
 -- Notify
 util.keymap('n', '<leader>nd', ':lua require("notify").dismiss()<CR>', { desc = "Dismiss notifications" })

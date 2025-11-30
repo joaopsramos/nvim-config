@@ -44,7 +44,7 @@ end
 
 if vim.g.neovide then
   opt.linespace = 0
-  vim.o.guifont = "Hack Nerd Font Mono:h11"
+  vim.o.guifont = "Hack Nerd Font Mono:h12"
   -- vim.g.neovide_scale_factor = 0.84
   vim.g.neovide_text_gamma = 0.0
   vim.g.neovide_text_contrast = 0.5
