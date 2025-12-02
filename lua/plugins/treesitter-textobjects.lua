@@ -49,6 +49,9 @@ return {
       { "ac",         function() select_textobject("@class.outer") end,              mode = { "x", "o" },      desc = "Select outer class" },
       { "ic",         function() select_textobject("@class.inner") end,              mode = { "x", "o" },      desc = "Select inner class" },
 
+      { "ib",         function() select_textobject("@block.inner") end,              mode = { "x", "o" },      desc = "Select inner block" },
+      { "ab",         function() select_textobject("@block.outer") end,              mode = { "x", "o" },      desc = "Select outer block" },
+
       { "]m",         function() ts_move.goto_next_start("@function.outer") end,     mode = { "n", "x", "o" }, desc = "Next function start" },
       { "]M",         function() ts_move.goto_next_end("@function.outer") end,       mode = { "n", "x", "o" }, desc = "Next function end" },
       { "[m",         function() ts_move.goto_previous_start("@function.outer") end, mode = { "n", "x", "o" }, desc = "Previous function start" },

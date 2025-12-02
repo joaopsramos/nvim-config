@@ -22,12 +22,10 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 if vim.g.vscode then
+  require('lazy').setup('vscode-plugins')
   require('vscode-config.opts')
   require('vscode-config.remap')
-  require('lazy').setup('vscode-plugins')
 else
-  require('config.opts')
-  require('config.remap')
   require('lazy').setup({
     spec = { import = "plugins" },
     -- Configure any other settings here. See the documentation for more details.
@@ -37,4 +35,6 @@ else
     -- checker = { enabled = true },
     change_detection = { notify = false }
   })
+  require('config.opts')
+  require('config.remap')
 end

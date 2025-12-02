@@ -29,7 +29,7 @@ util.keymap('v', '<C-p>', 's<C-r>0<Esc>')
 -- util.keymap('n', '<C-h>', ':noh<CR>')
 util.keymap('n', '<Esc>', ':noh<CR>')
 
-util.keymap('i', '<C-j>', '<C-o>o')
+util.keymap('i', '<C-CR>', '<C-o>o')
 util.keymap('i', '<C-z>', '<C-o>zz')
 
 util.keymap('n', '&', 'yiw:%s/\\(<C-r>0\\)/\\/g<Left><Left>1', { silent = false })
@@ -64,7 +64,7 @@ vim.api.nvim_create_autocmd('TermOpen', {
 })
 
 -- Notify
-util.keymap('n', '<leader>nd', ':lua require("notify").dismiss()<CR>', { desc = "Dismiss notifications" })
+-- util.keymap('n', '<leader>nd', require("notify").dismiss, { desc = "Dismiss notifications" })
 
 -- Neoterm
 util.keymap('n', '<leader>tm', ':Ttoggle<CR><C-w><C-p>', { desc = "Toggle terminal" })
@@ -79,19 +79,19 @@ util.keymap('n', '<leader>tl', ':TestLast<CR><leader>toG<C-w>p', { desc = "Test 
 util.keymap('n', '<leader>tv', ':TestVisit<CR>', { desc = "Test visit", remap = true })
 
 -- Neo test
-util.keymap('n', '<leader>nt', ":lua require('neotest').run.run()<CR>", { desc = 'Test nearest' })
-util.keymap('n', '<leader>nf', ":lua require('neotest').run.run(vim.fn.expand('%'))<CR>", { desc = 'Test file' })
--- util.keymap('n', '<leader>nl', ":lua require('neotest').run.run_last({extra_args = '--failed'})<CR>",
---   { desc = 'Test failed' })
-util.keymap('n', '<leader>nl', ":lua require('neotest').run.run_last()<CR>", { desc = 'Run last test' })
-util.keymap('n', '<leader>ne', ":lua require('neotest').output.open({enter = true})<CR>", { desc = 'Open test output' })
-util.keymap('n', '<leader>nc', ":lua require('neotest').output.open({enter = true, last_run = true})<CR>",
+local neotest = require('neotest')
+util.keymap('n', '<leader>nt', neotest.run.run, { desc = 'Test nearest' })
+util.keymap('n', '<leader>nf', function() neotest.run.run(vim.fn.expand('%')) end, { desc = 'Test file' })
+-- util.keymap('n', '<leader>nl', function() neotest.run.run_last({ extra_args = '--failed' }) end, { desc = 'Test failed' })
+util.keymap('n', '<leader>nl', neotest.run.run_last, { desc = 'Run last test' })
+util.keymap('n', '<leader>ne', function() neotest.output.open({ enter = true }) end, { desc = 'Open test output' })
+util.keymap('n', '<leader>nc', function() neotest.output.open({ enter = true, last_run = true }) end,
   { desc = 'Open output of last test run' })
-util.keymap('n', '<leader>na', ":lua require('neotest').run.attach()<CR>", { desc = 'Attach to current running tests' })
-util.keymap('n', '<leader>nb', ":lua require('neotest').summary.toggle()<CR>", { desc = 'Toggle test summary' })
-util.keymap('n', '<leader>np', ":lua require('neotest').run.stop()<CR>", { desc = 'Stop running tests' })
-util.keymap('n', '[t', ":lua require('neotest').jump.prev({ status = 'failed' })<CR>", { desc = 'Prev failed test' })
-util.keymap('n', ']t', ":lua require('neotest').jump.next({ status = 'failed' })<CR>", { desc = 'Next failed test' })
+util.keymap('n', '<leader>na', neotest.run.attach, { desc = 'Attach to current running tests' })
+util.keymap('n', '<leader>nb', neotest.summary.toggle, { desc = 'Toggle test summary' })
+util.keymap('n', '<leader>np', neotest.run.stop, { desc = 'Stop running tests' })
+util.keymap('n', '[t', function() neotest.jump.prev({ status = 'failed' }) end, { desc = 'Prev failed test' })
+util.keymap('n', ']t', function() neotest.jump.next({ status = 'failed' }) end, { desc = 'Next failed test' })
 
 -- File explorer
 -- util.keymap('n', '<leader>e', function() Snacks.picker.explorer() end, { desc = 'Toggle NvimTree' })
@@ -134,12 +134,15 @@ util.keymap('n', '<leader>gbD', ':Git branch -D<space>', { desc = "Git branch -D
 util.keymap('n', '<leader>fh', ':Git log -p -- <C-r>%<CR>', { desc = "Git file history" })
 
 -- Harpoon
-util.keymap('n', '<leader>rm', ":lua require('harpoon.ui').toggle_quick_menu()<CR>", { desc = 'Harpoon quick menu' })
-util.keymap('n', '<C-l>',
-  ":lua require('harpoon.mark').add_file()<CR>:lua vim.api.nvim_notify('File added', vim.log.levels.INFO, {title = 'Harpoon'})<CR>",
-  { desc = 'Harpoon add file' })
-util.keymap('n', '<C-j>', ":lua require('harpoon.ui').nav_prev()<CR>", { desc = 'Harpoon nav prev' })
-util.keymap('n', '<C-k>', ":lua require('harpoon.ui').nav_next()<CR>", { desc = 'Harpoon nav next' })
+local harpoon_ui = require('harpoon.ui')
+local harpoon_mark = require('harpoon.mark')
+util.keymap('n', '<leader>rm', harpoon_ui.toggle_quick_menu, { desc = 'Harpoon quick menu' })
+util.keymap('n', '<C-l>', function()
+  harpoon_mark.add_file()
+  vim.notify('File added', vim.log.levels.INFO, { title = 'Harpoon' })
+end, { desc = 'Harpoon add file' })
+util.keymap('n', '<C-j>', harpoon_ui.nav_prev, { desc = 'Harpoon nav prev' })
+util.keymap('n', '<C-k>', harpoon_ui.nav_next, { desc = 'Harpoon nav next' })
 
 -- Hop
 util.keymap('n', '<leader>j', ":HopWord<CR>", { desc = 'Jump' })
