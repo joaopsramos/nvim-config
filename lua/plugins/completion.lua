@@ -21,7 +21,6 @@ return {
     'onsails/lspkind.nvim',
     {
       "MattiasMTS/cmp-dbee",
-      dependencies = { "kndndrj/nvim-dbee" },
       -- ft = "sql",
       opts = {},
     },
@@ -81,7 +80,6 @@ return {
     cmp.setup.filetype('sql', {
       sources = {
         { name = 'cmp-dbee' },
-        -- { name = "vim-dadbod-completion" },
         { name = "buffer" }
       }
     })
