@@ -57,5 +57,6 @@ return {
     { "g/",         function() Snacks.picker.grep() end,        desc = "Grep" },
     { "gs",         function() Snacks.picker.lsp_symbols() end, desc = "Document symbols" },
     { "<leader>ri", function() Snacks.picker.resume() end,      desc = "Resume" },
+    { "<leader>gd", function() Snacks.picker.git_diff() end,    desc = "Git diff" },
   }
 }

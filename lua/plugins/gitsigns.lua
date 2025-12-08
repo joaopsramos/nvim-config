@@ -93,7 +93,15 @@ return {
       map('n', '<leader>hp', gitsigns.preview_hunk, { desc = "Preview hunk" })
       map('n', '<leader>hb', function() gitsigns.blame_line { full = true } end, { desc = "Full line blame" })
       map('n', '<leader>hB', gitsigns.blame, { desc = "Full blame" })
-      map('n', '<leader>hd', gitsigns.diffthis, { desc = "Open diff" })
+      map('n', '<leader>hd', function()
+        local file = vim.fn.expand('%')
+
+        -- Get the last commit that touched this file
+        local cmd = string.format("git log -n 1 --pretty=format:%%h -- %s", vim.fn.shellescape(file))
+        local last_commit = vim.fn.system(cmd):gsub("\n", "")
+
+        gitsigns.diffthis(last_commit .. "~1")
+      end, { desc = "Open diff" })
       map('n', '<leader>hD', gitsigns.toggle_deleted, { desc = "Toggle deleted" })
       map('n', '<leader>hQ', function() gitsigns.setqflist('all') end, { desc = "Send changes to quickfix list" })
       -- Text object
