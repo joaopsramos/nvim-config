@@ -10,6 +10,12 @@ return {
     require("dbee").install()
   end,
   config = function()
-    require("dbee").setup()
+    require("dbee").setup({
+      editor = {
+        mappings = {
+          { key = "<C-CR>", mode = "n", action = "run_under_cursor" },
+        }
+      }
+    })
   end,
 }

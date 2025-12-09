@@ -158,10 +158,3 @@ util.keymap('n', '<C-t>', ":WinResizerStartResize<CR>", { desc = 'Start resize' 
 
 -- winresizer
 util.keymap('n', '<leader>u', ':UndotreeToggle<CR>:UndotreeFocus<CR>', { desc = 'Undotree toggle and focus' })
-
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "sql" },
-  callback = function()
-    vim.api.nvim_buf_set_keymap(0, "n", "<C-CR>", "vipBB", { noremap = false, silent = false })
-  end
-})
