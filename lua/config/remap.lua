@@ -12,7 +12,13 @@ end
 
 -- General
 util.keymap('n', '<C-q>', 'q')
-util.keymap('n', 'q', ':q<CR>')
+util.keymap('n', 'q', function()
+  if #vim.api.nvim_list_wins() == 1 then
+    return
+  end
+
+  vim.cmd('q')
+end)
 util.keymap('n', 'Q', ':quitall<CR>')
 util.keymap('n', '<C-x>', ':bd<CR>')
 util.keymap('n', '<leader>dab', ':%bd<CR>:e#<CR>', { desc = 'Delete all buffers except current' })
