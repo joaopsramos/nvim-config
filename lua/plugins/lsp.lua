@@ -21,10 +21,10 @@ return {
       ts_ls = {},
       emmet_language_server = {},
       typescript_language_server = {},
-      expert = {
-        -- cmd = { get_ls_cmd("expert") },
-        -- filetypes = { "elixir", "eelixir", "heex" },
-      },
+      -- expert = {
+      -- cmd = { get_ls_cmd("expert") },
+      -- filetypes = { "elixir", "eelixir", "heex" },
+      -- },
       lexical = {
         cmd = { get_ls_cmd("lexical") },
         -- filetypes = { "elixir", "eelixir", "heex" },
@@ -41,8 +41,37 @@ return {
       gopls = {
         settings = {
           gopls = {
+            gofumpt = true,
+            codelenses = {
+              gc_details = false,
+              generate = true,
+              regenerate_cgo = true,
+              run_govulncheck = true,
+              test = true,
+              tidy = true,
+              upgrade_dependency = true,
+              vendor = true,
+            },
+            hints = {
+              assignVariableTypes = true,
+              compositeLiteralFields = true,
+              compositeLiteralTypes = true,
+              constantValues = true,
+              functionTypeParameters = true,
+              parameterNames = true,
+              rangeVariableTypes = true,
+            },
+            analyses = {
+              nilness = true,
+              unusedparams = true,
+              unusedwrite = true,
+              useany = true,
+            },
+            usePlaceholders = true,
+            completeUnimported = true,
             staticcheck = true,
-            gofumpt = true
+            directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+            semanticTokens = true,
           }
         }
       },
@@ -137,11 +166,6 @@ return {
 
         -- Delete defaults
         -- vim.keymap.del('n', 'grn', { buffer = args.buf })
-        -- vim.keymap.del('n', 'gra', { buffer = args.buf })
-        -- vim.keymap.del('n', 'grr', { buffer = args.buf })
-        -- vim.keymap.del('n', 'gri', { buffer = args.buf })
-        -- vim.keymap.del('n', 'gO', { buffer = args.buf })
-        -- vim.keymap.del('i', '<C-s>', { buffer = args.buf })
 
         util.keymap('n', 'gd', vim.lsp.buf.definition, { desc = "Definition" })
         util.keymap('n', 'gD', vim.lsp.buf.declaration, { desc = "Declaration" })
@@ -156,9 +180,6 @@ return {
         util.keymap('n', '[d', function() vim.diagnostic.jump({ count = -1 }) end, { desc = "Go to prev diagnostic" })
         util.keymap('n', ']d', function() vim.diagnostic.jump({ count = 1 }) end, { desc = "Go to next diagnostic" })
         util.keymap('n', '<leader>fm', function() vim.lsp.buf.format({ async = true }) end, { desc = "Format file" })
-        -- vim.keymap.set('n', '<leader>fp', ':ElixirFromPipe<CR>', opts)
-        -- vim.keymap.set('n', '<leader>tp', ':ElixirToPipe<CR>', opts)
-        -- vim.keymap.set('n', '<leader>em', ':ElixirExpandMacro<CR>', opts)
       end
     })
 
@@ -169,9 +190,7 @@ return {
         local params = vim.lsp.util.make_range_params(nil, "utf-8")
         params.context = { only = { "source.organizeImports" } }
         -- buf_request_sync defaults to a 1000ms timeout. Depending on your
-        -- machine and codebase, you may want longer. Add an additional
-        -- argument after params if you find that you have to write the file
-        -- twice for changes to be saved.
+        -- machine and codebase, you may want longer.
         -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
         local result = vim.lsp.buf_request_sync(0, "textDocument/codeAction", params)
         for cid, res in pairs(result or {}) do
@@ -182,7 +201,7 @@ return {
             end
           end
         end
-        vim.lsp.buf.format({ async = false })
+        -- vim.lsp.buf.format({ async = false })
       end
     })
 

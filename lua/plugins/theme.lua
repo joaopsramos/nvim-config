@@ -91,14 +91,19 @@ return {
       },
       custom_highlights = function(c)
         return {
-          Identifier = { fg = c.peach },
-          Type = { fg = c.mauve },
-          Keyword = { fg = c.red },
-          ['@keyword.function'] = { fg = c.red },
-          ['@string.special.symbol'] = { fg = c.sapphire },
-          ["@module"] = { fg = c.mauve, style = { "italic" } },
+          -- ['@identifier'] = { fg = c.yellow },
+          ['@keyword'] = { fg = c.maroon },
+          ['@type'] = { fg = c.mauve },
+          ['@type.definition'] = { fg = c.mauve },
+          ['@type.builtin.go'] = { fg = c.yellow },
+          ['@variable.parameter'] = { fg = c.red },
           ["@operator"] = { fg = c.teal },
-          ["@punctuation.bracket"] = { fg = c.overlay3 },
+          ["@punctuation.bracket"] = { fg = c.overlay2 },
+          ["@entity.name.namespace"] = { fg = c.yellow },
+
+          ["@keyword.function"] = { fg = c.maroon },
+          ["@module.elixir"] = { fg = c.mauve, style = { "italic" } },
+          ['@string.special.symbol.elixir'] = { fg = c.sapphire },
 
           htmlEndTag = { fg = c.flamingo },
 

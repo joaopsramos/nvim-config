@@ -43,6 +43,18 @@ return {
           exitAfterTaskReturns = false,
           debugAutoInterpretAllModules = false,
         },
+        {
+          type = "mix_task",
+          name = "test",
+          task = "test",
+          taskArgs = { "--trace" },
+          startApps = true,
+          request = "launch",
+          projectDir = "${workspaceFolder}",
+          requireFiles = { "test/**/test_helper.exs", "test/**/*_test.exs" },
+          exitAfterTaskReturns = false,
+          debugAutoInterpretAllModules = false,
+        },
       }
     end
 

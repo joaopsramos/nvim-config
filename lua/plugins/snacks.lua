@@ -20,6 +20,7 @@ return {
     --   animate = { enabled = false }
     -- },
     picker = {
+      enabled = false,
       ui_select = true,
       formatters = {
         file = {
@@ -52,7 +53,7 @@ return {
     words = {},
   },
   keys = {
-    { "<C-p>",      function() Snacks.picker.files() end,       desc = "Find Files" },
+    -- { "<C-p>",      function() Snacks.picker.files() end,       desc = "Find Files" },
     { "<leader>fb", function() Snacks.picker.buffers() end,     desc = "Buffers" },
     { "g/",         function() Snacks.picker.grep() end,        desc = "Grep" },
     { "gs",         function() Snacks.picker.lsp_symbols() end, desc = "Document symbols" },
