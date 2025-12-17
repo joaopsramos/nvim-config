@@ -91,17 +91,11 @@ return {
       },
       custom_highlights = function(c)
         return {
-          -- ['@identifier'] = { fg = c.yellow },
-          ['@keyword'] = { fg = c.maroon },
-          ['@type'] = { fg = c.mauve },
-          ['@type.definition'] = { fg = c.mauve },
-          ['@type.builtin.go'] = { fg = c.yellow },
-          ['@variable.parameter'] = { fg = c.red },
           ["@operator"] = { fg = c.teal },
           ["@punctuation.bracket"] = { fg = c.overlay2 },
-          ["@entity.name.namespace"] = { fg = c.yellow },
 
-          ["@keyword.function"] = { fg = c.maroon },
+          ["@keyword.function.elixir"] = { fg = c.maroon },
+          ["@keyword.elixir"] = { fg = c.maroon },
           ["@module.elixir"] = { fg = c.mauve, style = { "italic" } },
           ['@string.special.symbol.elixir'] = { fg = c.sapphire },
 

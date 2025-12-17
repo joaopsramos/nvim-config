@@ -51,7 +51,11 @@ return {
         }
       },
       defaults = {
+        -- layout_config = {
+        --   width = 0.9,
+        -- },
         path_display = { "filename_first" },
+        -- path_display = { "truncate" },
         mappings = {
           i = {
             -- map actions.which_key to <C-h> (default: <C-/>)
