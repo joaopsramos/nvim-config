@@ -26,7 +26,14 @@ return {
           statusline = {},
           winbar = { "Avante", "AvanteSelectedFiles", "AvanteInput" }
         },
-        ignore_focus = {},
+        ignore_focus = {
+          'dap-repl',
+          'dapui_console',
+          'dapui_watches',
+          'dapui_stacks',
+          'dapui_breakpoints',
+          'dapui_scopes',
+        },
         always_divide_middle = true,
         globalstatus = true,
         refresh = {
@@ -54,7 +61,7 @@ return {
           'filetype'
         },
         lualine_y = { 'lsp_status', },
-        lualine_z = { 'progress' }
+        lualine_z = { 'location', 'progress' }
       },
       inactive_sections = {
         lualine_a = {},
@@ -75,7 +82,7 @@ return {
         }
       },
       inactive_winbar = {},
-      extensions = {}
+      extensions = { 'nvim-dap-ui' }
     })
 
     local bg = "#282a36"

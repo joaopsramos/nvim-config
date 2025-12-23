@@ -26,6 +26,8 @@ return {
         operators = {},
       },
       integrations = {
+        dap = true,
+        dap_ui = true,
         fidget = true,
         mason = true,
         neotest = true,

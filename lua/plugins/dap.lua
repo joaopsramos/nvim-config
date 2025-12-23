@@ -26,6 +26,22 @@ return {
     --   },
     -- }
 
+    dap.adapters.lldb = {
+      type = "server",
+      port = "${port}",
+      executable = {
+        command = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
+        args = { "--port", "${port}" },
+        detached = false,
+      }
+    }
+
+    dap.adapters.coreclr = {
+      type = 'executable',
+      command = "netcoredbg",
+      args = { '--interpreter=vscode' }
+    }
+
     local elixir_ls_debugger = vim.fn.exepath "elixir-ls-debugger"
     if elixir_ls_debugger ~= "" then
       dap.adapters.mix_task = {
@@ -59,15 +75,6 @@ return {
     end
 
 
-    dap.adapters.lldb = {
-      type = "server",
-      port = "${port}",
-      executable = {
-        command = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
-        args = { "--port", "${port}" },
-        detached = false,
-      }
-    }
     dap.configurations.rust = {
       {
         name = "Debug an executable",
@@ -86,6 +93,23 @@ return {
       },
     }
 
+    dap.configurations.cs = {
+      {
+        type = "coreclr",
+        name = "Launch project",
+        request = "launch",
+        program = function()
+          local path = vim.fn.input({
+            prompt = 'Path to csproj: ',
+            default = vim.fn.getcwd() .. '/',
+            completion = 'file'
+          })
+
+          return (path and path ~= "") and path or dap.ABORT
+        end,
+      },
+    }
+
     vim.keymap.set("n", "<F6>", dap.toggle_breakpoint)
     vim.keymap.set("n", "<F7>", dap.run_to_cursor)
 
@@ -95,8 +119,8 @@ return {
     end)
 
     vim.keymap.set("n", "<F1>", dap.continue)
-    vim.keymap.set("n", "<F2>", dap.step_into)
-    vim.keymap.set("n", "<F3>", dap.step_over)
+    vim.keymap.set("n", "<F2>", dap.step_over)
+    vim.keymap.set("n", "<F3>", dap.step_into)
     vim.keymap.set("n", "<F4>", dap.step_out)
     vim.keymap.set("n", "<F5>", dap.step_back)
     vim.keymap.set("n", "<F11>", dap.restart)

@@ -20,6 +20,7 @@ return {
       efm = { filetypes = { 'elixir' } },
       ts_ls = {},
       emmet_language_server = {},
+      omnisharp = {},
       -- expert = {
       -- cmd = { get_ls_cmd("expert") },
       -- filetypes = { "elixir", "eelixir", "heex" },
