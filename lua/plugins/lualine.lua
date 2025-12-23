@@ -23,16 +23,15 @@ return {
         component_separators = { left = '|', right = '|' },
         section_separators = { left = '', right = '' },
         disabled_filetypes = {
-          statusline = {},
-          winbar = { "Avante", "AvanteSelectedFiles", "AvanteInput" }
+          statusline = {
+            "dapui_scopes", "dapui_breakpoints", "dapui_stacks", "dapui_watches", "dapui_console", "dap-repl",
+          },
+          winbar = { "Avante", "AvanteSelectedFiles", "AvanteInput",
+            "dapui_scopes", "dapui_breakpoints", "dapui_stacks", "dapui_watches", "dapui_console", "dap-repl",
+          }
         },
         ignore_focus = {
-          'dap-repl',
-          'dapui_console',
-          'dapui_watches',
-          'dapui_stacks',
-          'dapui_breakpoints',
-          'dapui_scopes',
+          'dap-repl', 'dapui_console', 'dapui_watches', 'dapui_stacks', 'dapui_breakpoints', 'dapui_scopes',
         },
         always_divide_middle = true,
         globalstatus = true,
