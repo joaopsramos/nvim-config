@@ -93,14 +93,15 @@ return {
       },
     }
 
+
     dap.configurations.cs = {
       {
         type = "coreclr",
-        name = "Launch project",
+        name = "Launch",
         request = "launch",
         program = function()
           local path = vim.fn.input({
-            prompt = 'Path to csproj: ',
+            prompt = 'Path to debug dll: ',
             default = vim.fn.getcwd() .. '/',
             completion = 'file'
           })

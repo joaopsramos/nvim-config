@@ -46,17 +46,17 @@ return {
         lualine_b = { 'branch', 'diff' },
         lualine_c = { { 'filename', path = 1 }, 'diagnostics' },
         lualine_x = {
-          macro_recording,
-          {
-            require("noice").api.status.command.get,
-            cond = require("noice").api.status.command.has,
-            color = { fg = "#ff9e64" },
-          },
-          {
-            require("noice").api.status.search.get,
-            cond = require("noice").api.status.search.has,
-            color = { fg = "#8BD5CA" },
-          },
+          -- macro_recording,
+          -- {
+          --   require("noice").api.status.command.get,
+          --   cond = require("noice").api.status.command.has,
+          --   color = { fg = "#ff9e64" },
+          -- },
+          -- {
+          --   require("noice").api.status.search.get,
+          --   cond = require("noice").api.status.search.has,
+          --   color = { fg = "#8BD5CA" },
+          -- },
           'filetype'
         },
         lualine_y = { 'lsp_status', },
