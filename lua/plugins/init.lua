@@ -1,174 +1,58 @@
 return {
-  'kyazdani42/nvim-web-devicons',
-  'nvim-lua/plenary.nvim',
-  'tpope/vim-surround',
-  'tpope/vim-repeat',
-  'tpope/vim-fugitive',
-  'mg979/vim-visual-multi',
-  'mtdl9/vim-log-highlighting',
-  --revisit
-  'nvim-telescope/telescope-live-grep-args.nvim',
-  --revisit
-  'ThePrimeagen/harpoon',
-  'mechatroner/rainbow_csv',
-  'mbbill/undotree',
+  "nvim-lua/plenary.nvim",
+  "nvim-mini/mini.icons",
+  "tpope/vim-surround",
+  "tpope/vim-repeat",
+  "mtdl9/vim-log-highlighting",
+  { "windwp/nvim-autopairs", opts = {} },
+  { "norcalli/nvim-colorizer.lua", opts = { "*" } },
+  { "js-everts/cmp-tailwind-colors", opts = {} },
+  { "kevinhwang91/nvim-ufo", dependencies = "kevinhwang91/promise-async", opts = {} },
   {
-
-    'AndrewRadev/splitjoin.vim',
-    init = function()
-      vim.g.splitjoin_split_mapping = ''
-      vim.g.splitjoin_join_mapping = ''
-    end
+    "olimorris/persisted.nvim",
+    lazy = false,
+    opts = {
+      autoload = true,
+    },
   },
   {
-    "folke/todo-comments.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    opts = {}
+    "nvim-mini/mini.indentscope",
+    opts = {
+      symbol = "▏",
+      options = { try_as_border = true },
+      draw = {
+        delay = 0,
+        animation = function()
+          return 0
+        end,
+      },
+    },
   },
   {
-    'stevearc/conform.nvim',
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    opts = {
+      indent = { char = "▏", tab_char = "▏" },
+      scope = { enabled = true, show_start = false, show_end = false },
+    },
+  },
+  {
+    "stevearc/conform.nvim",
     event = { "BufWritePre" },
     cmd = { "ConformInfo" },
     opts = {
+      formatters_by_ft = {
+        lua = { "stylua" },
+      },
       format_on_save = {
         timeout_ms = 500,
         lsp_format = "fallback",
       },
     },
   },
-  -- bug when deleting all buffers
-  -- { 'nvim-zh/colorful-winsep.nvim', opts = {},     event = { "WinLeave" } },
-  { 'norcalli/nvim-colorizer.lua', opts = { '*' } },
   {
-    'numToStr/Comment.nvim',
-    opts = {},
-    keys = {
-      { 'gc', mode = { 'n', 'v' } },
-      { 'gb', mode = { 'n', 'v' } },
-    }
-  },
-  { 'windwp/nvim-autopairs',       opts = {} },
-  {
-    'kassio/neoterm',
-    init = function()
-      vim.g.neoterm_default_mod = 'botright'
-      vim.g.neoterm_automap_keys = false
-    end
-  },
-  -- { 'rmagatti/auto-session', lazy = false,                                      opts = {} },
-  {
-    "olimorris/persisted.nvim",
-    lazy = false,
-    opts = {
-      autoload = true
-    }
-  },
-  {
-    'vim-test/vim-test',
-    init = function()
-      vim.g['test#strategy'] = 'neoterm'
-    end
-  },
-  {
-    'simeji/winresizer',
-    init = function()
-      vim.g.winresizer_start_key = false
-    end
-  },
-  {
-    'APZelos/blamer.nvim',
-    init = function()
-      vim.g.blamer_enabled = true
-      vim.g.blamer_prefix = '👀 '
-      vim.g.blamer_show_in_visual_modes = 0
-      vim.g.blamer_show_in_insert_modes = 0
-      vim.cmd([[highlight Blamer guifg=#494D64]])
-    end
-  },
-  -- revisit
-  {
-    'folke/trouble.nvim',
-    name = 'trouble',
-    opts = {},
-    dependencies = 'kyazdani42/nvim-web-devicons'
-  },
-  {
-    'editorconfig/editorconfig-vim',
-    init = function()
-      vim.g.EditorConfig_exclude_patterns = { 'fugitive://.*' }
-    end
-  },
-  { 'ustrajunior/ex_maps',           opts = { create_mappings = true, mapping = 'mtt' } },
-  {
-    'mrcjkb/rustaceanvim',
-    version = '^5',
-    lazy = false,
-  },
-  {
-    'nvim-neotest/neotest',
-    config = function()
-      local golang_opts = {}
-
-      require('neotest').setup({
-        adapters = {
-          require('neotest-elixir'),
-          require('neotest-golang')(golang_opts)
-        }
-      })
-    end,
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'jfpedroza/neotest-elixir',
-
-      -- Go
-      'nvim-neotest/nvim-nio',
-      "antoinemadec/FixCursorHold.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      { "fredrikaverpil/neotest-golang", version = "*" }
-    }
-  },
-  {
-    'ray-x/lsp_signature.nvim',
-    event = 'InsertEnter',
-    opts = {
-      bind = true, -- This is mandatory, otherwise border config won't get registered.
-      hint_enable = false,
-      handler_opts = {
-        border = "rounded"
-      }
-    }
-  },
-  --revisit
-  { "js-everts/cmp-tailwind-colors", opts = {}, },
-  { "phaazon/hop.nvim",              config = true },
-  -- Noice do the same thing
-  -- {
-  --   "j-hui/fidget.nvim",
-  --   opts = {
-  --     notification = {
-  --       window = {
-  --         winblend = 0,
-  --         x_padding = 1, -- Padding from right edge of window boundary
-  --         y_padding = 1,
-  --       }
-  --     }
-  --   },
-  -- },
-  {
-    'RRethy/vim-illuminate',
-    event = 'VeryLazy',
-    name = 'illuminate',
-    config = function()
-      require('illuminate').configure({
-        -- under_cursor: whether or not to illuminate under the cursor
-        -- under_cursor = false,
-      })
-    end
-  },
-  { 'kevinhwang91/nvim-ufo', dependencies = 'kevinhwang91/promise-async', config = true },
-  {
-    'SmiteshP/nvim-navic',
-    dependencies = 'neovim/nvim-lspconfig',
+    "SmiteshP/nvim-navic",
+    dependencies = "neovim/nvim-lspconfig",
     opts = {
       highlight = true,
       format_text = function(text)
@@ -183,12 +67,24 @@ return {
 
         -- subtract 2 more to account for the ".."
         return string.sub(text, 1, prefix_len - 2) .. ".." .. string.sub(text, -sufix_len)
-      end
-    }
+      end,
+    },
   },
   {
-    'tpope/vim-projectionist',
-    event = 'VeryLazy',
+    "mbbill/undotree",
+    keys = {
+      { "<leader>u", ":UndotreeToggle<CR>:UndotreeFocus<CR>", desc = "Undotree toggle and focus", silent = true },
+    },
+  },
+  {
+    "editorconfig/editorconfig-vim",
+    init = function()
+      vim.g.EditorConfig_exclude_patterns = { "fugitive://.*" }
+    end,
+  },
+  {
+    "tpope/vim-projectionist",
+    event = "VeryLazy",
     init = function()
       vim.g.projectionist_heuristics = {
         ["mix.exs"] = {
@@ -199,9 +95,81 @@ return {
           ["test/*_test.exs"] = {
             type = "test",
             alternate = "lib/{}.ex",
-          }
-        }
+          },
+        },
       }
-    end
-  }
+    end,
+  },
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    opts = {
+      preset = "helix",
+      delay = function(ctx)
+        return ctx.plugin and 0 or 400
+      end,
+    },
+    keys = {
+      {
+        "<leader>?",
+        function()
+          require("which-key").show({ global = true })
+        end,
+        desc = "Buffer Keymaps (which-key)",
+      },
+    },
+  },
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {},
+  },
+  {
+    "ThePrimeagen/harpoon",
+    keys = function()
+      local harpoon_ui = require("harpoon.ui")
+      local harpoon_mark = require("harpoon.mark")
+
+      return {
+        { "<leader>hl", harpoon_ui.toggle_quick_menu, desc = "Harpoon quick menu" },
+        {
+          "<leader>ha",
+          function()
+            harpoon_mark.add_file()
+            vim.notify("File added", vim.log.levels.INFO, { title = "Harpoon" })
+          end,
+          desc = "Harpoon add file",
+        },
+        { "<C-S-j>", harpoon_ui.nav_prev, desc = "Harpoon nav prev" },
+        { "<C-S-k>", harpoon_ui.nav_next, desc = "Harpoon nav next" },
+      }
+    end,
+  },
+  {
+    {
+      "phaazon/hop.nvim",
+      opts = {},
+      keys = {
+        { "<leader>j", ":HopWord<CR>", desc = "Jump", silent = true },
+      },
+    },
+  },
+  {
+    "windwp/nvim-ts-autotag",
+    event = "VeryLazy",
+    opts = {},
+  },
+  {
+    "simeji/winresizer",
+    init = function()
+      vim.g.winresizer_start_key = false
+    end,
+    keys = {
+      { "<leader>wr", ":WinResizerStartResize<CR>", desc = "Winresizer start resize", silent = true },
+    },
+  },
+  {
+    "MagicDuck/grug-far.nvim",
+    opts = {},
+  },
 }

@@ -1,31 +1,35 @@
 local opt = vim.opt
+local map = require("utils").keymap
 
-opt.encoding = 'utf8'
-opt.mouse = 'a'
+opt.mouse = "a"
+opt.undofile = true
 opt.wildmenu = true
+opt.completeopt = "menu,menuone,noselect"
+opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 opt.confirm = true
--- opt.hlsearch = false
 opt.incsearch = true
-opt.title = true
 opt.shiftwidth = 2
 opt.softtabstop = 2
 opt.expandtab = true
-opt.smartindent = true
 opt.cursorline = true
-opt.cursorlineopt = 'number'
+opt.cursorlineopt = "number"
 opt.ignorecase = true
 opt.smartcase = true
-opt.background = 'dark'
 opt.termguicolors = true
 opt.splitbelow = true
 opt.splitright = true
-opt.wrap = true
 opt.linebreak = true
 opt.scrolloff = 5
--- opt.colorcolumn = 100
+opt.shiftround = true -- Round indent
+opt.signcolumn = "yes" -- Avoid shift
+opt.list = false -- Show some invisible characters (tabs...
+opt.splitkeep = "screen"
+opt.virtualedit = "block"
+opt.laststatus = 3
+-- opt.colorcolumn = '100'
 -- Cursor at middle
 -- opt.scrolloff = 100
--- opt.ch = 0
+-- opt.cmdheight = 0
 
 if os.getenv("XDG_CURRENT_DESKTOP") == "Hyprland" then
   vim.g.clipboard = {
@@ -107,32 +111,7 @@ vim.cmd([[
   au FileType go set tabstop=4
 ]])
 
-local function add_lines_to_term()
-  local buf_ft = vim.api.nvim_get_option_value('filetype', { buf = vim.api.nvim_get_current_buf() })
-  if buf_ft == 'neoterm' then
-    vim.api.nvim_command('set relativenumber')
-    vim.api.nvim_command('set number')
-  end
-end
-
-local term_group = vim.api.nvim_create_augroup('term_group', { clear = true })
-vim.api.nvim_create_autocmd('BufEnter', {
-  group = term_group,
-  pattern = 'term:/*neoterm*',
-  callback = add_lines_to_term
-})
-
 -- Disable comments continuation
-vim.api.nvim_create_autocmd('BufWinEnter', {
-  command = 'set formatoptions-=cro',
-})
-
-vim.api.nvim_create_autocmd("VimLeavePre", {
-  callback = function()
-    vim.cmd([[
-      Tclose!
-    ]])
-
-    pcall(vim.cmd, "CopilotChatClose")
-  end,
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  command = "set formatoptions-=cro",
 })

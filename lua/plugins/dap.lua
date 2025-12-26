@@ -7,24 +7,19 @@ return {
     "nvim-neotest/nvim-nio",
     "williamboman/mason.nvim",
   },
+  keys = {
+    "<F1>",
+    "<F6>",
+  },
   config = function()
-    local dap = require "dap"
-    local ui = require "dapui"
+    local dap = require("dap")
+    local ui = require("dapui")
+    local map = require("utils").keymap
 
     require("dapui").setup()
     require("dap-go").setup()
 
     require("nvim-dap-virtual-text").setup()
-
-    -- Handled by nvim-dap-go
-    -- dap.adapters.go = {
-    --   type = "server",
-    --   port = "${port}",
-    --   executable = {
-    --     command = "dlv",
-    --     args = { "dap", "-l", "127.0.0.1:${port}" },
-    --   },
-    -- }
 
     dap.adapters.lldb = {
       type = "server",
@@ -33,16 +28,16 @@ return {
         command = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
         args = { "--port", "${port}" },
         detached = false,
-      }
+      },
     }
 
     dap.adapters.coreclr = {
-      type = 'executable',
+      type = "executable",
       command = "netcoredbg",
-      args = { '--interpreter=vscode' }
+      args = { "--interpreter=vscode" },
     }
 
-    local elixir_ls_debugger = vim.fn.exepath "elixir-ls-debugger"
+    local elixir_ls_debugger = vim.fn.exepath("elixir-ls-debugger")
     if elixir_ls_debugger ~= "" then
       dap.adapters.mix_task = {
         type = "executable",
@@ -74,7 +69,6 @@ return {
       }
     end
 
-
     dap.configurations.rust = {
       {
         name = "Debug an executable",
@@ -82,9 +76,9 @@ return {
         request = "launch",
         program = function()
           local path = vim.fn.input({
-            prompt = 'Path to executable: ',
-            default = vim.fn.getcwd() .. '/',
-            completion = 'file'
+            prompt = "Path to executable: ",
+            default = vim.fn.getcwd() .. "/",
+            completion = "file",
           })
           return (path and path ~= "") and path or dap.ABORT
         end,
@@ -93,7 +87,6 @@ return {
       },
     }
 
-
     dap.configurations.cs = {
       {
         type = "coreclr",
@@ -101,9 +94,9 @@ return {
         request = "launch",
         program = function()
           local path = vim.fn.input({
-            prompt = 'Path to debug dll: ',
-            default = vim.fn.getcwd() .. '/',
-            completion = 'file'
+            prompt = "Path to debug dll: ",
+            default = vim.fn.getcwd() .. "/",
+            completion = "file",
           })
 
           return (path and path ~= "") and path or dap.ABORT
@@ -111,21 +104,21 @@ return {
       },
     }
 
-    vim.keymap.set("n", "<F6>", dap.toggle_breakpoint)
-    vim.keymap.set("n", "<F7>", dap.run_to_cursor)
+    map("n", "<F6>", dap.toggle_breakpoint)
+    map("n", "<F7>", dap.run_to_cursor)
 
     -- Eval var under cursor
-    vim.keymap.set("n", "<space>?", function()
+    map("n", "<space>?", function()
       require("dapui").eval(nil, { enter = true })
     end)
 
-    vim.keymap.set("n", "<F1>", dap.continue)
-    vim.keymap.set("n", "<F2>", dap.step_over)
-    vim.keymap.set("n", "<F3>", dap.step_into)
-    vim.keymap.set("n", "<F4>", dap.step_out)
-    vim.keymap.set("n", "<F5>", dap.step_back)
-    vim.keymap.set("n", "<F11>", dap.restart)
-    vim.keymap.set("n", "<F12>", dap.disconnect)
+    map("n", "<F1>", dap.continue)
+    map("n", "<F2>", dap.step_over)
+    map("n", "<F3>", dap.step_into)
+    map("n", "<F4>", dap.step_out)
+    map("n", "<F5>", dap.step_back)
+    map("n", "<F11>", dap.restart)
+    map("n", "<F12>", dap.disconnect)
 
     dap.listeners.before.attach.dapui_config = function()
       ui.open()

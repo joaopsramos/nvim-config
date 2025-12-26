@@ -15,10 +15,7 @@ return {
     bigfile = {},
     lazygit = {},
     explorer = { enabled = false },
-    -- indent = {
-    --   char = "▏",
-    --   animate = { enabled = false }
-    -- },
+    statuscolumn = {},
     picker = {
       enabled = false,
       ui_select = true,
@@ -26,7 +23,7 @@ return {
         file = {
           -- filename_first = true,
           truncate = 80,
-        }
+        },
       },
       win = {
         input = {
@@ -52,6 +49,7 @@ return {
     image = {},
     words = {},
   },
+  -- stylua: ignore
   keys = {
     -- { "<C-p>",      function() Snacks.picker.files() end,       desc = "Find Files" },
     { "<leader>fb", function() Snacks.picker.buffers() end,     desc = "Buffers" },
@@ -59,5 +57,5 @@ return {
     { "gs",         function() Snacks.picker.lsp_symbols() end, desc = "Document symbols" },
     { "<leader>ri", function() Snacks.picker.resume() end,      desc = "Resume" },
     { "<leader>gd", function() Snacks.picker.git_diff() end,    desc = "Git diff" },
-  }
+  },
 }

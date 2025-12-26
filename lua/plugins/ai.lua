@@ -10,11 +10,12 @@ return {
         },
       })
     end,
+    -- stylua: ignore
     keys = {
-      { "<A-w>", function() require("copilot.suggestion").accept_word() end, desc = "Accept Copilot word",         mode = { 'i' } },
-      { "<A-n>", function() require("copilot.suggestion").next() end,        desc = "Next Copilot suggestion",     mode = { 'i' } },
-      { "<A-p>", function() require("copilot.suggestion").prev() end,        desc = "Previous Copilot suggestion", mode = { 'i' } },
-      { "<A-d>", function() require("copilot.suggestion").dismiss() end,     desc = "Dismiss Copilot suggestion",  mode = { 'i' } },
+      { "<A-w>", function() require("copilot.suggestion").accept_word() end, desc = "Accept Copilot word",         mode = { "i" }, },
+      { "<A-n>", function() require("copilot.suggestion").next() end,        desc = "Next Copilot suggestion",     mode = { "i" }, },
+      { "<A-p>", function() require("copilot.suggestion").prev() end,        desc = "Previous Copilot suggestion", mode = { "i" }, },
+      { "<A-d>", function() require("copilot.suggestion").dismiss() end,     desc = "Dismiss Copilot suggestion",  mode = { "i" }, },
     },
   },
   {
@@ -33,7 +34,9 @@ return {
     keys = {
       {
         "<c-.>",
-        function() require("sidekick.cli").toggle() end,
+        function()
+          require("sidekick.cli").toggle()
+        end,
         desc = "Sidekick Toggle",
         mode = { "n", "t", "i", "x" },
       },
@@ -42,11 +45,10 @@ return {
   {
     "yetone/avante.nvim",
     build = "make",
-    event = "VeryLazy",
     version = false, -- Never set this value to "*"! Never!
     opts = {
       selector = {
-        provider = "snacks"
+        provider = "snacks",
       },
       instructions_file = "avante.md",
       provider = "copilot",
@@ -72,14 +74,17 @@ return {
         },
       },
     },
+    keys = {
+      "<leader>aa",
+    },
     dependencies = {
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
       --- The below dependencies are optional,
-      "hrsh7th/nvim-cmp",            -- autocompletion for avante commands and mentions
-      "folke/snacks.nvim",           -- for input provider snacks
+      "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
+      "folke/snacks.nvim", -- for input provider snacks
       "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
-      "zbirenbaum/copilot.lua",      -- for providers='copilot'
+      "zbirenbaum/copilot.lua", -- for providers='copilot'
       {
         -- support for image pasting
         "HakonHarnes/img-clip.nvim",
@@ -99,12 +104,12 @@ return {
       },
       {
         -- Make sure to set this up properly if you have lazy=true
-        'MeanderingProgrammer/render-markdown.nvim',
+        "MeanderingProgrammer/render-markdown.nvim",
         opts = {
           file_types = { "markdown", "Avante" },
         },
         ft = { "markdown", "Avante" },
       },
     },
-  }
+  },
 }
