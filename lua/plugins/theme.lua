@@ -2,6 +2,9 @@ return {
   "catppuccin/nvim",
   name = "catppuccin",
   priority = 1000,
+  init = function()
+    vim.cmd.colorscheme("catppuccin")
+  end,
   opts = {
     background = {
       light = "latte",
@@ -25,25 +28,24 @@ return {
       neotest = true,
       which_key = true,
       noice = true,
-      native_lsp = {
-        enabled = true,
-        virtual_text = {
-          errors = { "italic" },
-          hints = { "italic" },
-          warnings = { "italic" },
-          information = { "italic" },
-          ok = { "italic" },
-        },
-        underlines = {
-          errors = { "undercurl" },
-          hints = { "undercurl" },
-          warnings = { "undercurl" },
-          information = { "undercurl" },
-          ok = { "undercurl" },
-        },
-        inlay_hints = {
-          background = true,
-        },
+    },
+    lsp_styles = {
+      virtual_text = {
+        errors = { "italic" },
+        hints = { "italic" },
+        warnings = { "italic" },
+        information = { "italic" },
+        ok = { "italic" },
+      },
+      underlines = {
+        errors = { "undercurl" },
+        hints = { "undercurl" },
+        warnings = { "undercurl" },
+        information = { "undercurl" },
+        ok = { "undercurl" },
+      },
+      inlay_hints = {
+        background = true,
       },
     },
     color_overrides = {
@@ -74,13 +76,13 @@ return {
         surface1 = "#494D64",
         surface0 = "#363A4F",
 
-        base = "#24273a",
-        mantle = "#1e2030",
-        crust = "#181926",
+        -- base = "#24273a",
+        -- mantle = "#1e2030",
+        -- crust = "#181926",
 
-        -- base = "#282a36",
-        -- mantle = "#282a36",
-        -- curst = "#282a36",
+        base = "#282a36",
+        mantle = "#21232d",
+        crust = "#181926",
       },
     },
     custom_highlights = function(c)
@@ -129,13 +131,15 @@ return {
       }
     end,
   },
-  init = function()
-    vim.cmd.colorscheme("catppuccin")
+  config = function(_, opts)
+    require("catppuccin").setup(opts)
+
+    local palette = require("catppuccin.palettes").get_palette()
 
     -- Navic
-    local bg = "#1e2030"
-    local fg = "#CAD3F5"
-    local accent = "#8AADF4"
+    local bg = palette.base
+    local fg = palette.text
+    local accent = palette.blue
 
     -- stylua: ignore
     local groups = {

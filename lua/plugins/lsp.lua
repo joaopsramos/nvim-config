@@ -160,8 +160,10 @@ return {
           local bufnr = event.buf
 
           if client and client.server_capabilities.documentSymbolProvider then
-            local navic = require("nvim-navic")
-            navic.attach(client, bufnr)
+            local ok, navic = pcall(require, "nvim-navic")
+            if ok then
+              navic.attach(client, bufnr)
+            end
           end
         end,
       })
@@ -169,6 +171,7 @@ return {
       -- Configure diagnostics
       local virtual_text_cfg = {
         severity = vim.diagnostic.severity.WARN,
+        prefix = "",
       }
 
       vim.diagnostic.config({

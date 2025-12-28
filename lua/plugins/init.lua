@@ -171,22 +171,4 @@ return {
       })
     end,
   },
-  {
-    "rcarriga/nvim-notify",
-    lazy = false,
-    opts = {
-      render = "wrapped-compact",
-      timeout = 3000,
-      stages = "static",
-    },
-    keys = {
-      {
-        "<leader>nd",
-        function()
-          require("notify").dismiss({ silent = true })
-        end,
-        desc = "Dismiss all notifications",
-      },
-    },
-  },
 }

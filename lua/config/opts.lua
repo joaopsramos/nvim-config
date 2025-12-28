@@ -22,10 +22,7 @@ opt.scrolloff = 5
 opt.shiftround = true -- Round indent
 opt.signcolumn = "yes" -- Avoid shift
 opt.list = true -- Show some invisible characters (tabs...
-opt.listchars = {
-  trail = "",
-}
-opt.listchars:append({ tab = "→ " })
+opt.listchars:append({ trail = "" })
 opt.splitkeep = "screen"
 opt.virtualedit = "block"
 opt.laststatus = 3
@@ -97,6 +94,11 @@ vim.cmd([[
   au TextYankPost * silent! lua vim.highlight.on_yank()
 ]])
 
+-- Disable comments continuation
+vim.api.nvim_create_autocmd("BufWinEnter", {
+  command = "set formatoptions-=cro",
+})
+
 -- Go indentation
 vim.cmd([[
   au FileType go set noexpandtab
@@ -104,8 +106,3 @@ vim.cmd([[
   au FileType go set softtabstop=4
   au FileType go set tabstop=4
 ]])
-
--- Disable comments continuation
-vim.api.nvim_create_autocmd("BufWinEnter", {
-  command = "set formatoptions-=cro",
-})

@@ -1,11 +1,13 @@
 return {
   "nvim-lualine/lualine.nvim",
-  dependencies = { "nvim-mini/mini.icons", "folke/noice.nvim" },
+  dependencies = { "nvim-mini/mini.icons", "folke/noice.nvim", "catppuccin/nvim" },
   config = function()
     -- from LazyVim
     -- PERF: we don't need this lualine require madness 🤷
     local lualine_require = require("lualine_require")
     lualine_require.require = require
+
+    local pallete = require("catppuccin.palettes").get_palette()
 
     local function macro_recording()
       local recording_register = vim.fn.reg_recording()
@@ -60,12 +62,12 @@ return {
           {
             require("noice").api.status.command.get,
             cond = require("noice").api.status.command.has,
-            color = { fg = "#ff9e64" },
+            color = { fg = pallete.peach },
           },
           {
             require("noice").api.status.search.get,
             cond = require("noice").api.status.search.has,
-            color = { fg = "#8BD5CA" },
+            color = { fg = pallete.teal },
           },
           { "filetype" },
         },

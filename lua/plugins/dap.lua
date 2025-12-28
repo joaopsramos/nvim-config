@@ -1,11 +1,12 @@
 return {
   "mfussenegger/nvim-dap",
   dependencies = {
-    "leoluz/nvim-dap-go",
     "rcarriga/nvim-dap-ui",
     "theHamsta/nvim-dap-virtual-text",
     "nvim-neotest/nvim-nio",
     "williamboman/mason.nvim",
+
+    "leoluz/nvim-dap-go",
   },
   keys = {
     "<F1>",
@@ -16,8 +17,30 @@ return {
     local ui = require("dapui")
     local map = require("utils").keymap
 
+    local ask_entry_file = function(msg)
+      return function()
+        local path = vim.fn.input({
+          prompt = msg .. ": ",
+          default = vim.fn.getcwd() .. "/",
+          completion = "file",
+        })
+
+        return (path and path ~= "") and path or dap.ABORT
+      end
+    end
+
     require("dapui").setup()
-    require("dap-go").setup()
+    require("dap-go").setup({
+      dap_configurations = {
+        {
+          type = "go",
+          name = "Debug package (with path)",
+          request = "launch",
+          program = ask_entry_file("Path to package dir"),
+          outputMode = "remote",
+        },
+      },
+    })
 
     require("nvim-dap-virtual-text").setup()
 
@@ -74,14 +97,7 @@ return {
         name = "Debug an executable",
         type = "lldb",
         request = "launch",
-        program = function()
-          local path = vim.fn.input({
-            prompt = "Path to executable: ",
-            default = vim.fn.getcwd() .. "/",
-            completion = "file",
-          })
-          return (path and path ~= "") and path or dap.ABORT
-        end,
+        program = ask_entry_file("Path to executable"),
         cwd = "${workspaceFolder}",
         stopOnEntry = false,
       },
@@ -92,15 +108,7 @@ return {
         type = "coreclr",
         name = "Launch",
         request = "launch",
-        program = function()
-          local path = vim.fn.input({
-            prompt = "Path to debug dll: ",
-            default = vim.fn.getcwd() .. "/",
-            completion = "file",
-          })
-
-          return (path and path ~= "") and path or dap.ABORT
-        end,
+        program = ask_entry_file("Path to dll"),
       },
     }
 
@@ -113,12 +121,15 @@ return {
     end)
 
     map("n", "<F1>", dap.continue)
-    map("n", "<F2>", dap.step_over)
-    map("n", "<F3>", dap.step_into)
+    map("n", "<F2>", dap.step_into)
+    map("n", "<F3>", dap.step_over)
     map("n", "<F4>", dap.step_out)
     map("n", "<F5>", dap.step_back)
     map("n", "<F11>", dap.restart)
-    map("n", "<F12>", dap.disconnect)
+    map("n", "<F12>", function()
+      dap.disconnect()
+      ui.close()
+    end)
 
     dap.listeners.before.attach.dapui_config = function()
       ui.open()

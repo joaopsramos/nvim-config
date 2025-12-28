@@ -34,7 +34,7 @@ return {
   end,
   keys = {
     { "<leader>tba", ":$tabnew<CR>", silent = true },
-    { "<leader>tbc", ":tabclose<CR>", silent = true },
+    { "<leader>tbd", ":tabclose<CR>", silent = true },
     { "<leader>tbo", ":tabonly<CR>", silent = true },
   },
 }

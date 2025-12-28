@@ -34,8 +34,6 @@ map({ "n", "x" }, "cy", '"+y', { desc = "Copy to clipboard" })
 map("i", "<C-p>", "<Left><C-o>p")
 map("v", "<C-p>", "s<C-r>0<Esc>")
 
-map({ "n", "v" }, "/", "/\\v", { silent = false })
-map({ "n", "v" }, "?", "?\\v", { silent = false })
 map("n", "<Esc>", ":noh<CR>")
 
 map("i", "<C-CR>", "<C-o>o")

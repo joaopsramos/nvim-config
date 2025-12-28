@@ -25,6 +25,21 @@ return {
       },
       follow_current_file = {
         enabled = true,
+        leave_dirs_open = true,
+      },
+      window = {
+        mappings = {
+          -- ["/"] = "none",
+          -- ["<esc>"] = "none",
+        },
+      },
+    },
+    event_handlers = {
+      {
+        event = "neo_tree_buffer_enter",
+        handler = function(arg)
+          vim.opt_local.relativenumber = true
+        end,
       },
     },
     default_component_configs = {

@@ -10,15 +10,23 @@ return {
     _G.bt = function()
       Snacks.debug.backtrace()
     end
-    vim.print = _G.dd
+    if vim.fn.has("nvim-0.11") == 1 then
+      vim._print = function(_, ...)
+        dd(...)
+      end
+    else
+      vim.print = dd
+    end
   end,
   opts = {
     bigfile = {},
     lazygit = {},
     explorer = { enabled = false },
     statuscolumn = {},
+    notifier = {},
+    image = {},
     picker = {
-      enabled = false,
+      enabled = true,
       ui_select = true,
       formatters = {
         file = {
@@ -47,8 +55,6 @@ return {
         },
       },
     },
-    image = {},
-    words = {},
   },
   -- stylua: ignore
   keys = {
@@ -58,5 +64,6 @@ return {
     { "gs",         function() Snacks.picker.lsp_symbols() end, desc = "Document symbols" },
     { "<leader>ri", function() Snacks.picker.resume() end,      desc = "Resume" },
     { "<leader>gd", function() Snacks.picker.git_diff() end,    desc = "Git diff" },
+    { "<leader>nd", function() Snacks.notifier.hide() end,      desc = "Dismiss all notifications", },
   },
 }
