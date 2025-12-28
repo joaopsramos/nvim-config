@@ -28,9 +28,7 @@ return {
         ts_ls = {},
         emmet_language_server = {},
         omnisharp = {},
-        lexical = {
-          cmd = { get_ls_cmd("lexical") },
-        },
+        expert = {},
         gopls = {
           settings = {
             gopls = {
@@ -120,12 +118,7 @@ return {
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
       for name, server_config in pairs(servers) do
-        if server_config == true then
-          server_config = {}
-        end
-        server_config = vim.tbl_deep_extend("force", {}, {
-          capabilities = capabilities,
-        }, server_config)
+        server_config = vim.tbl_deep_extend("force", {}, { capabilities = capabilities }, server_config)
 
         vim.lsp.config[name] = server_config
         vim.lsp.enable(name)
@@ -145,11 +138,21 @@ return {
     init = function()
       local map = require("utils").keymap
 
-      vim.diagnostic.config({ virtual_text = true })
-
-      map("n", "<leader>vl", function()
-        vim.diagnostic.config({ virtual_text = not vim.diagnostic.config().virtual_text })
-      end, { desc = "Toggle virtual text/lines" })
+      -- stylua: ignore start
+      map("n", "gd", vim.lsp.buf.definition, { desc = "Definition" })
+      map("n", "gD", vim.lsp.buf.declaration, { desc = "Declaration" })
+      map("n", "gy", vim.lsp.buf.type_definition, { desc = "Type definition" })
+      map("n", "gI", vim.lsp.buf.implementation, { desc = "Implementation" })
+      map("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
+      map("i", "<C-h>", vim.lsp.buf.signature_help, { desc = "Signature help" })
+      map("n", "cd", vim.lsp.buf.rename, { desc = "Rename (change definition)" })
+      map("n", "g.", vim.lsp.buf.code_action, { desc = "Code actions" })
+      map("n", "<leader>gr", function() Snacks.picker.lsp_references() end, { desc = "References" })
+      map("n", "gh", vim.diagnostic.open_float, { desc = "Open diagnostic" })
+      map("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, { desc = "Go to prev diagnostic" })
+      map("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, { desc = "Go to next diagnostic" })
+      map("n", "<leader>fm", function() vim.lsp.buf.format({ async = true }) end, { desc = "Format file" })
+      -- stylua: ignore end
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(event)
@@ -160,24 +163,31 @@ return {
             local navic = require("nvim-navic")
             navic.attach(client, bufnr)
           end
-
-          -- stylua: ignore start
-          map("n", "gd", vim.lsp.buf.definition, { desc = "Definition" })
-          map("n", "gD", vim.lsp.buf.declaration, { desc = "Declaration" })
-          map("n", "gy", vim.lsp.buf.type_definition, { desc = "Type definition" })
-          map("n", "gI", vim.lsp.buf.implementation, { desc = "Implementation" })
-          map("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
-          map("i", "<C-h>", vim.lsp.buf.signature_help, { desc = "Signature help" })
-          map("n", "cd", vim.lsp.buf.rename, { desc = "Rename (change definition)" })
-          map("n", "g.", vim.lsp.buf.code_action, { desc = "Code actions" })
-          map("n", "<leader>gr", function() Snacks.picker.lsp_references() end, { desc = "References" })
-          map("n", "gh", vim.diagnostic.open_float, { desc = "Open diagnostic" })
-          map("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, { desc = "Go to prev diagnostic" })
-          map("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, { desc = "Go to next diagnostic" })
-          map("n", "<leader>fm", function() vim.lsp.buf.format({ async = true }) end, { desc = "Format file" })
-          -- stylua: ignore end
         end,
       })
+
+      -- Configure diagnostics
+      local virtual_text_cfg = {
+        severity = vim.diagnostic.severity.WARN,
+      }
+
+      vim.diagnostic.config({
+        virtual_text = virtual_text_cfg,
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = "",
+            [vim.diagnostic.severity.WARN] = "",
+            [vim.diagnostic.severity.HINT] = "",
+            [vim.diagnostic.severity.INFO] = "",
+          },
+        },
+      })
+
+      map("n", "<leader>vt", function()
+        local enabled = not vim.diagnostic.config().virtual_text
+        vim.notify("Virtual text " .. (enabled and "enabled" or "disabled"))
+        vim.diagnostic.config({ virtual_text = enabled and virtual_text_cfg or false })
+      end, { desc = "Toggle virtual text" })
 
       -- Organize imports and format Go files
       vim.api.nvim_create_autocmd("BufWritePre", {
@@ -201,6 +211,7 @@ return {
         end,
       })
 
+      -- Set rounded border for hover and signature help
       local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
       function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
         opts = opts or {}

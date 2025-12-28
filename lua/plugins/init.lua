@@ -1,13 +1,15 @@
 return {
   "nvim-lua/plenary.nvim",
-  "nvim-mini/mini.icons",
   "tpope/vim-surround",
   "tpope/vim-repeat",
   "mtdl9/vim-log-highlighting",
+  { "nvim-mini/mini.icons", opts = {} },
   { "windwp/nvim-autopairs", opts = {} },
   { "norcalli/nvim-colorizer.lua", opts = { "*" } },
   { "js-everts/cmp-tailwind-colors", opts = {} },
-  { "kevinhwang91/nvim-ufo", dependencies = "kevinhwang91/promise-async", opts = {} },
+  { "MagicDuck/grug-far.nvim", opts = {} },
+  { "windwp/nvim-ts-autotag", event = "VeryLazy", opts = {} },
+  { "folke/todo-comments.nvim", dependencies = { "nvim-lua/plenary.nvim" }, opts = {} },
   {
     "olimorris/persisted.nvim",
     lazy = false,
@@ -51,36 +53,10 @@ return {
     },
   },
   {
-    "SmiteshP/nvim-navic",
-    dependencies = "neovim/nvim-lspconfig",
-    opts = {
-      highlight = true,
-      format_text = function(text)
-        if #text <= 40 then
-          return text
-        end
-
-        local prefix_len = 35
-        local max_suffix_len = 5
-
-        local sufix_len = math.min(max_suffix_len, #text - prefix_len)
-
-        -- subtract 2 more to account for the ".."
-        return string.sub(text, 1, prefix_len - 2) .. ".." .. string.sub(text, -sufix_len)
-      end,
-    },
-  },
-  {
     "mbbill/undotree",
     keys = {
       { "<leader>u", ":UndotreeToggle<CR>:UndotreeFocus<CR>", desc = "Undotree toggle and focus", silent = true },
     },
-  },
-  {
-    "editorconfig/editorconfig-vim",
-    init = function()
-      vim.g.EditorConfig_exclude_patterns = { "fugitive://.*" }
-    end,
   },
   {
     "tpope/vim-projectionist",
@@ -120,44 +96,41 @@ return {
     },
   },
   {
-    "folke/todo-comments.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    "kevinhwang91/nvim-ufo",
+    dependencies = "kevinhwang91/promise-async",
     opts = {},
-  },
-  {
-    "ThePrimeagen/harpoon",
-    keys = function()
-      local harpoon_ui = require("harpoon.ui")
-      local harpoon_mark = require("harpoon.mark")
-
-      return {
-        { "<leader>hl", harpoon_ui.toggle_quick_menu, desc = "Harpoon quick menu" },
-        {
-          "<leader>ha",
-          function()
-            harpoon_mark.add_file()
-            vim.notify("File added", vim.log.levels.INFO, { title = "Harpoon" })
-          end,
-          desc = "Harpoon add file",
-        },
-        { "<C-S-j>", harpoon_ui.nav_prev, desc = "Harpoon nav prev" },
-        { "<C-S-k>", harpoon_ui.nav_next, desc = "Harpoon nav next" },
-      }
+    init = function()
+      vim.o.foldlevel = 99
+      vim.o.foldlevelstart = 99
     end,
   },
   {
-    {
-      "phaazon/hop.nvim",
-      opts = {},
-      keys = {
-        { "<leader>j", ":HopWord<CR>", desc = "Jump", silent = true },
-      },
-    },
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      local harpoon = require("harpoon")
+      local map = require("utils").keymap
+
+      harpoon:setup()
+
+      -- stylua: ignore start
+      map("n", "<leader>hl", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon quick menu" })
+      map("n", "<leader>ha", function()
+        harpoon:list():add()
+        vim.notify("File added", vim.log.levels.INFO, { title = "Harpoon" })
+      end, { desc = "Harpoon add file" })
+      map("n", "<C-S-j>", function() harpoon:list():prev({ ui_nav_wrap = true }) end, { desc = "Harpoon previous file" })
+      map("n", "<C-S-k>", function() harpoon:list():next({ ui_nav_wrap = true }) end, { desc = "Harpoon next file" })
+      -- stylua: ignore end
+    end,
   },
   {
-    "windwp/nvim-ts-autotag",
-    event = "VeryLazy",
+    "phaazon/hop.nvim",
     opts = {},
+    keys = {
+      { "<leader>j", ":HopWord<CR>", desc = "Jump", silent = true },
+    },
   },
   {
     "simeji/winresizer",
@@ -169,7 +142,51 @@ return {
     },
   },
   {
-    "MagicDuck/grug-far.nvim",
-    opts = {},
+    "SmiteshP/nvim-navic",
+    dependencies = "neovim/nvim-lspconfig",
+    opts = {
+      highlight = true,
+      format_text = function(text)
+        if #text <= 40 then
+          return text
+        end
+
+        local prefix_len = 35
+        local max_suffix_len = 5
+
+        local sufix_len = math.min(max_suffix_len, #text - prefix_len)
+
+        -- subtract 2 more to account for the ".."
+        return string.sub(text, 1, prefix_len - 2) .. ".." .. string.sub(text, -sufix_len)
+      end,
+    },
+    init = function()
+      -- All this to avoid setting winbar in terminals (empty line)
+      vim.api.nvim_create_autocmd({ "BufWinEnter", "WinEnter" }, {
+        callback = function()
+          if vim.bo.buftype == "" then
+            vim.wo.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
+          end
+        end,
+      })
+    end,
+  },
+  {
+    "rcarriga/nvim-notify",
+    lazy = false,
+    opts = {
+      render = "wrapped-compact",
+      timeout = 3000,
+      stages = "static",
+    },
+    keys = {
+      {
+        "<leader>nd",
+        function()
+          require("notify").dismiss({ silent = true })
+        end,
+        desc = "Dismiss all notifications",
+      },
+    },
   },
 }

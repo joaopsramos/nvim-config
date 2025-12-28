@@ -2,15 +2,12 @@ return {
   "catppuccin/nvim",
   name = "catppuccin",
   priority = 1000,
-  init = function()
-    vim.cmd.colorscheme("catppuccin")
-  end,
   opts = {
     background = {
       light = "latte",
       dark = "macchiato",
     },
-    transparent_background = true,
+    transparent_background = false,
     show_end_of_buffer = true,
     integrations = {
       cmp = true,
@@ -77,10 +74,12 @@ return {
         surface1 = "#494D64",
         surface0 = "#363A4F",
 
+        base = "#24273a",
+        mantle = "#1e2030",
+        crust = "#181926",
+
         -- base = "#282a36",
-        -- mantle = "#1E2030",
         -- mantle = "#282a36",
-        -- crust = "#181926",
         -- curst = "#282a36",
       },
     },
@@ -130,4 +129,28 @@ return {
       }
     end,
   },
+  init = function()
+    vim.cmd.colorscheme("catppuccin")
+
+    -- Navic
+    local bg = "#1e2030"
+    local fg = "#CAD3F5"
+    local accent = "#8AADF4"
+
+    -- stylua: ignore
+    local groups = {
+      "File", "Module", "Namespace", "Package", "Class", "Method", "Property",
+      "Field", "Constructor", "Enum", "Interface", "Function", "Variable",
+      "Constant", "String", "Number", "Boolean", "Array", "Object", "Key",
+      "Null", "EnumMember", "Struct", "Event", "Operator", "TypeParameter",
+      "Text", "Separator"
+    }
+
+    for _, grp in ipairs(groups) do
+      vim.api.nvim_set_hl(0, "NavicIcons" .. grp, { default = true, bg = bg, fg = accent })
+    end
+
+    vim.api.nvim_set_hl(0, "NavicText", { default = true, bg = bg, fg = fg })
+    vim.api.nvim_set_hl(0, "NavicSeparator", { default = true, bg = bg, fg = fg })
+  end,
 }

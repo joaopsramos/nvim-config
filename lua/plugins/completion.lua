@@ -8,15 +8,16 @@ return {
     "hrsh7th/cmp-cmdline",
     -- { 'L3MON4D3/LuaSnip', build = 'make install_jsregexp' },
     -- 'saadparwaiz1/cmp_luasnip',
-    "SirVer/ultisnips",
     {
-      "quangnguyen30192/cmp-nvim-ultisnips",
+      "SirVer/ultisnips",
       init = function()
-        vim.g.UltiSnipsExpandTrigger = "<CR>"
-        vim.g.UltiSnipsJumpForwardTrigger = "<Tab>"
-        vim.g.UltiSnipsJumpBackwardTrigger = "<S-Tab>"
+        -- Setting something to expand trigger to avoid weird <esc> mapping
+        vim.g.UltiSnipsExpandTrigger = "<F12>"
+        vim.g.UltiSnipsJumpForwardTrigger = "<C-f>"
+        vim.g.UltiSnipsJumpBackwardTrigger = "<C-b>"
       end,
     },
+    "quangnguyen30192/cmp-nvim-ultisnips",
     "honza/vim-snippets",
     "onsails/lspkind.nvim",
   },
@@ -56,6 +57,7 @@ return {
         documentation = cmp.config.window.bordered(),
       },
       mapping = cmp.mapping.preset.insert({
+        ["<C-p>"] = cmp.config.disable,
         ["<C-b>"] = cmp.mapping.scroll_docs(-4),
         ["<C-f>"] = cmp.mapping.scroll_docs(4),
         ["<C-Space>"] = cmp.mapping.complete(),
@@ -63,9 +65,9 @@ return {
         ["<Tab>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
       }),
       sources = cmp.config.sources({
-        { name = "nvim_lsp" },
-        -- { name = 'luasnip', option = { use_show_condition = false } },
         { name = "ultisnips" },
+        -- { name = 'luasnip', option = { use_show_condition = false } },
+        { name = "nvim_lsp" },
       }, {
         { name = "buffer" },
         { name = "path" },

@@ -10,31 +10,38 @@ if vim.g.neovide then
   map("t", "<SC-v>", '<C-\\><C-n>"+Pi')
 end
 
--- General
-map("n", "<C-q>", "q")
-map("n", "q", function()
+map("n", "<C-q>", ":q<CR>", { desc = "Close window" })
+map("n", "<C-x>", ":bd<CR>", { desc = "Close buffer" })
+map("n", "ZZ", ":quitall<CR>", { desc = "Close buffer" })
+map("n", "<leader>dab", ":%bd|e#<CR>", { desc = "Delete all buffers except current" })
+
+-- close bottom window if any
+map("n", "<leader>gq", function()
   if #vim.api.nvim_list_wins() == 1 then
     return
   end
 
-  vim.cmd("q")
-end)
-map("n", "Q", ":quitall<CR>")
-map("n", "<C-x>", ":bd<CR>")
-map("n", "<leader>dab", ":%bd<CR>:e#<CR>", { desc = "Delete all buffers except current" })
+  vim.cmd("wincmd j")
+  vim.cmd("quit")
+end, { desc = "Close bottom window" })
 
 map("n", "<C-a>", "ggVG", { desc = "Select all" })
 
-map({ "n", "i", "v" }, "<C-s>", "<Cmd>w<cr><Esc>")
+map({ "n", "i", "v" }, "<C-s>", "<Cmd>w<CR><Esc>")
 
-map("v", "<C-y>", '"+y')
+map("v", "<C-y>", '"+y', { desc = "Copy to clipboard" })
+map({ "n", "x" }, "cy", '"+y', { desc = "Copy to clipboard" })
 map("i", "<C-p>", "<Left><C-o>p")
 map("v", "<C-p>", "s<C-r>0<Esc>")
+
+map({ "n", "v" }, "/", "/\\v", { silent = false })
+map({ "n", "v" }, "?", "?\\v", { silent = false })
 map("n", "<Esc>", ":noh<CR>")
 
 map("i", "<C-CR>", "<C-o>o")
 map("i", "<C-z>", "<C-o>zz")
 
+-- Find and Replace current word
 map("n", "&", "yiw:%s/\\(<C-r>0\\)/\\/g<Left><Left>1", { silent = false })
 map("v", "&", "y:%s/\\(<C-r>0\\)/\\/g<Left><Left>1", { silent = false })
 
@@ -50,6 +57,15 @@ map("n", "<A-d>", "<C-w>p<C-d><C-w>p")
 
 map("n", "<leader>so", "vip:sort<CR>", { desc = "Sort lines" })
 
+-- Splits
+map("n", "<leader>-", "<C-w>v", { desc = "Split window vertically" })
+map("n", "<leader>/", "<C-w>s", { desc = "Split window horizontally" })
+
+-- Terminal
+map("t", "<C-\\>", "<C-\\><C-n>")
+map("t", "<Esc>", "<C-\\><C-n>:close<CR>", { desc = "Close terminal" })
+map("t", "<C-j>", "<C-\\><C-n><C-w>_")
+
 -- better up/down with line wrapped
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -62,13 +78,7 @@ map("n", "<C-j>", "<C-w>j", { desc = "Go to lower window", remap = true })
 map("n", "<C-k>", "<C-w>k", { desc = "Go to upper window", remap = true })
 map("n", "<C-l>", "<C-w>l", { desc = "Go to right window", remap = true })
 
--- Close bottom window
-map("n", "<leader>gq", "<C-w>j:q<CR>", { desc = "" })
-
--- Notify
--- map('n', '<leader>nd', require("notify").dismiss, { desc = "Dismiss notifications" })
-
 -- Mix
-map("n", "<leader>iex", "<leader>tmiiex<CR>", { desc = "Run iex", remap = true })
-map("n", "<leader>iem", "<leader>tmiiex -S mix<CR>", { desc = "Run iex with mix", remap = true })
-map("n", "<leader>iep", "<leader>tmiiex -S mix phx.server<CR>", { desc = "Run phoenix server", remap = true })
+map("n", "<leader>iex", "<C-t>iiex<CR>", { desc = "Run iex", remap = true })
+map("n", "<leader>iem", "<C-t>iiex -S mix<CR>", { desc = "Run iex with mix", remap = true })
+map("n", "<leader>iep", "<C-t>iiex -S mix phx.server<CR>", { desc = "Run phoenix server", remap = true })

@@ -16,7 +16,6 @@ return {
       { "<leader>gsw",  ":Git switch<space>",           desc = "Git switch" },
       { "<leader>gsb",  ":Git switch --create<space>",  desc = "Git switch --create" },
       { "<leader>gsm",  ":Git switch main<CR>",         desc = "Git switch main",    silent = true },
-      { "<leader>gsn",  ":Git switch next<CR>",         desc = "Git switch next",    silent = true },
       { "<leader>gsk",  ":Git switch -<CR>",            desc = "Git switch back",    silent = true },
 
       { "<leader>gsth", ":Git stash<CR>",               desc = "Git stash",          silent = true },

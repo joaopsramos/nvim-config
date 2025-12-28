@@ -1,16 +1,9 @@
-local map = require("utils").keymap
-
-map("t", "<C-\\>", "<C-\\><C-n>")
-map("t", "<Esc>", "<C-\\><C-n>:close<CR>", { desc = "Close terminal" })
-map("t", "<C-j>", "<C-\\><C-n><C-w>_")
-
-local term_group = vim.api.nvim_create_augroup("term_group", { clear = true })
 vim.api.nvim_create_autocmd("BufEnter", {
-  group = term_group,
   pattern = "term:/*",
   callback = function()
-    vim.api.nvim_command("set relativenumber")
-    vim.api.nvim_command("set number")
+    vim.opt_local.winbar = nil
+    vim.opt_local.number = true
+    vim.opt_local.relativenumber = true
   end,
 })
 

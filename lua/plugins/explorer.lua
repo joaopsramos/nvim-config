@@ -1,16 +1,51 @@
 return {
-  "nvim-tree/nvim-tree.lua",
-  lazy = false,
+  "nvim-neo-tree/neo-tree.nvim",
+  branch = "v3.x",
   dependencies = {
-    "nvim-tree/nvim-web-devicons",
+    "nvim-lua/plenary.nvim",
+    "MunifTanjim/nui.nvim",
+    -- "nvim-tree/nvim-web-devicons", -- or mini.icons, optional, but recommended
+    "nvim-mini/mini.icons",
   },
-  opts = {},
-  init = function()
-    -- disable netrw
-    vim.g.loaded_netrw = 1
-    vim.g.loaded_netrwPlugin = 1
-  end,
+  lazy = false, -- neo-tree will lazily load itself
   keys = {
-    { "<leader>e", ":NvimTreeFindFileToggle<CR>", desc = "Toggle NvimTree", silent = true },
+    { "<leader>e", ":Neotree toggle reveal<CR>", desc = "Toggle NvimTree", silent = true },
+  },
+  init = function()
+    vim.api.nvim_create_autocmd("VimLeavePre", {
+      callback = function()
+        pcall(vim.cmd, "Neotree close")
+      end,
+    })
+  end,
+  opts = {
+    filesystem = {
+      filtered_items = {
+        visible = true,
+      },
+      follow_current_file = {
+        enabled = true,
+      },
+    },
+    default_component_configs = {
+      icon = {
+        provider = function(icon, node, state)
+          if node.type == "file" or node.type == "terminal" then
+            local ok, mini_icons = pcall(require, "mini.icons")
+            if not ok then
+              return
+            end
+
+            local name = node.type == "terminal" and "terminal" or node.name
+            local glyph, hl = mini_icons.get("file", name)
+
+            if glyph then
+              icon.text = glyph
+              icon.highlight = hl or icon.highlight
+            end
+          end
+        end,
+      },
+    },
   },
 }

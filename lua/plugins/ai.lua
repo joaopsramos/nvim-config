@@ -45,6 +45,7 @@ return {
   {
     "yetone/avante.nvim",
     build = "make",
+    event = "VeryLazy",
     version = false, -- Never set this value to "*"! Never!
     opts = {
       selector = {
@@ -74,16 +75,14 @@ return {
         },
       },
     },
-    keys = {
-      "<leader>aa",
-    },
     dependencies = {
       "nvim-lua/plenary.nvim",
       "MunifTanjim/nui.nvim",
       --- The below dependencies are optional,
       "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
       "folke/snacks.nvim", -- for input provider snacks
-      "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+      -- "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+      "nvim-mini/mini.icons",
       "zbirenbaum/copilot.lua", -- for providers='copilot'
       {
         -- support for image pasting

@@ -1,5 +1,4 @@
 local opt = vim.opt
-local map = require("utils").keymap
 
 opt.mouse = "a"
 opt.undofile = true
@@ -22,11 +21,17 @@ opt.linebreak = true
 opt.scrolloff = 5
 opt.shiftround = true -- Round indent
 opt.signcolumn = "yes" -- Avoid shift
-opt.list = false -- Show some invisible characters (tabs...
+opt.list = true -- Show some invisible characters (tabs...
+opt.listchars = {
+  trail = "",
+}
+opt.listchars:append({ tab = "→ " })
 opt.splitkeep = "screen"
 opt.virtualedit = "block"
 opt.laststatus = 3
--- opt.colorcolumn = '100'
+opt.number = true
+opt.relativenumber = true
+-- opt.colorcolumn = "100"
 -- Cursor at middle
 -- opt.scrolloff = 100
 -- opt.cmdheight = 0
@@ -86,17 +91,6 @@ if vim.g.neovide then
   -- vim.g.neovide_background_color = "#0f1117" .. alpha()
   -- vim.g.neovide_window_blurred = true
 end
-
--- nvim-ufo
-vim.o.foldlevel = 99
-vim.o.foldlevelstart = 99
-
-vim.cmd([[
-  syntax on
-  set nu! rnu!
-  set whichwrap+=<,>,h,l
-  let extension = expand('%:e')
-]])
 
 -- Highlight on yank
 vim.cmd([[

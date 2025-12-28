@@ -1,5 +1,6 @@
 return {
   "folke/snacks.nvim",
+  dependencies = { "nvim-mini/mini.icons" },
   priority = 1000,
   lazy = false,
   init = function()
