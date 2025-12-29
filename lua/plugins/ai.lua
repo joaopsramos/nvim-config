@@ -81,7 +81,7 @@ return {
       --- The below dependencies are optional,
       "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
       "folke/snacks.nvim", -- for input provider snacks
-      -- "nvim-tree/nvim-web-devicons", -- or echasnovski/mini.icons
+      -- "nvim-tree/nvim-web-devicons", -- or nvim-mini/mini.icons
       "nvim-mini/mini.icons",
       "zbirenbaum/copilot.lua", -- for providers='copilot'
       {

@@ -1,153 +1,174 @@
 return {
-  "mfussenegger/nvim-dap",
-  dependencies = {
-    "rcarriga/nvim-dap-ui",
-    "theHamsta/nvim-dap-virtual-text",
-    "nvim-neotest/nvim-nio",
-    "williamboman/mason.nvim",
+  {
+    "mfussenegger/nvim-dap",
+    dependencies = {
+      "rcarriga/nvim-dap-ui",
+      { "theHamsta/nvim-dap-virtual-text", opts = {} },
+    },
+    keys = {
+      -- stylua: ignore start
+      { "<F1>",  function() require("dap").continue() end },
+      { "<F2>",  function() require("dap").step_into() end },
+      { "<F3>",  function() require("dap").step_over() end },
+      { "<F4>",  function() require("dap").step_out() end },
+      { "<F5>",  function() require("dap").step_back() end },
+      { "<F6>",  function() require("dap").toggle_breakpoint() end },
+      { "<F7>",  function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end },
+      { "<F8>",  function() require("dap").run_to_cursor() end },
+      -- F9 ui toggle
+      { "<F11>", function() require("dap").restart() end },
+      { "<F12>", function() require("dap").disconnect() end },
+      -- stylua: ignore end
+    },
+    config = function()
+      local dap = require("dap")
 
-    "leoluz/nvim-dap-go",
-  },
-  keys = {
-    "<F1>",
-    "<F6>",
-  },
-  config = function()
-    local dap = require("dap")
-    local ui = require("dapui")
-    local map = require("utils").keymap
+      local ask_entry_file = function(msg)
+        return function()
+          local path = vim.fn.input({
+            prompt = msg .. ": ",
+            default = vim.fn.getcwd() .. "/",
+            completion = "file",
+          })
 
-    local ask_entry_file = function(msg)
-      return function()
-        local path = vim.fn.input({
-          prompt = msg .. ": ",
-          default = vim.fn.getcwd() .. "/",
-          completion = "file",
-        })
-
-        return (path and path ~= "") and path or dap.ABORT
+          return (path and path ~= "") and path or dap.ABORT
+        end
       end
-    end
 
-    require("dapui").setup()
-    require("dap-go").setup({
-      dap_configurations = {
-        {
-          type = "go",
-          name = "Debug package (with path)",
-          request = "launch",
-          program = ask_entry_file("Path to package dir"),
-          outputMode = "remote",
+      local adapters = {
+        mix_task = {
+          type = "executable",
+          command = vim.fn.exepath("elixir-ls-debugger"),
         },
-      },
-    })
-
-    require("nvim-dap-virtual-text").setup()
-
-    dap.adapters.lldb = {
-      type = "server",
-      port = "${port}",
-      executable = {
-        command = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
-        args = { "--port", "${port}" },
-        detached = false,
-      },
-    }
-
-    dap.adapters.coreclr = {
-      type = "executable",
-      command = "netcoredbg",
-      args = { "--interpreter=vscode" },
-    }
-
-    local elixir_ls_debugger = vim.fn.exepath("elixir-ls-debugger")
-    if elixir_ls_debugger ~= "" then
-      dap.adapters.mix_task = {
-        type = "executable",
-        command = elixir_ls_debugger,
-      }
-
-      dap.configurations.elixir = {
-        {
-          type = "mix_task",
-          name = "phoenix server",
-          task = "phx.server",
-          request = "launch",
-          projectDir = "${workspaceFolder}",
-          exitAfterTaskReturns = false,
-          debugAutoInterpretAllModules = false,
+        dlv = {
+          type = "server",
+          port = "${port}",
+          executable = {
+            command = "dlv",
+            args = { "dap", "-l", "127.0.0.1:${port}" },
+          },
         },
-        {
-          type = "mix_task",
-          name = "test",
-          task = "test",
-          taskArgs = { "--trace" },
-          startApps = true,
-          request = "launch",
-          projectDir = "${workspaceFolder}",
-          requireFiles = { "test/**/test_helper.exs", "test/**/*_test.exs" },
-          exitAfterTaskReturns = false,
-          debugAutoInterpretAllModules = false,
+        lldb = {
+          type = "server",
+          port = "${port}",
+          executable = {
+            command = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
+            args = { "--port", "${port}" },
+            detached = false,
+          },
+        },
+        coreclr = {
+          type = "executable",
+          command = "netcoredbg",
+          args = { "--interpreter=vscode" },
         },
       }
-    end
 
-    dap.configurations.rust = {
-      {
-        name = "Debug an executable",
-        type = "lldb",
-        request = "launch",
-        program = ask_entry_file("Path to executable"),
-        cwd = "${workspaceFolder}",
-        stopOnEntry = false,
-      },
-    }
+      local configs = {
+        elixir = {
+          {
+            type = "mix_task",
+            name = "phoenix server",
+            task = "phx.server",
+            request = "launch",
+            projectDir = "${workspaceFolder}",
+            exitAfterTaskReturns = false,
+            debugAutoInterpretAllModules = false,
+          },
+          {
+            type = "mix_task",
+            name = "test",
+            task = "test",
+            taskArgs = { "--trace" },
+            startApps = true,
+            request = "launch",
+            projectDir = "${workspaceFolder}",
+            requireFiles = { "test/**/test_helper.exs", "test/**/*_test.exs" },
+            exitAfterTaskReturns = false,
+            debugAutoInterpretAllModules = false,
+          },
+          {
+            type = "mix_task",
+            name = "single test",
+            task = "test",
+            taskArgs = function()
+              local line = vim.fn.line(".")
+              return { "${file}:" .. line, "--trace" }
+            end,
+            startApps = true,
+            request = "launch",
+            projectDir = "${workspaceFolder}",
+            requireFiles = { "test/**/test_helper.exs", "test/**/*_test.exs" },
+            exitAfterTaskReturns = false,
+            debugAutoInterpretAllModules = false,
+          },
+        },
+        go = {
+          {
+            type = "dlv",
+            name = "Debug package (with path)",
+            request = "launch",
+            program = ask_entry_file("Path to package dir"),
+          },
+        },
+        rust = {
+          {
+            type = "lldb",
+            name = "Debug an executable",
+            request = "launch",
+            program = ask_entry_file("Path to executable"),
+            cwd = "${workspaceFolder}",
+            stopOnEntry = false,
+          },
+        },
+        cs = {
+          {
+            type = "coreclr",
+            name = "Launch",
+            request = "launch",
+            program = ask_entry_file("Path to dll"),
+          },
+        },
+      }
 
-    dap.configurations.cs = {
-      {
-        type = "coreclr",
-        name = "Launch",
-        request = "launch",
-        program = ask_entry_file("Path to dll"),
-      },
-    }
+      for adapter, config in pairs(adapters) do
+        dap.adapters[adapter] = config
+      end
 
-    map("n", "<F6>", dap.toggle_breakpoint)
-    map("n", "<F7>", dap.run_to_cursor)
+      for name, config in pairs(configs) do
+        dap.configurations[name] = config
+      end
 
-    -- Eval var under cursor
-    map("n", "<space>?", function()
-      require("dapui").eval(nil, { enter = true })
-    end)
+      local sign = vim.fn.sign_define
 
-    map("n", "<F1>", dap.continue)
-    map("n", "<F2>", dap.step_into)
-    map("n", "<F3>", dap.step_over)
-    map("n", "<F4>", dap.step_out)
-    map("n", "<F5>", dap.step_back)
-    map("n", "<F11>", dap.restart)
-    map("n", "<F12>", function()
-      dap.disconnect()
-      ui.close()
-    end)
+      sign("DapBreakpoint", { text = "", texthl = "DiagnosticError", linehl = "", numhl = "" })
+      sign("DapBreakpointCondition", { text = "", texthl = "DiagnosticError", linehl = "", numhl = "" })
+      sign("DapLogPoint", { text = "◆", texthl = "DapLogPoint", linehl = "", numhl = "" })
+      sign("BreakpointRejected", { text = "", texthl = "DiagnosticWarn", linehl = "", numhl = "" })
+      sign(
+        "DapStopped",
+        { text = "󰁕", texthl = "DiagnosticWarn", linehl = "DapStoppedLine", numhl = "DapStoppedLine" }
+      )
+    end,
+  },
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = { "nvim-neotest/nvim-nio" },
+    -- stylua: ignore
+    keys = {
+      { "<F9>",      function() require("dapui").toggle() end },
+      { "<leader>?", function() require("dapui").eval(nil, { enter = true }) end, },
+    },
+    config = function()
+      local dap = require("dap")
+      local dapui = require("dapui")
 
-    dap.listeners.before.attach.dapui_config = function()
-      ui.open()
-    end
-    dap.listeners.before.launch.dapui_config = function()
-      ui.open()
-    end
-    dap.listeners.before.event_terminated.dapui_config = function()
-      ui.close()
-    end
-    dap.listeners.before.event_exited.dapui_config = function()
-      ui.close()
-    end
+      dapui.setup()
 
-    local sign = vim.fn.sign_define
-
-    sign("DapBreakpoint", { text = "●", texthl = "DapBreakpoint", linehl = "", numhl = "" })
-    sign("DapBreakpointCondition", { text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
-    sign("DapLogPoint", { text = "◆", texthl = "DapLogPoint", linehl = "", numhl = "" })
-  end,
+      dap.listeners.before.attach.dapui_config = dapui.open
+      dap.listeners.before.launch.dapui_config = dapui.open
+      dap.listeners.before.event_terminated.dapui_config = dapui.close
+      dap.listeners.before.event_exited.dapui_config = dapui.close
+    end,
+  },
 }

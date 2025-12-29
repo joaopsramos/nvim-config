@@ -128,6 +128,8 @@ return {
         AvanteConflictIncoming = { bg = "#223159" },
         AvanteConflictAncestor = { bg = "#394b70" },
         AvanteConflictDelete = { bg = "#3f2d3d" },
+
+        DapStoppedLine = { bg = c.mantle },
       }
     end,
   },

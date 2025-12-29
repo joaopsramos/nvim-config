@@ -42,6 +42,7 @@ return {
         end,
       },
     },
+    -- Use mini.icons
     default_component_configs = {
       icon = {
         provider = function(icon, node, state)

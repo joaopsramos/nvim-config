@@ -24,4 +24,37 @@ return {
       desc = "FFFind files",
     },
   },
+  -- TODO: Remove this once mini.icons can be set as the icon provider
+  init = function()
+    local icons = require("fff.file_picker.icons")
+
+    local icon_providers = {
+      "mini.icons",
+      "nvim-web-devicons",
+    }
+
+    -- Monkey patch the setup function to prefer mini.icons
+    icons.setup = function()
+      if icons.provider_name then
+        return true
+      end
+      if icons.setup_failed then
+        return false
+      end
+
+      icons.setup_attempted = true
+
+      for _, provider_name in ipairs(icon_providers) do
+        local ok, provider = pcall(require, provider_name)
+        if ok then
+          icons.provider = provider
+          icons.provider_name = provider_name
+          return true
+        end
+      end
+
+      icons.setup_failed = true
+      return false
+    end
+  end,
 }

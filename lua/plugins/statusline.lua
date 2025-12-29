@@ -1,6 +1,6 @@
 return {
   "nvim-lualine/lualine.nvim",
-  dependencies = { "nvim-mini/mini.icons", "folke/noice.nvim", "catppuccin/nvim" },
+  dependencies = { "nvim-tree/nvim-web-devicons", "folke/noice.nvim", "catppuccin/nvim" },
   config = function()
     -- from LazyVim
     -- PERF: we don't need this lualine require madness 🤷
@@ -55,8 +55,29 @@ return {
       },
       sections = {
         lualine_a = { "mode" },
-        lualine_b = { "branch", "diff" },
-        lualine_c = { { "filename", path = 1 }, "diagnostics" },
+        lualine_b = { "branch" },
+        lualine_c = {
+          {
+            "diff",
+            symbols = {
+              added = " ",
+              modified = " ",
+              removed = " ",
+            },
+            source = function()
+              local gitsigns = vim.b.gitsigns_status_dict
+              if gitsigns then
+                return {
+                  added = gitsigns.added,
+                  modified = gitsigns.changed,
+                  removed = gitsigns.removed,
+                }
+              end
+            end,
+          },
+          { "filename", path = 1 },
+          "diagnostics",
+        },
         lualine_x = {
           macro_recording,
           {
@@ -69,7 +90,7 @@ return {
             cond = require("noice").api.status.search.has,
             color = { fg = pallete.teal },
           },
-          { "filetype" },
+          { "filetype", colored = true },
         },
         lualine_y = { "lsp_status" },
         lualine_z = { "location", "progress" },
