@@ -129,6 +129,11 @@ return {
         AvanteConflictAncestor = { bg = "#394b70" },
         AvanteConflictDelete = { bg = "#3f2d3d" },
 
+        DapBreakpointFg = { fg = c.sapphire },
+        DapBreakpointConditionFg = { fg = c.sapphire },
+        DapBreakpointRejectedFg = { fg = c.mauve },
+        DapLogPointFg = { fg = c.sapphire },
+        DapStoppedFg = { fg = c.yellow },
         DapStoppedLine = { bg = c.mantle },
       }
     end,

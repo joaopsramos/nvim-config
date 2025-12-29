@@ -22,7 +22,7 @@ opt.scrolloff = 5
 opt.shiftround = true -- Round indent
 opt.signcolumn = "yes" -- Avoid shift
 opt.list = true -- Show some invisible characters (tabs...
-opt.listchars:append({ trail = "" })
+opt.listchars:append({ trail = "", tab = " " })
 opt.splitkeep = "screen"
 opt.virtualedit = "block"
 opt.laststatus = 3

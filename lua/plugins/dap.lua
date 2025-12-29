@@ -2,22 +2,23 @@ return {
   {
     "mfussenegger/nvim-dap",
     dependencies = {
-      "rcarriga/nvim-dap-ui",
+      "igorlfs/nvim-dap-view",
       { "theHamsta/nvim-dap-virtual-text", opts = {} },
     },
     keys = {
       -- stylua: ignore start
-      { "<F1>",  function() require("dap").continue() end },
-      { "<F2>",  function() require("dap").step_into() end },
-      { "<F3>",  function() require("dap").step_over() end },
-      { "<F4>",  function() require("dap").step_out() end },
-      { "<F5>",  function() require("dap").step_back() end },
-      { "<F6>",  function() require("dap").toggle_breakpoint() end },
-      { "<F7>",  function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end },
-      { "<F8>",  function() require("dap").run_to_cursor() end },
+      { "<F1>",       function() require("dap").continue() end },
+      { "<F2>",       function() require("dap").step_into() end },
+      { "<F3>",       function() require("dap").step_over() end },
+      { "<F4>",       function() require("dap").step_out() end },
+      { "<F5>",       function() require("dap").toggle_breakpoint() end },
+      { "<F6>",       function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end },
+      { "<F7>",       function() require("dap").set_breakpoint(nil, nil, vim.fn.input("Log: ")) end },
+      { "<F8>",       function() require("dap").run_to_cursor() end },
       -- F9 ui toggle
-      { "<F11>", function() require("dap").restart() end },
-      { "<F12>", function() require("dap").disconnect() end },
+      { "<F11>",      function() require("dap").restart() end },
+      { "<F12>",      function() require("dap").terminate() end },
+      { "<leader>dc", function() require("dap").clear_breakpoints() end },
       -- stylua: ignore end
     },
     config = function()
@@ -33,6 +34,23 @@ return {
 
           return (path and path ~= "") and path or dap.ABORT
         end
+      end
+
+      local mix_task = function(opts)
+        local base = {
+          type = "mix_task",
+          request = "launch",
+          projectDir = "${workspaceFolder}",
+          exitAfterTaskReturns = false,
+          debugAutoInterpretAllModules = false,
+        }
+
+        if opts.task == "test" then
+          base.startApps = true
+          base.requireFiles = { "test/**/test_helper.exs", "test/**/*_test.exs" }
+        end
+
+        return vim.tbl_extend("force", base, opts)
       end
 
       local adapters = {
@@ -66,42 +84,28 @@ return {
 
       local configs = {
         elixir = {
-          {
-            type = "mix_task",
-            name = "phoenix server",
+          mix_task({
+            name = "Phoenix server",
             task = "phx.server",
-            request = "launch",
-            projectDir = "${workspaceFolder}",
-            exitAfterTaskReturns = false,
-            debugAutoInterpretAllModules = false,
-          },
-          {
-            type = "mix_task",
-            name = "test",
+          }),
+          mix_task({
+            name = "Test",
             task = "test",
             taskArgs = { "--trace" },
-            startApps = true,
-            request = "launch",
-            projectDir = "${workspaceFolder}",
-            requireFiles = { "test/**/test_helper.exs", "test/**/*_test.exs" },
-            exitAfterTaskReturns = false,
-            debugAutoInterpretAllModules = false,
-          },
-          {
-            type = "mix_task",
-            name = "single test",
+          }),
+          mix_task({
+            name = "Test file",
+            task = "test",
+            taskArgs = { "${file}", "--trace" },
+          }),
+          mix_task({
+            name = "Test current",
             task = "test",
             taskArgs = function()
               local line = vim.fn.line(".")
               return { "${file}:" .. line, "--trace" }
             end,
-            startApps = true,
-            request = "launch",
-            projectDir = "${workspaceFolder}",
-            requireFiles = { "test/**/test_helper.exs", "test/**/*_test.exs" },
-            exitAfterTaskReturns = false,
-            debugAutoInterpretAllModules = false,
-          },
+          }),
         },
         go = {
           {
@@ -141,34 +145,51 @@ return {
 
       local sign = vim.fn.sign_define
 
-      sign("DapBreakpoint", { text = "", texthl = "DiagnosticError", linehl = "", numhl = "" })
-      sign("DapBreakpointCondition", { text = "", texthl = "DiagnosticError", linehl = "", numhl = "" })
-      sign("DapLogPoint", { text = "◆", texthl = "DapLogPoint", linehl = "", numhl = "" })
-      sign("BreakpointRejected", { text = "", texthl = "DiagnosticWarn", linehl = "", numhl = "" })
-      sign(
-        "DapStopped",
-        { text = "󰁕", texthl = "DiagnosticWarn", linehl = "DapStoppedLine", numhl = "DapStoppedLine" }
-      )
+      -- stylua: ignore start
+      sign("DapBreakpoint", { text = "", texthl = "DapBreakpointFg", linehl = "", numhl = "" })
+      sign("DapBreakpointCondition", { text = "", texthl = "DapBreakpointConditionFg", linehl = "", numhl = "" })
+      sign("DapLogPoint", { text = "◆", texthl = "DapLogPointFg", linehl = "", numhl = "" })
+      sign("DapBreakpointRejected", { text = "󰂭", texthl = "DapBreakpointRejectedFg", linehl = "", numhl = "" })
+      sign("DapStopped", { text = "󰁕", texthl = "DapStoppedFg", linehl = "DapStoppedLine", numhl = "DapStoppedLine" })
+      -- stylua: ignore end
     end,
   },
   {
-    "rcarriga/nvim-dap-ui",
-    dependencies = { "nvim-neotest/nvim-nio" },
+    "igorlfs/nvim-dap-view",
+    opts = {
+      winbar = {
+        controls = {
+          enabled = true,
+          buttons = {
+            "play",
+            "step_into",
+            "step_over",
+            "step_out",
+            "step_back",
+            "run_last",
+            "terminate",
+          },
+        },
+      },
+      help = {
+        border = "rounded",
+      },
+    },
     -- stylua: ignore
     keys = {
-      { "<F9>",      function() require("dapui").toggle() end },
-      { "<leader>?", function() require("dapui").eval(nil, { enter = true }) end, },
+      { "<F9>",       ":DapViewToggle<CR><C-w>j", silent = true },
+      { "<leader>dw", ":DapViewWatch<CR>",        silent = true },
     },
-    config = function()
+    config = function(_, opts)
       local dap = require("dap")
-      local dapui = require("dapui")
+      local dap_view = require("dap-view")
 
-      dapui.setup()
+      dap_view.setup(opts)
 
-      dap.listeners.before.attach.dapui_config = dapui.open
-      dap.listeners.before.launch.dapui_config = dapui.open
-      dap.listeners.before.event_terminated.dapui_config = dapui.close
-      dap.listeners.before.event_exited.dapui_config = dapui.close
+      dap.listeners.before.attach.dapui_config = dap_view.open
+      dap.listeners.before.launch.dapui_config = dap_view.open
+      dap.listeners.before.event_terminated.dapui_config = dap_view.close
+      dap.listeners.before.event_exited.dapui_config = dap_view.close
     end,
   },
 }

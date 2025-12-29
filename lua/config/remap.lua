@@ -56,8 +56,8 @@ map("n", "<A-d>", "<C-w>p<C-d><C-w>p")
 map("n", "<leader>so", "vip:sort<CR>", { desc = "Sort lines" })
 
 -- Splits
-map("n", "<leader>-", "<C-w>v", { desc = "Split window vertically" })
-map("n", "<leader>/", "<C-w>s", { desc = "Split window horizontally" })
+map("n", "<leader>/", "<C-w>v", { desc = "Split window vertically" })
+map("n", "<leader>-", "<C-w>s", { desc = "Split window horizontally" })
 
 -- Terminal
 map("t", "<C-\\>", "<C-\\><C-n>")
