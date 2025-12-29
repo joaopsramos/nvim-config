@@ -63,6 +63,7 @@ return {
         end)
 
         -- Actions
+        -- stylua: ignore start
         map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "Stage hunk" })
         map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "Reset hunk" })
 
@@ -77,7 +78,6 @@ return {
         map("n", "<leader>hS", gitsigns.stage_buffer, { desc = "Stage buffer" })
         map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "Reset buffer (!!!)" })
         map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "Preview hunk" })
-        -- stylua: ignore
         map("n", "<leader>hb", function() gitsigns.blame_line({ full = true }) end, { desc = "Full line blame" })
         map("n", "<leader>hB", gitsigns.blame, { desc = "Full blame" })
         map("n", "<leader>hd", function()
@@ -88,13 +88,14 @@ return {
           local last_commit = vim.fn.system(cmd):gsub("\n", "")
 
           gitsigns.diffthis(last_commit .. "~1")
-        end, { desc = "Open diff" })
+        end, { desc = "Diff against last commit" })
         map("n", "<leader>hD", gitsigns.toggle_deleted, { desc = "Toggle deleted" })
         map("n", "<leader>hQ", function()
           gitsigns.setqflist("all")
         end, { desc = "Send changes to quickfix list" })
         -- Text object
         map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+        -- stylua: ignore end
       end,
     },
   },
