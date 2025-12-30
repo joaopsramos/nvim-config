@@ -23,11 +23,13 @@ return {
     config = function()
       local dap = require("dap")
 
-      local ask_entry_file = function(msg)
+      local ask_entry_file = function(msg, opts)
         return function()
+          local default = opts and opts.default or (vim.fn.getcwd() .. "/")
+
           local path = vim.fn.input({
             prompt = msg .. ": ",
-            default = vim.fn.getcwd() .. "/",
+            default = default,
             completion = "file",
           })
 
@@ -129,7 +131,19 @@ return {
             type = "coreclr",
             name = "Launch",
             request = "launch",
-            program = ask_entry_file("Path to dll"),
+            program = ask_entry_file("Path to dll", { default = vim.fn.getcwd() .. "/bin/Debug/" }),
+          },
+          {
+            type = "coreclr",
+            name = "Test",
+            request = "attach",
+            program = "dotnet",
+            args = { "test" },
+            processId = "${command:pickProcess}",
+            exitAfterTaskReturns = false,
+            env = {
+              VSTEST_HOST_DEBUG = "1",
+            },
           },
         },
       }
@@ -169,6 +183,9 @@ return {
             "terminate",
           },
         },
+      },
+      windows = {
+        height = 0.35,
       },
       help = {
         border = "rounded",
