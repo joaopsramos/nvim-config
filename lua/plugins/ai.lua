@@ -22,7 +22,7 @@ return {
     "folke/sidekick.nvim",
     opts = {
       nes = {
-        enabled = false,
+        enabled = true,
       },
       cli = {
         mux = {
@@ -39,6 +39,16 @@ return {
         end,
         desc = "Sidekick Toggle",
         mode = { "n", "t", "i", "x" },
+      },
+      {
+        "<tab>",
+        function()
+          if not require("sidekick").nes_jump_or_apply() then
+            return "<Tab>" -- fallback to normal tab
+          end
+        end,
+        expr = true,
+        desc = "Goto/Apply Next Edit Suggestion",
       },
     },
   },

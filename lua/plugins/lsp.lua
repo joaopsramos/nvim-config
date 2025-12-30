@@ -151,7 +151,7 @@ return {
       map("n", "gh", vim.diagnostic.open_float, { desc = "Open diagnostic" })
       map("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, { desc = "Go to prev diagnostic" })
       map("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, { desc = "Go to next diagnostic" })
-      map("n", "<leader>fm", function() vim.lsp.buf.format({ async = true }) end, { desc = "Format file" })
+      map("n", "<A-f>", function() vim.lsp.buf.format({ async = true }) end, { desc = "Format file" })
       -- stylua: ignore end
 
       vim.api.nvim_create_autocmd("LspAttach", {

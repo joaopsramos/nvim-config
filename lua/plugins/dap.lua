@@ -7,18 +7,17 @@ return {
     },
     keys = {
       -- stylua: ignore start
-      { "<F1>",       function() require("dap").continue() end },
-      { "<F2>",       function() require("dap").step_into() end },
-      { "<F3>",       function() require("dap").step_over() end },
-      { "<F4>",       function() require("dap").step_out() end },
-      { "<F5>",       function() require("dap").toggle_breakpoint() end },
-      { "<F6>",       function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end },
-      { "<F7>",       function() require("dap").set_breakpoint(nil, nil, vim.fn.input("Log: ")) end },
-      { "<F8>",       function() require("dap").run_to_cursor() end },
-      -- F9 ui toggle
-      { "<F11>",      function() require("dap").restart() end },
-      { "<F12>",      function() require("dap").terminate() end },
-      { "<leader>dc", function() require("dap").clear_breakpoints() end },
+      { "<F1>",       function() require("dap").continue() end,                                             desc = "Start/Continue debugging" },
+      { "<F2>",       function() require("dap").step_into() end,                                            desc = "Step into" },
+      { "<F3>",       function() require("dap").step_over() end,                                            desc = "Step over" },
+      { "<F4>",       function() require("dap").step_out() end,                                             desc = "Step out" },
+      { "<F5>",       function() require("dap").toggle_breakpoint() end,                                    desc = "Toggle breakpoint" },
+      { "<F6>",       function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, desc = "Set Conditional Breakpoint" },
+      { "<F7>",       function() require("dap").set_breakpoint(nil, nil, vim.fn.input("Log: ")) end,        desc = "Set pog point" },
+      { "<F8>",       function() require("dap").run_to_cursor() end,                                        desc = "Run to cursor" },
+      { "<F11>",      function() require("dap").restart() end,                                              desc = "Restart debugging" },
+      { "<F12>",      function() require("dap").terminate() end,                                            desc = "Terminate debugging" },
+      { "<leader>dc", function() require("dap").clear_breakpoints() end,                                    desc = "Clear all breakpoints" },
       -- stylua: ignore end
     },
     config = function()
@@ -177,8 +176,8 @@ return {
     },
     -- stylua: ignore
     keys = {
-      { "<F9>",       ":DapViewToggle<CR><C-w>j", silent = true },
-      { "<leader>dw", ":DapViewWatch<CR>",        silent = true },
+      { "<F9>",       ":DapViewToggle<CR><C-w>j", desc="Toggle DAP view", silent = true },
+      { "<leader>dw", ":DapViewWatch<CR>",       desc="Watch variable in DAP view", silent = true },
     },
     config = function(_, opts)
       local dap = require("dap")

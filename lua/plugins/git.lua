@@ -3,7 +3,23 @@ return {
     "tpope/vim-fugitive",
     -- stylua: ignore
     keys = {
-      { "<leader>gi",   ":Git<CR><C-w>5-5j",            desc = "Open git",           silent = true },
+      {
+        "<C-g>",
+        function()
+          for _, win in ipairs(vim.api.nvim_list_wins()) do
+            local buf = vim.api.nvim_win_get_buf(win)
+            local ft = vim.bo[buf].filetype
+            if ft == "fugitive" then
+              vim.api.nvim_win_close(win, true)
+              return
+            end
+          end
+
+          vim.cmd("Git | wincmd 5- | normal! 5j")
+        end,
+        desc = "Toggle fugitive",
+        silent = true
+      },
       { "<leader>gI",   ":Git<space>",                  desc = "Run git command" },
 
       { "<leader>gl",   ":Git log<CR>",                 desc = "Git log",            silent = true },

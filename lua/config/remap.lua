@@ -12,17 +12,17 @@ end
 
 map("n", "<C-q>", ":q<CR>", { desc = "Close window" })
 map("n", "<C-x>", ":bd<CR>", { desc = "Close buffer" })
-map("n", "ZZ", ":quitall<CR>", { desc = "Close buffer" })
-map("n", "<leader>dab", ":%bd|e#<CR>", { desc = "Delete all buffers except current" })
+map("n", "ZZ", ":quitall<CR>", { desc = "Quit" })
+map("n", "<leader>bD", ":%bd|e#<CR>", { desc = "Delete all buffers except current" })
 
 -- close bottom window if any
-map("n", "<leader>gq", function()
+map("n", "<leader>bq", function()
   if #vim.api.nvim_list_wins() == 1 then
     return
   end
 
-  vim.cmd("wincmd j")
-  vim.cmd("quit")
+  -- Goes 5 windows down to ensure reaching the bottom window
+  vim.cmd("wincmd 5j | quit")
 end, { desc = "Close bottom window" })
 
 map("n", "<C-a>", "ggVG", { desc = "Select all" })
@@ -36,7 +36,7 @@ map("v", "<C-p>", "s<C-r>0<Esc>")
 
 map("n", "<Esc>", ":noh<CR>")
 
-map("i", "<C-CR>", "<C-o>o")
+map("i", "<C-CR>", "<C-m>")
 map("i", "<C-z>", "<C-o>zz")
 
 -- Find and Replace current word

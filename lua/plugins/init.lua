@@ -94,6 +94,16 @@ return {
         desc = "Buffer Keymaps (which-key)",
       },
     },
+    config = function(_, opts)
+      local wk = require("which-key")
+      wk.setup(opts)
+      wk.add({
+        { "<leader>a", group = "Avante" },
+        { "<leader>b", group = "Buffers" },
+        { "<leader>d", group = "Dap" },
+        { "Z", group = "Quit" },
+      })
+    end,
   },
   {
     "kevinhwang91/nvim-ufo",
