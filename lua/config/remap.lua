@@ -2,9 +2,9 @@ local map = require("utils").keymap
 
 if vim.g.neovide then
   map("n", "<SC-V>", '"+P')
-  map("v", "<SC-c>", '"+y')
+  map("x", "<SC-c>", '"+y')
   map("n", "<SC-v>", '"+P')
-  map("v", "<SC-v>", '"+P')
+  map("x", "<SC-v>", '"+P')
   map("c", "<SC-v>", "<C-r>+")
   map("i", "<SC-v>", "<C-r>+")
   map("t", "<SC-v>", '<C-\\><C-n>"+Pi')
@@ -27,28 +27,28 @@ end, { desc = "Close bottom window" })
 
 map("n", "<C-a>", "ggVG", { desc = "Select all" })
 
-map({ "n", "i", "v" }, "<C-s>", "<Cmd>w<CR><Esc>")
+map({ "n", "i", "x" }, "<C-s>", "<Cmd>w<CR><Esc>")
 
-map("v", "<C-y>", '"+y', { desc = "Copy to clipboard" })
+map("x", "<C-y>", '"+y', { desc = "Copy to clipboard" })
 map({ "n", "x" }, "cy", '"+y', { desc = "Copy to clipboard" })
 map("i", "<C-p>", "<Left><C-o>p")
-map("v", "<C-p>", "s<C-r>0<Esc>")
+map("x", "<C-p>", "s<C-r>0<Esc>")
 
 map("n", "<Esc>", ":noh<CR>")
 
-map("i", "<C-CR>", "<C-m>")
+map("i", "<C-CR>", "<C-o>o")
 map("i", "<C-z>", "<C-o>zz")
 
 -- Find and Replace current word
 map("n", "&", "yiw:%s/\\(<C-r>0\\)/\\/g<Left><Left>1", { silent = false })
-map("v", "&", "y:%s/\\(<C-r>0\\)/\\/g<Left><Left>1", { silent = false })
+map("x", "&", "y:%s/\\(<C-r>0\\)/\\/g<Left><Left>1", { silent = false })
 
 map("n", "<A-j>", ":m .+1<CR>")
 map("n", "<A-k>", ":m .-2<CR>")
 map("i", "<A-j>", "<C-o>:m .+1<CR>")
 map("i", "<A-k>", "<C-o>:m .-2<CR>")
-map("v", "<A-j>", ":m '>+1<CR>gv")
-map("v", "<A-k>", ":m '<-2<CR>gv")
+map("x", "<A-j>", ":m '>+1<CR>gv")
+map("x", "<A-k>", ":m '<-2<CR>gv")
 
 map("n", "<SA-j>", ":cnext<CR>", { desc = "Go to next quickfix item" })
 map("n", "<SA-k>", ":cprevious<CR>", { desc = "Go to previous quickfix item" })

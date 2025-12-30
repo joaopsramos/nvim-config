@@ -101,6 +101,16 @@ return {
         { "<leader>a", group = "Avante" },
         { "<leader>b", group = "Buffers" },
         { "<leader>d", group = "Dap" },
+        { "<leader>f", group = "Files" },
+        { "<leader>ie", group = "IEx" },
+        { "<leader>g", group = "Git" },
+        { "<leader>gb", group = "Git branch" },
+        { "<leader>gs", group = "Git stash" },
+        { "<leader>h", group = "Hunks and Harpoon" },
+        { "<leader>t", group = "Tests and Tabs" },
+        { "<leader>n", group = "Neotest and Notifications" },
+        { "<leader>tb", group = "Tabs" },
+        { "<leader>w", proxy = "<C-w>", group = "Windows" },
         { "Z", group = "Quit" },
       })
     end,
@@ -148,7 +158,7 @@ return {
       vim.g.winresizer_start_key = false
     end,
     keys = {
-      { "<leader>wr", ":WinResizerStartResize<CR>", desc = "Winresizer start resize", silent = true },
+      { "<leader>wr", ":WinResizerStartResize<CR>", desc = "Resize", silent = true },
     },
   },
   {

@@ -114,6 +114,9 @@ return {
 
         IblScope = { fg = c.overlay0 },
 
+        SnacksDiffContextLineNr = { bg = c.base },
+        SnacksDiffContext = { bg = c.base },
+
         AvanteTitle = { bg = c.lavender, fg = c.base },
         AvanteReversedTitle = { bg = c.none, fg = c.lavender },
         AvanteSubtitle = { bg = c.peach, fg = c.base },

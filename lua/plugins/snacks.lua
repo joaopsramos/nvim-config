@@ -37,8 +37,12 @@ return {
       win = {
         input = {
           keys = {
-            -- ["<c-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
-            -- ["<c-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
+            ["<Esc>"] = { "close", mode = { "i", "n" } },
+            ["<C-c>"] = "cancel",
+            ["<C-u>"] = { "preview_scroll_up", mode = { "i", "n" } },
+            ["<C-d>"] = { "preview_scroll_down", mode = { "i", "n" } },
+            ["<C-b>"] = { "list_scroll_up", mode = { "i", "n" } },
+            ["<C-f>"] = { "list_scroll_down", mode = { "i", "n" } },
           },
         },
       },
@@ -58,12 +62,11 @@ return {
   },
   -- stylua: ignore
   keys = {
-    -- { "<C-p>",      function() Snacks.picker.files() end,       desc = "Find Files" },
-    { "<leader>fb", function() Snacks.picker.buffers() end,     desc = "Buffers" },
-    { "g/",         function() Snacks.picker.grep() end,        desc = "Grep" },
-    { "gs",         function() Snacks.picker.lsp_symbols() end, desc = "Document symbols" },
-    { "<leader>ri", function() Snacks.picker.resume() end,      desc = "Resume" },
-    { "<leader>gd", function() Snacks.picker.git_diff() end,    desc = "Git diff" },
-    { "<leader>nd", function() Snacks.notifier.hide() end,      desc = "Dismiss all notifications", },
+    { "gl",         function() Snacks.picker.buffers() end,                  desc = "Buffers" },
+    { "g/",         function() Snacks.picker.grep() end,                     desc = "Grep" },
+    { "gs",         function() Snacks.picker.lsp_symbols() end,              desc = "Document symbols" },
+    { "<leader>pr", function() Snacks.picker.resume() end,                   desc = "Resume" },
+    { "<leader>gd", function() Snacks.picker.git_diff({ group = true }) end, desc = "Git diff" },
+    { "<leader>nd", function() Snacks.notifier.hide() end,                   desc = "Dismiss all notifications", },
   },
 }

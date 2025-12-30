@@ -138,6 +138,12 @@ return {
     init = function()
       local map = require("utils").keymap
 
+      vim.keymap.del("n", "gra")
+      vim.keymap.del("n", "gri")
+      vim.keymap.del("n", "grn")
+      vim.keymap.del("n", "grr")
+      vim.keymap.del("n", "grt")
+
       -- stylua: ignore start
       map("n", "gd", vim.lsp.buf.definition, { desc = "Definition" })
       map("n", "gD", vim.lsp.buf.declaration, { desc = "Declaration" })
@@ -147,7 +153,7 @@ return {
       map("i", "<C-h>", vim.lsp.buf.signature_help, { desc = "Signature help" })
       map("n", "cd", vim.lsp.buf.rename, { desc = "Rename (change definition)" })
       map("n", "g.", vim.lsp.buf.code_action, { desc = "Code actions" })
-      map("n", "<leader>gr", function() Snacks.picker.lsp_references() end, { desc = "References" })
+      map("n", "gr", function() Snacks.picker.lsp_references() end, { desc = "References" })
       map("n", "gh", vim.diagnostic.open_float, { desc = "Open diagnostic" })
       map("n", "[d", function() vim.diagnostic.jump({ count = -1 }) end, { desc = "Go to prev diagnostic" })
       map("n", "]d", function() vim.diagnostic.jump({ count = 1 }) end, { desc = "Go to next diagnostic" })

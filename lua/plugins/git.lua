@@ -20,14 +20,14 @@ return {
         desc = "Toggle fugitive",
         silent = true
       },
-      { "<leader>gI",   ":Git<space>",                  desc = "Run git command" },
+      { "<leader>gi",   ":Git<space>",                  desc = "Run git command" },
 
       { "<leader>gl",   ":Git log<CR>",                 desc = "Git log",            silent = true },
 
       { "<leader>gci",  ':Git commit -m ""<Left>',      desc = "Git commit" },
 
-      { "<leader>gP",   ":Git push -u origin HEAD<CR>", desc = "Git push",           silent = true },
       { "<leader>gp",   ":Git pull<CR>",                desc = "Git pull",           silent = true },
+      { "<leader>gP",   ":Git push -u origin HEAD<CR>", desc = "Git push",           silent = true },
 
       { "<leader>gsw",  ":Git switch<space>",           desc = "Git switch" },
       { "<leader>gsb",  ":Git switch --create<space>",  desc = "Git switch --create" },
