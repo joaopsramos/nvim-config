@@ -120,8 +120,8 @@ return {
         harpoon:list():add()
         vim.notify("File added", vim.log.levels.INFO, { title = "Harpoon" })
       end, { desc = "Harpoon add file" })
-      map("n", "<C-S-j>", function() harpoon:list():prev({ ui_nav_wrap = true }) end, { desc = "Harpoon previous file" })
-      map("n", "<C-S-k>", function() harpoon:list():next({ ui_nav_wrap = true }) end, { desc = "Harpoon next file" })
+      map("n", "<SA-h>", function() harpoon:list():prev({ ui_nav_wrap = true }) end, { desc = "Harpoon previous file" })
+      map("n", "<SA-l>", function() harpoon:list():next({ ui_nav_wrap = true }) end, { desc = "Harpoon next file" })
       -- stylua: ignore end
     end,
   },
@@ -139,6 +139,31 @@ return {
     end,
     keys = {
       { "<leader>wr", ":WinResizerStartResize<CR>", desc = "Winresizer start resize", silent = true },
+    },
+  },
+  {
+
+    "gbprod/yanky.nvim",
+    opts = {
+      ring = {
+        history_length = 10,
+        storage = "memory",
+      },
+      system_clipboard = {
+        sync_with_ring = false,
+      },
+      highlight = {
+        on_put = false,
+        timer = 200,
+      },
+    },
+    keys = {
+      { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yank text" },
+      { "p", "<Plug>(YankyPutAfter)", mode = { "n", "x" }, desc = "Put yanked text after cursor" },
+      { "P", "<Plug>(YankyPutBefore)", mode = { "n", "x" }, desc = "Put yanked text before cursor" },
+      { "<leader>yh", "<cmd>YankyRingHistory<cr>", mode = { "n", "x" }, desc = "Open Yank History" },
+      { "<A-p>", "<Plug>(YankyPreviousEntry)", desc = "Select previous entry through yank history" },
+      { "<A-n>", "<Plug>(YankyNextEntry)", desc = "Select next entry through yank history" },
     },
   },
   {

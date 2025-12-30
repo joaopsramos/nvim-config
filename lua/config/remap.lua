@@ -45,10 +45,13 @@ map("v", "&", "y:%s/\\(<C-r>0\\)/\\/g<Left><Left>1", { silent = false })
 
 map("n", "<A-j>", ":m .+1<CR>")
 map("n", "<A-k>", ":m .-2<CR>")
-map("i", "<A-j>", "<Esc>:m .+1<CR>")
-map("i", "<A-k>", "<Esc>:m .-2<CR>")
-map("v", "<A-j>", ":m '>+1<CR>")
-map("v", "<A-k>", ":m '<-2<CR>")
+map("i", "<A-j>", "<C-o>:m .+1<CR>")
+map("i", "<A-k>", "<C-o>:m .-2<CR>")
+map("v", "<A-j>", ":m '>+1<CR>gv")
+map("v", "<A-k>", ":m '<-2<CR>gv")
+
+map("n", "<SA-j>", ":cnext<CR>", { desc = "Go to next quickfix item" })
+map("n", "<SA-k>", ":cprevious<CR>", { desc = "Go to previous quickfix item" })
 
 map("n", "<A-u>", "<C-w>p<C-u><C-w>p")
 map("n", "<A-d>", "<C-w>p<C-d><C-w>p")
