@@ -1,15 +1,19 @@
 return {
   {
     "vim-test/vim-test",
+    dependencies = {
+      "kassio/neoterm",
+    },
     init = function()
       vim.g["test#strategy"] = "neoterm"
     end,
+    -- stylua: ignore
     keys = {
-      { "<leader>tn", ":TestNearest<CR><leader>toG<C-w>p", desc = "Test nearest", remap = true, silent = true },
-      { "<leader>tf", ":TestFile<CR><leader>toG<C-w>p", desc = "Test file", remap = true, silent = true },
-      { "<leader>ts", ":TestSuite<CR><leader>toG<C-w>p", desc = "Test suite", remap = true, silent = true },
-      { "<leader>tl", ":TestLast<CR><leader>toG<C-w>p", desc = "Test last", remap = true, silent = true },
-      { "<leader>tv", ":TestVisit<CR>", desc = "Test visit", remap = true, silent = true },
+      { "<leader>tn", ":TestNearest<CR>:Topen<CR><C-w>jG<C-w>p", desc = "Test nearest", silent = true },
+      { "<leader>tf", ":TestFile<CR>:Topen<CR><C-w>jG<C-w>p",    desc = "Test file",    silent = true },
+      { "<leader>ts", ":TestSuite<CR>:Topen<CR><C-w>jG<C-w>p",   desc = "Test suite",   silent = true },
+      { "<leader>tl", ":TestLast<CR>:Topen<CR><C-w>jG<C-w>p",    desc = "Test last",    silent = true },
+      { "<leader>tv", ":TestVisit<CR>",                          desc = "Test visit",   silent = true },
     },
   },
   {
