@@ -106,3 +106,9 @@ vim.cmd([[
   au FileType go set softtabstop=4
   au FileType go set tabstop=4
 ]])
+
+vim.api.nvim_create_user_command("Setup", function()
+  vim.cmd([[
+    TSSetup
+  ]])
+end, {})

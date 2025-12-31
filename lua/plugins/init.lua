@@ -129,21 +129,23 @@ return {
     branch = "harpoon2",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      local harpoon = require("harpoon")
-      local map = require("utils").keymap
-
-      harpoon:setup()
-
-      -- stylua: ignore start
-      map("n", "<leader>hl", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "Harpoon quick menu" })
-      map("n", "<leader>ha", function()
-        harpoon:list():add()
-        vim.notify("File added", vim.log.levels.INFO, { title = "Harpoon" })
-      end, { desc = "Harpoon add file" })
-      map("n", "<SA-h>", function() harpoon:list():prev({ ui_nav_wrap = true }) end, { desc = "Harpoon previous file" })
-      map("n", "<SA-l>", function() harpoon:list():next({ ui_nav_wrap = true }) end, { desc = "Harpoon next file" })
-      -- stylua: ignore end
+      require("harpoon"):setup()
     end,
+    keys = {
+      -- stylua: ignore start
+      { "<leader>hl", function() require("harpoon").ui:toggle_quick_menu(require("harpoon"):list()) end, desc = "Harpoon quick menu" },
+      {
+        "<leader>ha",
+        function()
+          require("harpoon"):list():add()
+          vim.notify("File added", vim.log.levels.INFO, { title = "Harpoon" })
+        end,
+        desc = "Harpoon add file"
+      },
+      { "<SA-h>",     function() require("harpoon"):list():prev({ ui_nav_wrap = true }) end,             desc = "Harpoon previous file" },
+      { "<SA-l>",     function() require("harpoon"):list():next({ ui_nav_wrap = true }) end,             desc = "Harpoon next file" },
+      -- stylua: ignore end
+    },
   },
   {
     "phaazon/hop.nvim",
@@ -177,13 +179,14 @@ return {
         timer = 200,
       },
     },
+    -- stylua: ignore
     keys = {
-      { "y", "<Plug>(YankyYank)", mode = { "n", "x" }, desc = "Yank text" },
-      { "p", "<Plug>(YankyPutAfter)", mode = { "n", "x" }, desc = "Put yanked text after cursor" },
-      { "P", "<Plug>(YankyPutBefore)", mode = { "n", "x" }, desc = "Put yanked text before cursor" },
-      { "<leader>yh", "<cmd>YankyRingHistory<cr>", mode = { "n", "x" }, desc = "Open Yank History" },
-      { "<A-p>", "<Plug>(YankyPreviousEntry)", desc = "Select previous entry through yank history" },
-      { "<A-n>", "<Plug>(YankyNextEntry)", desc = "Select next entry through yank history" },
+      { "y",          "<Plug>(YankyYank)",          mode = { "n", "x" },                                desc = "Yank text" },
+      { "p",          "<Plug>(YankyPutAfter)",      mode = { "n", "x" },                                desc = "Put yanked text after cursor" },
+      { "P",          "<Plug>(YankyPutBefore)",     mode = { "n", "x" },                                desc = "Put yanked text before cursor" },
+      { "<leader>yh", "<cmd>YankyRingHistory<cr>",  mode = { "n", "x" },                                desc = "Open Yank History" },
+      { "<A-p>",      "<Plug>(YankyPreviousEntry)", desc = "Select previous entry through yank history" },
+      { "<A-n>",      "<Plug>(YankyNextEntry)",     desc = "Select next entry through yank history" },
     },
   },
   {
