@@ -31,7 +31,7 @@ opt.relativenumber = true
 -- opt.colorcolumn = "100"
 -- Cursor at middle
 -- opt.scrolloff = 100
--- opt.cmdheight = 0
+opt.cmdheight = 1
 
 if os.getenv("XDG_CURRENT_DESKTOP") == "Hyprland" then
   vim.g.clipboard = {

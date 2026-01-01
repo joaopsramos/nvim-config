@@ -1,6 +1,6 @@
 return {
   "nvim-lualine/lualine.nvim",
-  dependencies = { "nvim-tree/nvim-web-devicons", "folke/noice.nvim", "catppuccin/nvim" },
+  dependencies = { "nvim-tree/nvim-web-devicons", "catppuccin/nvim" },
   config = function()
     -- from LazyVim
     -- PERF: we don't need this lualine require madness 🤷
@@ -79,18 +79,18 @@ return {
           "diagnostics",
         },
         lualine_x = {
-          macro_recording,
-          {
-            require("noice").api.status.command.get,
-            cond = require("noice").api.status.command.has,
-            color = { fg = pallete.peach },
-          },
-          {
-            require("noice").api.status.search.get,
-            cond = require("noice").api.status.search.has,
-            color = { fg = pallete.teal },
-          },
-          { "filetype", colored = true },
+          -- macro_recording,
+          -- {
+          --   require("noice").api.status.command.get,
+          --   cond = require("noice").api.status.command.has,
+          --   color = { fg = pallete.peach },
+          -- },
+          -- {
+          --   require("noice").api.status.search.get,
+          --   cond = require("noice").api.status.search.has,
+          --   color = { fg = pallete.teal },
+          -- },
+          -- { "filetype", colored = true },
         },
         lualine_y = { "lsp_status" },
         lualine_z = { "location", "progress" },
