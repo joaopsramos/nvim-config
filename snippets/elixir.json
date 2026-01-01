@@ -1,0 +1,14 @@
+{
+  "pipo into inspect": {
+    "prefix": ">i",
+    "body": [
+      "|> IO.inspect()"
+    ]
+  },
+  "pipo into inspect with label": {
+    "prefix": ">il",
+    "body": [
+      "|> IO.inspect(label: \"${1:label}\")"
+    ]
+  }
+}

@@ -97,21 +97,22 @@ return {
     config = function(_, opts)
       local wk = require("which-key")
       wk.setup(opts)
+      -- stylua: ignore
       wk.add({
-        { "<leader>a", group = "Avante" },
-        { "<leader>b", group = "Buffers" },
-        { "<leader>d", group = "Dap" },
-        { "<leader>f", group = "Files" },
+        { "<leader>a",  group = "Avante" },
+        { "<leader>b",  group = "Buffers" },
+        { "<leader>d",  group = "Dap" },
+        { "<leader>f",  group = "Files" },
         { "<leader>ie", group = "IEx" },
-        { "<leader>g", group = "Git" },
+        { "<leader>g",  group = "Git" },
         { "<leader>gb", group = "Git branch" },
         { "<leader>gs", group = "Git stash" },
-        { "<leader>h", group = "Hunks and Harpoon" },
-        { "<leader>t", group = "Tests and Tabs" },
-        { "<leader>n", group = "Neotest and Notifications" },
+        { "<leader>h",  group = "Hunks and Harpoon" },
+        { "<leader>t",  group = "Tests and Tabs" },
+        { "<leader>n",  group = "Neotest and Notifications" },
         { "<leader>tb", group = "Tabs" },
-        { "<leader>w", proxy = "<C-w>", group = "Windows" },
-        { "Z", group = "Quit" },
+        { "<leader>w",  group = "Windows",                  proxy = "<C-w>", },
+        { "Z",          group = "Quit" },
       })
     end,
   },
@@ -122,6 +123,7 @@ return {
     init = function()
       vim.o.foldlevel = 99
       vim.o.foldlevelstart = 99
+      vim.o.foldenable = true
     end,
   },
   {

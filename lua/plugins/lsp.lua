@@ -116,11 +116,7 @@ return {
         },
       }
 
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
       for name, server_config in pairs(servers) do
-        server_config = vim.tbl_deep_extend("force", {}, { capabilities = capabilities }, server_config)
-
         vim.lsp.config[name] = server_config
         vim.lsp.enable(name)
       end
@@ -222,12 +218,12 @@ return {
       })
 
       -- Set rounded border for hover and signature help
-      local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-      function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-        opts = opts or {}
-        opts.border = opts.border or "rounded"
-        return orig_util_open_floating_preview(contents, syntax, opts, ...)
-      end
+      -- local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+      -- function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+      --   opts = opts or {}
+      --   opts.border = opts.border or "rounded"
+      --   return orig_util_open_floating_preview(contents, syntax, opts, ...)
+      -- end
     end,
   },
 }

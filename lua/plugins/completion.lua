@@ -1,102 +1,53 @@
 return {
-  "hrsh7th/nvim-cmp",
-  event = "VeryLazy",
+  "saghen/blink.cmp",
   dependencies = {
-    "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-buffer",
-    "hrsh7th/cmp-path",
-    "hrsh7th/cmp-cmdline",
-    -- { 'L3MON4D3/LuaSnip', build = 'make install_jsregexp' },
-    -- 'saadparwaiz1/cmp_luasnip',
-    {
-      "SirVer/ultisnips",
-      init = function()
-        -- Setting something to expand trigger to avoid weird <esc> mapping
-        vim.g.UltiSnipsExpandTrigger = "<F12>"
-        vim.g.UltiSnipsJumpForwardTrigger = "<C-f>"
-        vim.g.UltiSnipsJumpBackwardTrigger = "<C-b>"
-      end,
-    },
-    "quangnguyen30192/cmp-nvim-ultisnips",
-    "honza/vim-snippets",
-    "onsails/lspkind.nvim",
+    "rafamadriz/friendly-snippets",
+
+    "Kaiser-Yang/blink-cmp-avante",
   },
-  config = function()
-    local cmp = require("cmp")
-    -- local luasnip = require('luasnip')
-    local lspkind = require("lspkind")
-
-    -- require('luasnip.loaders.from_snipmate').lazy_load()
-
-    cmp.setup({
-      formatting = {
-        format = lspkind.cmp_format({
-          mode = "symbol_text",
-          maxwidth = 60,
-          before = function(entry, vim_item)
-            vim_item.menu = ({
-              nvim_lsp = "[LSP]",
-              look = "[Dict]",
-              buffer = "[Buffer]",
-              luasnip = "[LuaSnip]",
-              path = "[Path]",
-            })[entry.source.name]
-
-            return vim_item
-          end,
-        }),
+  -- use a release tag to download pre-built binaries
+  version = "1.*",
+  ---@module 'blink.cmp'
+  opts = {
+    keymap = { preset = "super-tab" },
+    completion = {
+      keyword = { range = "full" },
+      list = {
+        selection = { preselect = true, auto_insert = false },
       },
-      snippet = {
-        expand = function(args)
-          -- luasnip.lsp_expand(args.body)
-          vim.fn["UltiSnips#Anon"](args.body)
-        end,
+      documentation = {
+        auto_show = true,
+        auto_show_delay_ms = 500,
+        -- window = { border = "rounded" },
       },
-      window = {
-        completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
+      menu = {
+        -- border = "rounded",
+        draw = {
+          columns = {
+            { "kind_icon", "label", "label_description", gap = 1 },
+            { "kind" },
+          },
+        },
       },
-      mapping = cmp.mapping.preset.insert({
-        ["<C-p>"] = cmp.config.disable,
-        ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-        ["<C-f>"] = cmp.mapping.scroll_docs(4),
-        ["<C-Space>"] = cmp.mapping.complete(),
-        ["<C-e>"] = cmp.mapping.abort(),
-        ["<Tab>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-      }),
-      sources = cmp.config.sources({
-        { name = "ultisnips" },
-        -- { name = 'luasnip', option = { use_show_condition = false } },
-        { name = "nvim_lsp" },
-      }, {
-        { name = "buffer" },
-        { name = "path" },
-      }),
-    })
-
-    cmp.setup.filetype("sql", {
-      sources = {
-        { name = "buffer" },
+    },
+    cmdline = {
+      keymap = { preset = "inherit" },
+      completion = { menu = { auto_show = true } },
+    },
+    -- Default list of enabled providers defined so that you can extend it
+    -- elsewhere in your config, without redefining it, due to `opts_extend`
+    sources = {
+      default = { "lsp", "path", "snippets", "buffer", "avante" },
+      -- By default, buffer completions shows when lsp has no results, this config disable that behavior
+      providers = {
+        lsp = { fallbacks = {} },
+        avante = {
+          module = "blink-cmp-avante",
+          name = "Avante",
+        },
       },
-    })
-
-    -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-    cmp.setup.cmdline({ "/", "?" }, {
-      mapping = cmp.mapping.preset.cmdline(),
-      sources = {
-        { name = "buffer" },
-      },
-    })
-
-    -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-    cmp.setup.cmdline(":", {
-      mapping = cmp.mapping.preset.cmdline(),
-      sources = cmp.config.sources({
-        { name = "path" },
-      }, {
-        { name = "cmdline" },
-      }),
-      matching = { disallow_symbol_nonprefix_matching = false },
-    })
-  end,
+    },
+    fuzzy = { implementation = "prefer_rust_with_warning" },
+  },
+  opts_extend = { "sources.default" },
 }
