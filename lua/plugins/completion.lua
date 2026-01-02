@@ -8,6 +8,7 @@ return {
   -- use a release tag to download pre-built binaries
   version = "1.*",
   ---@module 'blink.cmp'
+  opts_extend = { "sources.default" },
   opts = {
     keymap = { preset = "super-tab" },
     completion = {
@@ -38,9 +39,19 @@ return {
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
       default = { "lsp", "path", "snippets", "buffer", "avante" },
-      -- By default, buffer completions shows when lsp has no results, this config disable that behavior
       providers = {
-        lsp = { fallbacks = {} },
+        lsp = {
+          async = true,
+          fallbacks = {}, -- by default, buffer completions shows when lsp has no results, this config disable that behavior
+        },
+        path = {
+          opts = {
+            show_hidden_files_by_default = true,
+          },
+        },
+        buffer = {
+          min_keyword_length = 4,
+        },
         avante = {
           module = "blink-cmp-avante",
           name = "Avante",
@@ -49,5 +60,4 @@ return {
     },
     fuzzy = { implementation = "prefer_rust_with_warning" },
   },
-  opts_extend = { "sources.default" },
 }

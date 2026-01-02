@@ -15,7 +15,7 @@ return {
             end
           end
 
-          vim.cmd("Git | wincmd 5- | normal! 5j")
+          vim.cmd("Git | wincmd 8- | normal! 5j")
         end,
         desc = "Toggle fugitive",
         silent = true

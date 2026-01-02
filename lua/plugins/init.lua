@@ -10,32 +10,12 @@ return {
   { "MagicDuck/grug-far.nvim", opts = {} },
   { "windwp/nvim-ts-autotag", event = "VeryLazy", opts = {} },
   { "folke/todo-comments.nvim", dependencies = { "nvim-lua/plenary.nvim" }, opts = {} },
+  { "j-hui/fidget.nvim", opts = {} },
   {
     "olimorris/persisted.nvim",
     lazy = false,
     opts = {
       autoload = true,
-    },
-  },
-  {
-    "nvim-mini/mini.indentscope",
-    opts = {
-      symbol = "▏",
-      options = { try_as_border = true },
-      draw = {
-        delay = 0,
-        animation = function()
-          return 0
-        end,
-      },
-    },
-  },
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    main = "ibl",
-    opts = {
-      indent = { char = "▏", tab_char = "▏" },
-      scope = { enabled = true, show_start = false, show_end = false },
     },
   },
   {
