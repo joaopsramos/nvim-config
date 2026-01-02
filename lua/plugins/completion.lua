@@ -16,7 +16,7 @@ return {
         selection = { preselect = true, auto_insert = false },
       },
       documentation = {
-        auto_show = true,
+        auto_show = false,
         auto_show_delay_ms = 500,
         -- window = { border = "rounded" },
       },
@@ -38,9 +38,16 @@ return {
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
       default = { "lsp", "path", "snippets", "buffer", "avante" },
-      -- By default, buffer completions shows when lsp has no results, this config disable that behavior
       providers = {
-        lsp = { fallbacks = {} },
+        lsp = {
+          async = true,
+          fallbacks = {}, -- by default, buffer completions shows when lsp has no results, this config disable that behavior
+        },
+        path = {
+          opts = {
+            show_hidden_files_by_default = true,
+          },
+        },
         avante = {
           module = "blink-cmp-avante",
           name = "Avante",

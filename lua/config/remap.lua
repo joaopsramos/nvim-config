@@ -1,5 +1,14 @@
 local map = require("utils").keymap
 
+local win_count = function()
+  return vim
+    .iter(vim.api.nvim_list_wins())
+    :filter(function(win)
+      return vim.api.nvim_win_get_config(win).relative == ""
+    end)
+    :totable()
+end
+
 if vim.g.neovide then
   map("n", "<SC-V>", '"+P')
   map("x", "<SC-c>", '"+y')
@@ -17,7 +26,7 @@ map("n", "<leader>bD", ":%bd|e#<CR>", { desc = "Delete all buffers except curren
 
 -- close bottom window if any
 map("n", "<leader>bq", function()
-  if #vim.api.nvim_list_wins() == 1 then
+  if #win_count() == 1 then
     return
   end
 

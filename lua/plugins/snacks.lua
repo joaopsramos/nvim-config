@@ -25,6 +25,16 @@ return {
     statuscolumn = {},
     notifier = {},
     image = {},
+    indent = {
+      indent = {
+        char = "▏",
+      },
+      animate = { enabled = false },
+      scope = {
+        enabled = true,
+        char = "▏",
+      },
+    },
     picker = {
       enabled = true,
       ui_select = true,
@@ -67,6 +77,7 @@ return {
     { "gs",         function() Snacks.picker.lsp_symbols() end,              desc = "Document symbols" },
     { "<leader>pr", function() Snacks.picker.resume() end,                   desc = "Resume" },
     { "<leader>gd", function() Snacks.picker.git_diff({ group = true }) end, desc = "Git diff" },
-    { "<leader>nd", function() Snacks.notifier.hide() end,                   desc = "Dismiss all notifications", },
+    { "<leader>nh", function() Snacks.notifier.hide() end,                   desc = "Dismiss all notifications", },
+    { "<leader>no", function() Snacks.picker.notifications() end,                   desc = "Dismiss all notifications", },
   },
 }

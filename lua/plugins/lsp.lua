@@ -29,6 +29,7 @@ return {
         emmet_language_server = {},
         omnisharp = {},
         expert = {},
+        ["rust-analyzer"] = { cmd = { get_ls_cmd("rust-analyzer") }, filetypes = { "rust" } },
         gopls = {
           settings = {
             gopls = {
@@ -44,7 +45,6 @@ return {
                 vendor = true,
               },
               hints = {
-                assignVariableTypes = true,
                 compositeLiteralFields = true,
                 compositeLiteralTypes = true,
                 constantValues = true,
@@ -173,6 +173,7 @@ return {
 
       -- Configure diagnostics
       local virtual_text_cfg = {
+        source = "if_many",
         severity = vim.diagnostic.severity.WARN,
         prefix = "",
       }
@@ -218,12 +219,12 @@ return {
       })
 
       -- Set rounded border for hover and signature help
-      -- local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-      -- function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-      --   opts = opts or {}
-      --   opts.border = opts.border or "rounded"
-      --   return orig_util_open_floating_preview(contents, syntax, opts, ...)
-      -- end
+      local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+      function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+        opts = opts or {}
+        opts.border = opts.border or "rounded"
+        return orig_util_open_floating_preview(contents, syntax, opts, ...)
+      end
     end,
   },
 }

@@ -116,6 +116,15 @@ return {
 
         SnacksDiffContextLineNr = { bg = c.base },
         SnacksDiffContext = { bg = c.base },
+        SnacksIndent = { fg = c.surface0 },
+        SnacksIndentScope = { fg = c.overlay2 },
+
+        DapBreakpointFg = { fg = c.sapphire },
+        DapBreakpointConditionFg = { fg = c.sapphire },
+        DapBreakpointRejectedFg = { fg = c.mauve },
+        DapLogPointFg = { fg = c.sapphire },
+        DapStoppedFg = { fg = c.yellow },
+        DapStoppedLine = { bg = c.mantle },
 
         AvanteTitle = { bg = c.lavender, fg = c.base },
         AvanteReversedTitle = { bg = c.none, fg = c.lavender },
@@ -131,13 +140,6 @@ return {
         AvanteConflictIncoming = { bg = "#223159" },
         AvanteConflictAncestor = { bg = "#394b70" },
         AvanteConflictDelete = { bg = "#3f2d3d" },
-
-        DapBreakpointFg = { fg = c.sapphire },
-        DapBreakpointConditionFg = { fg = c.sapphire },
-        DapBreakpointRejectedFg = { fg = c.mauve },
-        DapLogPointFg = { fg = c.sapphire },
-        DapStoppedFg = { fg = c.yellow },
-        DapStoppedLine = { bg = c.mantle },
       }
     end,
   },
