@@ -2,10 +2,10 @@ return {
   {
     "vim-test/vim-test",
     dependencies = {
-      "kassio/neoterm",
+      "akinsho/toggleterm.nvim",
     },
     init = function()
-      vim.g["test#strategy"] = "neoterm"
+      vim.g["test#strategy"] = "toggleterm"
     end,
     -- stylua: ignore
     keys = {

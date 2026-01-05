@@ -1,25 +1,31 @@
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "term:/*",
-  callback = function()
-    vim.opt_local.winbar = nil
-    vim.opt_local.number = true
-    vim.opt_local.relativenumber = true
-  end,
-})
-
 return {
-  "kassio/neoterm",
+  "akinsho/toggleterm.nvim",
+  opts = {
+    size = function(term)
+      if term.direction == "horizontal" then
+        return vim.o.lines * 0.35
+      elseif term.direction == "vertical" then
+        return vim.o.columns * 0.4
+      end
+    end,
+    start_in_insert = false,
+    hide_numbers = false,
+    highlights = {
+      Normal = { link = "Normal" },
+    },
+  },
   init = function()
     vim.api.nvim_create_autocmd("VimLeavePre", {
       callback = function()
-        pcall(vim.cmd, "Tclose!")
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+          if vim.bo[buf].buftype == "terminal" then
+            vim.api.nvim_buf_delete(buf, { force = true })
+          end
+        end
       end,
     })
-
-    vim.g.neoterm_default_mod = "botright"
-    vim.g.neoterm_automap_keys = false
   end,
   keys = {
-    { "<C-t>", ":Ttoggle<CR><C-w><C-p>", { desc = "Toggle terminal" }, silent = true },
+    { "<C-t>", ":ToggleTerm<CR>", { desc = "Toggle terminal" }, silent = true },
   },
 }

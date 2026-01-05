@@ -112,3 +112,11 @@ vim.api.nvim_create_user_command("Setup", function()
     TSSetup
   ]])
 end, {})
+
+vim.api.nvim_create_autocmd("TermOpen", {
+  callback = function()
+    vim.opt_local.winbar = nil
+    vim.opt_local.number = true
+    vim.opt_local.relativenumber = true
+  end,
+})
