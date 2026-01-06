@@ -32,6 +32,7 @@ opt.relativenumber = true
 -- Cursor at middle
 -- opt.scrolloff = 100
 opt.cmdheight = 1
+opt.fillchars:append({ diff = "╱" })
 
 if os.getenv("XDG_CURRENT_DESKTOP") == "Hyprland" then
   vim.g.clipboard = {

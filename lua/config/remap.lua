@@ -44,7 +44,6 @@ map("i", "<C-p>", "<Left><C-o>p")
 map("x", "<C-p>", "s<C-r>0<Esc>")
 
 map("n", "<Esc>", ":noh<CR>")
-map("n", "<C-h>", ":noh<CR>")
 
 map("i", "<C-CR>", "<C-o>o")
 map("i", "<C-z>", "<C-o>zz")

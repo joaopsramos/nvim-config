@@ -26,6 +26,6 @@ return {
     })
   end,
   keys = {
-    { "<C-t>", ":ToggleTerm<CR>", { desc = "Toggle terminal" }, silent = true },
+    { "<C-t>", ":ToggleTerm<CR>", desc = "Toggle terminal", silent = true },
   },
 }

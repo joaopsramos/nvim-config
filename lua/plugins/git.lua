@@ -1,6 +1,7 @@
 return {
   {
     "tpope/vim-fugitive",
+    lazy = false,
     -- stylua: ignore
     keys = {
       {
@@ -80,7 +81,7 @@ return {
 
         -- Actions
         -- stylua: ignore start
-        map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "Stage hunk" })
+        map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "Stage/Unstage hunk" })
         map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "Reset hunk" })
 
         map("v", "<leader>hs", function()
@@ -92,6 +93,7 @@ return {
         end, { desc = "Reset hunk" })
 
         map("n", "<leader>hS", gitsigns.stage_buffer, { desc = "Stage buffer" })
+        map("n", "<leader>hU", gitsigns.reset_buffer_index, { desc = "Unstage buffer" })
         map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "Reset buffer (!!!)" })
         map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "Preview hunk" })
         map("n", "<leader>hb", function() gitsigns.blame_line({ full = true }) end, { desc = "Full line blame" })
