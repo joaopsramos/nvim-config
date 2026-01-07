@@ -12,6 +12,15 @@ return {
   { "folke/todo-comments.nvim", dependencies = { "nvim-lua/plenary.nvim" }, opts = {} },
   { "j-hui/fidget.nvim", opts = {} },
   {
+    name = "review",
+    event = "VeryLazy",
+    dir = "~/.config/nvim/lua/review",
+    config = function()
+      require("review").setup()
+    end,
+    dependencies = { "tpope/vim-fugitive", "lewis6991/gitsigns.nvim" },
+  },
+  {
     "olimorris/persisted.nvim",
     lazy = false,
     opts = {

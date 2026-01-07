@@ -50,7 +50,9 @@ return {
           },
         },
         buffer = {
-          min_keyword_length = 4,
+          min_keyword_length = function()
+            return vim.fn.getcmdtype() == "" and 4 or 0
+          end,
         },
         avante = {
           module = "blink-cmp-avante",

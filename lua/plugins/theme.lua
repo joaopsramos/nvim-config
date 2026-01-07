@@ -106,7 +106,7 @@ return {
         GitSignsChange = { fg = c.peach },
         DiffChange = { bg = "#223159" },
         -- DiffAdd = { bg = '#283b4d' },
-        DiffDelete = { bg = c.base, fg = c.overlay0 },
+        DiffDelete = { bg = "#3f2d3d", fg = c.overlay0 },
         DiffText = { bg = "#394b70" },
 
         TabLineSel = { fg = c.green, bg = c.mantle },

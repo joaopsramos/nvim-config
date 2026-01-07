@@ -78,6 +78,6 @@ return {
     { "<leader>pr", function() Snacks.picker.resume() end,                   desc = "Resume" },
     { "<leader>gd", function() Snacks.picker.git_diff({ group = true }) end, desc = "Git diff" },
     { "<leader>nh", function() Snacks.notifier.hide() end,                   desc = "Dismiss all notifications", },
-    { "<leader>no", function() Snacks.picker.notifications() end,                   desc = "Dismiss all notifications", },
+    { "<leader>no", function() Snacks.picker.notifications() end,            desc = "Show notifications", },
   },
 }
