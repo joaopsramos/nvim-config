@@ -10,103 +10,113 @@ local state = {
   last_opened_file = {},
 }
 
+local porcelain_status = {
+  A = "added",
+  M = "modified",
+  D = "deleted",
+  R = "renamed",
+  ["?"] = "untracked",
+}
+
 local icons = {
   staged = "󰱒",
   unstaged = "",
   untracked = "",
+  renamed = "󰑕",
   deleted = "󱋭",
 }
 
-local function get_changed_files()
-  local git_files = {}
+local idx_offset = 3
+
+local function parse_git_status_line(line)
+  if line == "" then
+    return nil
+  end
+
+  local file = { change_types = {} }
+  local x, y, path = line:match("^(.)(.)%s*(.+)$")
+
+  file.path = vim.trim(path)
+  file.x_icon = x
+  file.y_icon = y
+
+  local x_status = porcelain_status[x]
+  local y_status = porcelain_status[y]
+
+  if x == " " then
+    file.staged = false
+  else
+    file.change_types[x_status] = true
+    file.staged = x ~= "?"
+  end
+
+  if y == " " then
+    file.unstaged = false
+  else
+    file.change_types[y_status] = true
+    file.unstaged = true
+  end
+
+  return file
+end
+
+local function update_files()
   local files = {}
 
-  local staged_output = vim.fn.systemlist("git diff --cached --name-only")
-  for _, file in ipairs(staged_output) do
-    if file ~= "" then
-      git_files[file] = git_files[file] or {}
-      git_files[file].path = file
-      git_files[file].staged = true
-    end
-  end
+  local output = vim.fn.systemlist("git status --porcelain")
+  for _, line in ipairs(output) do
+    local file = parse_git_status_line(line)
 
-  local unstaged_output = vim.fn.systemlist("git diff --name-only --diff-filter=d")
-  for _, file in ipairs(unstaged_output) do
-    if file ~= "" then
-      git_files[file] = git_files[file] or {}
-      git_files[file].path = file
-      git_files[file].unstaged = true
+    if file then
+      table.insert(files, file)
     end
-  end
-
-  local untracked_output = vim.fn.systemlist("git ls-files --others --exclude-standard")
-  for _, file in ipairs(untracked_output) do
-    if file ~= "" then
-      git_files[file] = git_files[file] or {}
-      git_files[file].path = file
-      git_files[file].untracked = true
-    end
-  end
-
-  local deleted_output = vim.fn.systemlist("git diff --name-only --diff-filter=D")
-  for _, file in ipairs(deleted_output) do
-    if file ~= "" then
-      git_files[file] = git_files[file] or {}
-      git_files[file].path = file
-      git_files[file].deleted = true
-    end
-  end
-
-  for _, file in pairs(git_files) do
-    table.insert(files, file)
   end
 
   table.sort(files, function(a, b)
     return a.path < b.path
   end)
 
-  return files
+  state.files = files
 end
 
 local function refresh()
-  state.files = get_changed_files()
+  update_files()
+
   if #state.files == 0 then
     state.current_idx = 0
-    return
-  end
-
-  if state.current_idx > #state.files then
-    state.current_idx = #state.files
     return
   end
 
   if state.current_idx == 0 and #state.files > 0 then
     state.current_idx = 1
   end
+
+  if state.current_idx > #state.files then
+    state.current_idx = #state.files
+    return
+  end
 end
 
 local function refresh_one(file)
-  file.staged = false
-  file.unstaged = false
-  file.untracked = false
-  file.deleted = false
-
   local status = vim.fn.system("git status --porcelain -- " .. file.path)
+  return parse_git_status_line(status)
+end
 
-  if status:find("^MM") then
-    file.staged = true
-    file.unstaged = true
-  elseif status:find("^M") or status:find("^A") then
-    file.staged = true
-  elseif status:find("^ M") then
-    file.unstaged = true
-  elseif status:find("^D") then
-    file.staged = true
-    file.deleted = true
-  elseif status:find("^ D") then
-    file.deleted = true
-  elseif status:find("^??") then
-    file.untracked = true
+local function get_icon(file)
+  if file.staged and file.unstaged then
+    return icons.staged .. icons.unstaged
+  end
+
+  for _, type in pairs(file.change_types) do
+    if icons[type] then
+      return icons[type]
+    end
+  end
+
+  if file.staged then
+    return icons.staged
+  else
+    return icons.unstaged
   end
 end
 
@@ -132,17 +142,9 @@ local function render()
     table.insert(lines, "")
 
     for i, file in ipairs(state.files) do
-      local status_icon
-      if file.staged and file.unstaged then
-        status_icon = icons.staged .. icons.unstaged
-      elseif file.staged then
-        status_icon = " " .. icons.staged
-      elseif file.untracked then
-        status_icon = " " .. icons.untracked
-      elseif file.deleted then
-        status_icon = " " .. icons.deleted
-      else
-        status_icon = " " .. icons.unstaged
+      local status_icon = get_icon(file)
+      if #status_icon < 2 then
+        status_icon = status_icon .. " "
       end
 
       local line = string.format(" %s %s", status_icon, file.path)
@@ -257,13 +259,13 @@ local function stage(to_stage)
     vim.fn.system("git restore --staged " .. filepath)
   end
 
-  refresh_one(file)
+  state.files[state.current_idx] = refresh_one(file)
   render()
 end
 
 local function move_cursor()
   if state.win and vim.api.nvim_win_is_valid(state.win) then
-    vim.api.nvim_win_set_cursor(state.win, { state.current_idx + 3, 0 })
+    vim.api.nvim_win_set_cursor(state.win, { state.current_idx + idx_offset, 0 })
   end
 end
 
@@ -299,6 +301,7 @@ local function close()
   if state.win and vim.api.nvim_win_is_valid(state.win) then
     vim.api.nvim_win_close(state.win, true)
   end
+  -- TODO: Do not delete buffer
   if state.buf and vim.api.nvim_buf_is_valid(state.buf) then
     vim.api.nvim_buf_delete(state.buf, { force = true })
   end
@@ -340,7 +343,7 @@ local function setup_keymaps()
 
     vim.fn.system("git add " .. state.last_opened_file.path)
 
-    refresh_one(state.last_opened_file)
+    state.last_opened_file = refresh_one(state.last_opened_file)
     next_file()
     open_diff()
   end)
@@ -349,14 +352,14 @@ local function setup_keymaps()
 
   vim.keymap.set("n", "s", function()
     gitsigns.stage_hunk(nil, nil, function()
-      refresh_one(state.last_opened_file)
+      state.last_opened_file = refresh_one(state.last_opened_file)
       render()
     end)
   end)
 
   vim.keymap.set("n", "R", function()
     gitsigns.reset_buffer_index(function()
-      refresh_one(state.last_opened_file)
+      state.last_opened_file = refresh_one(state.last_opened_file)
       render()
     end)
   end)
@@ -375,9 +378,6 @@ local function setup_autocmds()
     buffer = state.buf,
     once = true,
     callback = function()
-      state.win = nil
-      state.buf = nil
-
       vim.keymap.del("n", "s")
       vim.keymap.del("n", "S")
       vim.keymap.del("n", "R")
@@ -414,6 +414,7 @@ function M.open()
   vim.wo[state.win].winfixwidth = true
 
   setup_keymaps()
+  -- TODO: setup autocmds only once
   setup_autocmds()
   render()
   move_cursor()
