@@ -3,111 +3,185 @@ local M = {}
 local state = {
   buf = nil,
   win = nil,
-  files = {},
+  staged_files = {},
+  unstaged_files = {},
   current_idx = 0,
+  cursor_section = "",
   width = 40,
   wo = nil,
   last_opened_file = {},
 }
 
-local icons = {
-  staged = "󰱒",
-  unstaged = "",
-  untracked = "",
-  deleted = "󱋭",
+local porcelain_status = {
+  A = "added",
+  M = "modified",
+  D = "deleted",
+  R = "renamed",
+  ["?"] = "untracked",
 }
 
-local function get_changed_files()
-  local git_files = {}
-  local files = {}
+local staged_idx_offset = 3
+local unstaged_idx_offset = 2
 
-  local staged_output = vim.fn.systemlist("git diff --cached --name-only")
-  for _, file in ipairs(staged_output) do
-    if file ~= "" then
-      git_files[file] = git_files[file] or {}
-      git_files[file].path = file
-      git_files[file].staged = true
+local function parse_git_status_line(line)
+  if line == "" then
+    return nil
+  end
+
+  local file = {}
+  local x, y, path = line:match("^(.)(.)%s*(.+)$")
+
+  file.path = path
+  file.x_icon = x
+  file.y_icon = y
+
+  local x_status = porcelain_status[x]
+  local y_status = porcelain_status[y]
+
+  if x == " " then
+    file.staged = false
+  else
+    file[x_status] = true
+    file.staged = x == "?" and false or true
+  end
+
+  if y == " " then
+    file.unstaged = false
+  else
+    file[y_status] = true
+    file.unstaged = true
+  end
+
+  return file
+end
+
+local function update_idx(direction)
+  local new_idx = state.current_idx + direction
+  local section = state.cursor_section
+
+  if section == "" then
+    if #state.staged_files > 0 then
+      section = "staged"
+    elseif #state.unstaged_files > 0 then
+      section = "unstaged"
+    else
+      return
     end
   end
 
-  local unstaged_output = vim.fn.systemlist("git diff --name-only --diff-filter=d")
-  for _, file in ipairs(unstaged_output) do
-    if file ~= "" then
-      git_files[file] = git_files[file] or {}
-      git_files[file].path = file
-      git_files[file].unstaged = true
+  if section == "staged" then
+    if new_idx <= 0 then
+      if #state.unstaged_files > 0 then
+        section = "unstaged"
+        new_idx = #state.unstaged_files
+      else
+        new_idx = #state.staged_files
+      end
+    elseif new_idx > #state.staged_files then
+      if #state.unstaged_files > 0 then
+        section = "unstaged"
+      end
+
+      new_idx = 1
     end
   end
 
-  local untracked_output = vim.fn.systemlist("git ls-files --others --exclude-standard")
-  for _, file in ipairs(untracked_output) do
-    if file ~= "" then
-      git_files[file] = git_files[file] or {}
-      git_files[file].path = file
-      git_files[file].untracked = true
+  if section == "unstaged" then
+    if new_idx <= 0 then
+      if #state.staged_files > 0 then
+        section = "staged"
+        new_idx = #state.staged_files
+      else
+        new_idx = #state.unstaged_files
+      end
+    elseif new_idx > #state.unstaged_files then
+      if #state.staged_files > 0 then
+        section = "staged"
+      end
+
+      new_idx = 1
     end
   end
 
-  local deleted_output = vim.fn.systemlist("git diff --name-only --diff-filter=D")
-  for _, file in ipairs(deleted_output) do
-    if file ~= "" then
-      git_files[file] = git_files[file] or {}
-      git_files[file].path = file
-      git_files[file].deleted = true
+  state.current_idx = new_idx
+  state.cursor_section = section
+end
+
+local function move_cursor()
+  local position = 0
+
+  if state.cursor_section == "staged" then
+    position = state.current_idx + staged_idx_offset
+  elseif state.cursor_section == "unstaged" then
+    position = state.current_idx + #state.staged_files + staged_idx_offset
+
+    if #state.staged_files > 0 then
+      position = position + unstaged_idx_offset
     end
   end
 
-  for _, file in pairs(git_files) do
-    table.insert(files, file)
+  if state.win and vim.api.nvim_win_is_valid(state.win) then
+    vim.api.nvim_win_set_cursor(state.win, { position, 0 })
+  end
+end
+
+local function update_changed_files()
+  local staged_files = {}
+  local unstaged_files = {}
+
+  local output = vim.fn.systemlist("git status --porcelain")
+  for _, line in ipairs(output) do
+    local file = parse_git_status_line(line)
+
+    if file then
+      if file.staged then
+        table.insert(staged_files, file)
+      end
+
+      if file.unstaged then
+        table.insert(unstaged_files, file)
+      end
+    end
   end
 
-  table.sort(files, function(a, b)
+  table.sort(staged_files, function(a, b)
     return a.path < b.path
   end)
 
-  return files
+  table.sort(unstaged_files, function(a, b)
+    return a.path < b.path
+  end)
+
+  state.staged_files = staged_files
+  state.unstaged_files = unstaged_files
+
+  update_idx(0)
 end
 
-local function refresh()
-  state.files = get_changed_files()
-  if #state.files == 0 then
-    state.current_idx = 0
-    return
-  end
+-- local function refresh()
+--   update_changed_files()
+--   update_idx(1)
 
-  if state.current_idx > #state.files then
-    state.current_idx = #state.files
-    return
-  end
-
-  if state.current_idx == 0 and #state.files > 0 then
-    state.current_idx = 1
-  end
-end
+-- if #state.staged_files == 0 and #state.unstaged_files == 0 then
+--   state.current_idx = 0
+--   return
+-- end
+--
+-- if state.cursor_section == "staged" and state.current_idx > #state.files then
+--   state.current_idx = #state.staged_files
+--   return
+-- end
+--
+--
+-- if state.current_idx == 0 and #state.files > 0 then
+--   state.current_idx = 1
+-- end
+-- end
 
 local function refresh_one(file)
-  file.staged = false
-  file.unstaged = false
-  file.untracked = false
-  file.deleted = false
-
-  local status = vim.fn.system("git status --porcelain -- " .. file.path)
-
-  if status:find("^MM") then
-    file.staged = true
-    file.unstaged = true
-  elseif status:find("^M") or status:find("^A") then
-    file.staged = true
-  elseif status:find("^ M") then
-    file.unstaged = true
-  elseif status:find("^D") then
-    file.staged = true
-    file.deleted = true
-  elseif status:find("^ D") then
-    file.deleted = true
-  elseif status:find("^??") then
-    file.untracked = true
-  end
+  -- local status = vim.fn.system("git status --porcelain -- " .. file.path)
+  -- file = parse_git_status_line(status)
+  update_changed_files()
 end
 
 local function render()
@@ -124,54 +198,31 @@ local function render()
   table.insert(lines, string.rep("─", state.width - 2))
   table.insert(highlights, { line = 0, col = 0, end_col = #lines[1], hl = "Title" })
 
-  if #state.files == 0 then
+  if #state.staged_files == 0 and #state.unstaged_files == 0 then
     table.insert(lines, " No changes to review")
     table.insert(lines, "")
     table.insert(highlights, { line = 2, col = 0, end_col = #lines[3], hl = "Comment" })
   else
-    table.insert(lines, "")
+    if #state.staged_files > 0 then
+      table.insert(lines, " Staged:")
+    end
 
-    for i, file in ipairs(state.files) do
-      local status_icon
-      if file.staged and file.unstaged then
-        status_icon = icons.staged .. icons.unstaged
-      elseif file.staged then
-        status_icon = " " .. icons.staged
-      elseif file.untracked then
-        status_icon = " " .. icons.untracked
-      elseif file.deleted then
-        status_icon = " " .. icons.deleted
-      else
-        status_icon = " " .. icons.unstaged
-      end
-
-      local line = string.format(" %s %s", status_icon, file.path)
-
+    for i, file in ipairs(state.staged_files) do
+      local line = string.format(" %s %s", file.x_icon, file.path)
       table.insert(lines, line)
+    end
 
-      local line_idx = #lines - 1
-
-      if i == state.current_idx then
-        table.insert(highlights, { line = line_idx, col = 0, end_col = #line, hl = "ReviewLine" })
+    if #state.unstaged_files > 0 then
+      if #state.staged_files > 0 then
+        table.insert(lines, "")
       end
 
-      if file.staged then
-        table.insert(highlights, { line = line_idx, col = 1, end_col = #icons.staged, hl = "ReviewStaged" })
-      end
+      table.insert(lines, " Unstaged:")
+    end
 
-      if file.unstaged then
-        local col = file.staged and (#icons.staged + 1) or 1
-        local end_col = file.staged and (#icons.staged + #icons.unstaged + 1) or #icons.unstaged
-        table.insert(highlights, { line = line_idx, col = col, end_col = end_col, hl = "ReviewUnstaged" })
-      end
-
-      if file.untracked then
-        table.insert(highlights, { line = line_idx, col = 1, end_col = #icons.untracked, hl = "ReviewUntracked" })
-      end
-
-      if file.deleted then
-        table.insert(highlights, { line = line_idx, col = 1, end_col = #icons.deleted, hl = "ReviewDeleted" })
-      end
+    for i, file in ipairs(state.unstaged_files) do
+      local line = string.format(" %s %s", file.y_icon, file.path)
+      table.insert(lines, line)
     end
 
     table.insert(lines, "")
@@ -214,12 +265,16 @@ local function close_diff_windows()
   end
 end
 
-local function open_diff()
-  if state.current_idx == 0 or state.current_idx > #state.files then
-    return
+local function get_current_file()
+  if state.cursor_section == "staged" then
+    return state.staged_files[state.current_idx]
+  else
+    return state.unstaged_files[state.current_idx]
   end
+end
 
-  local file = state.files[state.current_idx]
+local function open_diff()
+  local file = get_current_file()
   local filepath = vim.fn.getcwd() .. "/" .. file.path
 
   close_diff_windows()
@@ -244,11 +299,7 @@ local function open_diff()
 end
 
 local function stage(to_stage)
-  if state.current_idx == 0 or state.current_idx > #state.files then
-    return
-  end
-
-  local file = state.files[state.current_idx]
+  local file = get_current_file()
   local filepath = vim.fn.fnameescape(file.path)
 
   if to_stage then
@@ -259,38 +310,25 @@ local function stage(to_stage)
 
   refresh_one(file)
   render()
-end
-
-local function move_cursor()
-  if state.win and vim.api.nvim_win_is_valid(state.win) then
-    vim.api.nvim_win_set_cursor(state.win, { state.current_idx + 3, 0 })
-  end
+  move_cursor()
 end
 
 local function next_file()
-  if #state.files == 0 then
+  if #state.staged_files == 0 and #state.unstaged_files == 0 then
     return
   end
 
-  state.current_idx = state.current_idx + 1
-  if state.current_idx > #state.files then
-    state.current_idx = 1
-  end
-
+  update_idx(1)
   render()
   move_cursor()
 end
 
 local function prev_file()
-  if #state.files == 0 then
+  if #state.staged_files == 0 and #state.unstaged_files == 0 then
     return
   end
 
-  state.current_idx = state.current_idx - 1
-  if state.current_idx < 1 then
-    state.current_idx = #state.files
-  end
-
+  update_idx(-1)
   render()
   move_cursor()
 end
@@ -366,8 +404,9 @@ local function setup_autocmds()
   vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
     buffer = state.buf,
     callback = function()
-      refresh()
+      update_changed_files()
       render()
+      move_cursor()
     end,
   })
 
@@ -393,9 +432,9 @@ function M.open()
     return
   end
 
-  refresh()
+  update_changed_files()
 
-  if #state.files == 0 then
+  if #state.staged_files == 0 and #state.unstaged_files == 0 then
     vim.notify("No changes to review", vim.log.levels.INFO, { title = "Review" })
     return
   end
@@ -420,3 +459,39 @@ function M.open()
 end
 
 return M
+
+-- for i, file in ipairs(state.files) do
+--   if file == nil then
+--     goto continue
+--   end
+--
+--   local line = string.format(" %s%s %s", file.x_icon, file.y_icon, file.path)
+--
+--   table.insert(lines, line)
+--
+--   local line_idx = #lines - 1
+--
+--   if i == state.current_idx then
+--     table.insert(highlights, { line = line_idx, col = 0, end_col = #line, hl = "ReviewLine" })
+--   end
+--
+--   -- if file.staged then
+--   --   table.insert(highlights, { line = line_idx, col = 1, end_col = 1, hl = "ReviewStaged" })
+--   -- end
+--   --
+--   -- if file.unstaged then
+--   --   local col = file.staged and 2 or 1
+--   --   local end_col = file.staged and 3 or 1
+--   --   table.insert(highlights, { line = line_idx, col = col, end_col = end_col, hl = "ReviewUnstaged" })
+--   -- end
+--   --
+--   -- if file.untracked then
+--   --   table.insert(highlights, { line = line_idx, col = 1, end_col = #icons.untracked, hl = "ReviewUntracked" })
+--   -- end
+--   --
+--   -- if file.deleted then
+--   --   table.insert(highlights, { line = line_idx, col = 1, end_col = #icons.deleted, hl = "ReviewDeleted" })
+--   -- end
+--
+--   ::continue::
+-- end
