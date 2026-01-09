@@ -7,7 +7,7 @@ local state = {
   current_idx = 0,
   width = 40,
   wo = nil,
-  last_opened_file = {},
+  last_opened_file_idx = nil,
 }
 
 local porcelain_status = {
@@ -21,9 +21,11 @@ local porcelain_status = {
 local icons = {
   staged = "󰱒",
   unstaged = "",
-  untracked = "",
-  renamed = "󰑕",
-  deleted = "󱋭",
+  A = "A",
+  M = "M",
+  D = "D",
+  R = "R",
+  ["?"] = "?",
 }
 
 local idx_offset = 3
@@ -34,9 +36,17 @@ local function parse_git_status_line(line)
   end
 
   local file = { change_types = {} }
-  local x, y, path = line:match("^(.)(.)%s*(.+)$")
+  local x, y, output = line:match("^(.)(.)%s*(.+)$")
+
+  local path = output
+
+  if string.find(output, "->", 1, true) then
+    local paths = vim.split(output, "->")
+    path = vim.trim(paths[2])
+  end
 
   file.path = vim.trim(path)
+  file.output = vim.trim(output)
   file.x_icon = x
   file.y_icon = y
 
@@ -97,26 +107,39 @@ local function refresh()
   end
 end
 
-local function refresh_one(file)
-  local status = vim.fn.system("git status --porcelain -- " .. file.path)
-  return parse_git_status_line(status)
+local function refresh_one(idx)
+  local status = vim.fn.system("git status --porcelain -- " .. state.files[idx].path)
+  local updated_file = parse_git_status_line(status)
+  dd(updated_file)
+
+  if not updated_file then
+    refresh()
+    return
+  end
+
+  local types = updated_file.change_types
+
+  -- FIXME: when unstaging a renamed file, the cursor do not goes to the correct file
+  if types.added or types.deleted or types.renamed or types.untracked then
+    refresh()
+    return
+  end
+
+  state.files[idx] = updated_file
 end
 
 local function get_icon(file)
-  if file.staged and file.unstaged then
-    return icons.staged .. icons.unstaged
-  end
+  local x_icon = icons[file.x_icon] or icons.staged
+  local y_icon = icons[file.y_icon] or icons.unstaged
 
-  for _, type in pairs(file.change_types) do
-    if icons[type] then
-      return icons[type]
-    end
+  if file.staged and file.unstaged then
+    return x_icon .. y_icon
   end
 
   if file.staged then
-    return icons.staged
+    return x_icon
   else
-    return icons.unstaged
+    return y_icon
   end
 end
 
@@ -147,7 +170,7 @@ local function render()
         status_icon = status_icon .. " "
       end
 
-      local line = string.format(" %s %s", status_icon, file.path)
+      local line = string.format(" %s %s", status_icon, file.output)
 
       table.insert(lines, line)
 
@@ -242,7 +265,13 @@ local function open_diff()
   vim.cmd("wincmd =")
   vim.cmd("wincmd l")
 
-  state.last_opened_file = file
+  state.last_opened_file_idx = state.current_idx
+end
+
+local function move_cursor()
+  if state.win and vim.api.nvim_win_is_valid(state.win) then
+    vim.api.nvim_win_set_cursor(state.win, { state.current_idx + idx_offset, 0 })
+  end
 end
 
 local function stage(to_stage)
@@ -256,17 +285,20 @@ local function stage(to_stage)
   if to_stage then
     vim.fn.system("git add " .. filepath)
   else
-    vim.fn.system("git restore --staged " .. filepath)
+    if file.change_types.renamed then
+      local paths = vim.split(file.output, "->")
+      vim.fn.system(string.format("git restore --staged %s %s", paths[1], paths[2]))
+      refresh()
+      render()
+      return
+    else
+      vim.fn.system("git restore --staged " .. filepath)
+    end
   end
 
-  state.files[state.current_idx] = refresh_one(file)
+  refresh_one(state.current_idx)
   render()
-end
-
-local function move_cursor()
-  if state.win and vim.api.nvim_win_is_valid(state.win) then
-    vim.api.nvim_win_set_cursor(state.win, { state.current_idx + idx_offset, 0 })
-  end
+  move_cursor()
 end
 
 local function next_file()
@@ -337,13 +369,13 @@ local function setup_keymaps()
   end)
 
   vim.keymap.set("n", "S", function()
-    if not state.last_opened_file.path then
+    if not state.last_opened_file_idx then
       return
     end
 
-    vim.fn.system("git add " .. state.last_opened_file.path)
+    vim.fn.system("git add " .. state.files[state.last_opened_file_idx].path)
 
-    state.last_opened_file = refresh_one(state.last_opened_file)
+    refresh_one(state.last_opened_file_idx)
     next_file()
     open_diff()
   end)
@@ -352,14 +384,14 @@ local function setup_keymaps()
 
   vim.keymap.set("n", "s", function()
     gitsigns.stage_hunk(nil, nil, function()
-      state.last_opened_file = refresh_one(state.last_opened_file)
+      refresh_one(state.last_opened_file_idx)
       render()
     end)
   end)
 
   vim.keymap.set("n", "R", function()
     gitsigns.reset_buffer_index(function()
-      state.last_opened_file = refresh_one(state.last_opened_file)
+      refresh_one(state.last_opened_file_idx)
       render()
     end)
   end)

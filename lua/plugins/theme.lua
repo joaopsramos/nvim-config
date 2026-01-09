@@ -104,6 +104,7 @@ return {
         TelescopeMatching = { fg = c.sapphire },
         TelescopeSelection = { fg = c.peach, bg = c.none, style = { "bold" } },
         GitSignsChange = { fg = c.peach },
+        GitSignsCurrentLineBlame = { fg = "#494D64" },
         DiffChange = { bg = "#223159" },
         -- DiffAdd = { bg = '#283b4d' },
         DiffDelete = { bg = "#3f2d3d", fg = c.overlay0 },

@@ -49,7 +49,8 @@ return {
     "lewis6991/gitsigns.nvim",
     event = "VeryLazy",
     opts = {
-      current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
+      current_line_blame = true,
+      current_line_blame_formatter = "👀 <author>, <author_time:%d/%m/%Y %H:%M> • <summary>",
       preview_config = {
         border = "rounded",
       },
@@ -107,15 +108,5 @@ return {
         -- stylua: ignore end
       end,
     },
-  },
-  {
-    "APZelos/blamer.nvim",
-    init = function()
-      vim.g.blamer_enabled = true
-      vim.g.blamer_prefix = "👀 "
-      vim.g.blamer_show_in_visual_modes = 0
-      vim.g.blamer_show_in_insert_modes = 0
-      vim.cmd([[highlight Blamer guifg=#494D64]])
-    end,
   },
 }
