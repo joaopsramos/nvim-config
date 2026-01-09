@@ -110,7 +110,6 @@ end
 local function refresh_one(idx)
   local status = vim.fn.system("git status --porcelain -- " .. state.files[idx].path)
   local updated_file = parse_git_status_line(status)
-  dd(updated_file)
 
   if not updated_file then
     refresh()
