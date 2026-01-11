@@ -210,7 +210,7 @@ local function render()
             line = line_idx,
             col = current_col,
             end_col = current_col + #icon,
-            hl = icon_highlights[icon]
+            hl = icon_highlights[icon],
           })
           current_col = current_col + #icon
         end
@@ -297,12 +297,13 @@ local function move_cursor()
   end
 end
 
-local function stage(to_stage)
-  if state.current_idx == 0 or state.current_idx > #state.files then
+local function stage(to_stage, idx)
+  idx = idx or state.current_idx
+  if idx == 0 or idx > #state.files then
     return
   end
 
-  local file = state.files[state.current_idx]
+  local file = state.files[idx]
   local filepath = vim.fn.fnameescape(file.path)
 
   if to_stage then
@@ -319,7 +320,7 @@ local function stage(to_stage)
     end
   end
 
-  refresh_one(state.current_idx)
+  refresh_one(idx)
   render()
   move_cursor()
 end
@@ -413,6 +414,13 @@ local function setup_keymaps()
   end)
 
   vim.keymap.set("n", "R", function()
+    local file = state.files[state.last_opened_file_idx]
+    local changes = file.change_types
+    if changes.deleted or changes.added or changes.renamed then
+      stage(false, state.last_opened_file_idx)
+      return
+    end
+
     gitsigns.reset_buffer_index(function()
       refresh_one(state.last_opened_file_idx)
       render()
