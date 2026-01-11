@@ -2,6 +2,9 @@ local M = {}
 
 local function setup_highlights()
   vim.api.nvim_set_hl(0, "ReviewStaged", { fg = "#A6DA95" })
+  vim.api.nvim_set_hl(0, "ReviewAdded", { fg = "#8BD5CA" })
+  vim.api.nvim_set_hl(0, "ReviewModified", { fg = "#EED49F" })
+  vim.api.nvim_set_hl(0, "ReviewRenamed", { fg = "#F5A97F" })
   vim.api.nvim_set_hl(0, "ReviewUnstaged", { fg = "#8AADF4" })
   vim.api.nvim_set_hl(0, "ReviewUntracked", { fg = "#C6A0F6" })
   vim.api.nvim_set_hl(0, "ReviewDeleted", { fg = "#ED8796" })

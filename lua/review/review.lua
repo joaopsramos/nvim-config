@@ -19,13 +19,21 @@ local porcelain_status = {
 }
 
 local icons = {
-  staged = "󰱒",
-  unstaged = "",
+  staged = "",
+  unstaged = "",
   A = "A",
   M = "M",
   D = "D",
   R = "R",
   ["?"] = "?",
+}
+
+local icon_highlights = {
+  A = "ReviewAdded",
+  M = "ReviewModified",
+  D = "ReviewDeleted",
+  R = "ReviewRenamed",
+  ["?"] = "ReviewUntracked",
 }
 
 local idx_offset = 3
@@ -127,18 +135,18 @@ local function refresh_one(idx)
   state.files[idx] = updated_file
 end
 
-local function get_icon(file)
-  local x_icon = icons[file.x_icon] or icons.staged
-  local y_icon = icons[file.y_icon] or icons.unstaged
+local function get_icons(file)
+  local x_icon = icons[file.x_icon] or " "
+  local y_icon = icons[file.y_icon] or " "
 
   if file.staged and file.unstaged then
-    return x_icon .. y_icon
+    return x_icon, y_icon
   end
 
   if file.staged then
-    return x_icon
+    return x_icon, " "
   else
-    return y_icon
+    return y_icon, " "
   end
 end
 
@@ -164,37 +172,48 @@ local function render()
     table.insert(lines, "")
 
     for i, file in ipairs(state.files) do
-      local status_icon = get_icon(file)
-      if #status_icon < 2 then
-        status_icon = status_icon .. " "
+      local x_icon, y_icon = get_icons(file)
+
+      local status_icon
+      local status_hl
+      if file.staged and file.unstaged then
+        status_icon = "[-]"
+        status_hl = "ReviewModified"
+      elseif file.staged then
+        status_icon = "[x]"
+        status_hl = "ReviewStaged"
+      else
+        status_icon = "[ ]"
+        status_hl = "ReviewUnstaged"
       end
 
-      local line = string.format(" %s %s", status_icon, file.output)
+      local line = string.format(" %s %s%s %s", status_icon, x_icon, y_icon, file.output)
 
       table.insert(lines, line)
 
       local line_idx = #lines - 1
 
       if i == state.current_idx then
-        table.insert(highlights, { line = line_idx, col = 0, end_col = #line, hl = "ReviewLine" })
+        table.insert(highlights, { line = line_idx, col = 0, full_line = true, hl = "ReviewLine" })
       end
 
-      if file.staged then
-        table.insert(highlights, { line = line_idx, col = 1, end_col = #icons.staged, hl = "ReviewStaged" })
-      end
+      local current_col = 1
+      table.insert(highlights,
+        { line = line_idx, col = current_col, end_col = current_col + #status_icon, hl = status_hl })
 
-      if file.unstaged then
-        local col = file.staged and (#icons.staged + 1) or 1
-        local end_col = file.staged and (#icons.staged + #icons.unstaged + 1) or #icons.unstaged
-        table.insert(highlights, { line = line_idx, col = col, end_col = end_col, hl = "ReviewUnstaged" })
-      end
-
-      if file.untracked then
-        table.insert(highlights, { line = line_idx, col = 1, end_col = #icons.untracked, hl = "ReviewUntracked" })
-      end
-
-      if file.deleted then
-        table.insert(highlights, { line = line_idx, col = 1, end_col = #icons.deleted, hl = "ReviewDeleted" })
+      current_col = current_col + #status_icon + 1
+      for _, icon in ipairs({ x_icon, y_icon }) do
+        if icon == " " then
+          current_col = current_col + 1
+        else
+          table.insert(highlights, {
+            line = line_idx,
+            col = current_col,
+            end_col = current_col + #icon,
+            hl = icon_highlights[icon]
+          })
+          current_col = current_col + #icon
+        end
       end
     end
 
@@ -223,7 +242,11 @@ local function render()
   vim.api.nvim_buf_clear_namespace(state.buf, ns, 0, -1)
 
   for _, hl in ipairs(highlights) do
-    vim.api.nvim_buf_set_extmark(state.buf, ns, hl.line, hl.col, { end_col = hl.end_col, hl_group = hl.hl })
+    if hl.full_line then
+      vim.api.nvim_buf_set_extmark(state.buf, ns, hl.line, hl.col, { hl_eol = true, line_hl_group = hl.hl })
+    else
+      vim.api.nvim_buf_set_extmark(state.buf, ns, hl.line, hl.col, { end_col = hl.end_col, hl_group = hl.hl })
+    end
   end
 
   vim.bo[state.buf].modifiable = false
@@ -256,6 +279,7 @@ local function open_diff()
 
   vim.cmd("silent! Gvdiffsplit HEAD")
   vim.cmd("wincmd x")
+  vim.cmd("set wrap")
 
   if state.win and vim.api.nvim_win_is_valid(state.win) then
     vim.api.nvim_win_set_width(state.win, state.width)
@@ -449,6 +473,7 @@ function M.open()
   setup_autocmds()
   render()
   move_cursor()
+  open_diff()
 end
 
 return M
