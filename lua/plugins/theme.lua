@@ -105,10 +105,10 @@ return {
         TelescopeSelection = { fg = c.peach, bg = c.none, style = { "bold" } },
         GitSignsChange = { fg = c.peach },
         GitSignsCurrentLineBlame = { fg = "#494D64" },
-        DiffChange = { bg = "#223159" },
+        -- DiffChange = { bg = "#223159" },
         -- DiffAdd = { bg = '#283b4d' },
         DiffDelete = { bg = "#3f2d3d", fg = c.overlay0 },
-        DiffText = { bg = "#394b70" },
+        -- DiffText = { bg = "#394b70" },
 
         TabLineSel = { fg = c.green, bg = c.mantle },
         EndOfBuffer = { fg = c.surface1 },

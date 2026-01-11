@@ -3,10 +3,9 @@ local M = {}
 local state = {
   buf = nil,
   win = nil,
+  width = 40,
   files = {},
   current_idx = 0,
-  width = 40,
-  wo = nil,
   last_opened_file_idx = nil,
 }
 
@@ -19,8 +18,9 @@ local porcelain_status = {
 }
 
 local icons = {
-  staged = "",
-  unstaged = "",
+  staged = "[x]",
+  unstaged = "[ ]",
+  staged_unstaged = "[-]",
   A = "A",
   M = "M",
   D = "D",
@@ -150,6 +150,66 @@ local function get_icons(file)
   end
 end
 
+local function render_file_line(file, lines, highlights)
+  local x_icon, y_icon = get_icons(file)
+
+  local status_icon
+  local status_hl
+  if file.staged and file.unstaged then
+    status_icon = icons.staged_unstaged
+    status_hl = "ReviewModified"
+  elseif file.staged then
+    status_icon = icons.staged
+    status_hl = "ReviewStaged"
+  else
+    status_icon = icons.unstaged
+    status_hl = "ReviewUnstaged"
+  end
+
+  local filename = vim.fn.fnamemodify(file.output, ":t")
+  local dir      = vim.fn.fnamemodify(file.output, ":h")
+
+  if file.change_types.renamed then
+    local paths = vim.split(file.output, "->")
+    local filename_before, filename_after = vim.fn.fnamemodify(paths[1], ":t"), vim.fn.fnamemodify(paths[2], ":t")
+    local dir_before, dir_after = vim.fn.fnamemodify(paths[1], ":h"), vim.fn.fnamemodify(paths[2], ":h")
+
+    filename = filename_before .. "-> " .. filename_after
+    dir = dir_before .. " ->" .. dir_after
+  end
+
+  if dir == "." then
+    dir = ""
+  end
+
+  local line = string.format(" %s %s%s %s %s", status_icon, x_icon, y_icon, filename, dir)
+  table.insert(lines, line)
+
+  local line_idx = #lines - 1
+  local current_col = 1
+
+  table.insert(highlights,
+    { line = line_idx, col = #line - #dir, end_col = #line, hl = "Comment" })
+
+  table.insert(highlights,
+    { line = line_idx, col = current_col, end_col = current_col + #status_icon, hl = status_hl })
+
+  current_col = current_col + #status_icon + 1
+  for _, icon in ipairs({ x_icon, y_icon }) do
+    if icon == " " then
+      current_col = current_col + 1
+    else
+      table.insert(highlights, {
+        line = line_idx,
+        col = current_col,
+        end_col = current_col + #icon,
+        hl = icon_highlights[icon],
+      })
+      current_col = current_col + #icon
+    end
+  end
+end
+
 local function render()
   if not state.buf or not vim.api.nvim_buf_is_valid(state.buf) then
     return
@@ -161,79 +221,25 @@ local function render()
   local highlights = {}
 
   table.insert(lines, " Git Review")
-  table.insert(lines, string.rep("─", state.width - 2))
+  table.insert(lines, "")
   table.insert(highlights, { line = 0, col = 0, end_col = #lines[1], hl = "Title" })
 
   if #state.files == 0 then
     table.insert(lines, " No changes to review")
-    table.insert(lines, "")
     table.insert(highlights, { line = 2, col = 0, end_col = #lines[3], hl = "Comment" })
   else
-    table.insert(lines, "")
+    table.insert(lines, string.format(" Changes (%d)", #state.files))
 
     for i, file in ipairs(state.files) do
-      local x_icon, y_icon = get_icons(file)
-
-      local status_icon
-      local status_hl
-      if file.staged and file.unstaged then
-        status_icon = "[-]"
-        status_hl = "ReviewModified"
-      elseif file.staged then
-        status_icon = "[x]"
-        status_hl = "ReviewStaged"
-      else
-        status_icon = "[ ]"
-        status_hl = "ReviewUnstaged"
-      end
-
-      local line = string.format(" %s %s%s %s", status_icon, x_icon, y_icon, file.output)
-
-      table.insert(lines, line)
-
-      local line_idx = #lines - 1
+      render_file_line(file, lines, highlights)
 
       if i == state.current_idx then
-        table.insert(highlights, { line = line_idx, col = 0, full_line = true, hl = "ReviewLine" })
-      end
-
-      local current_col = 1
-      table.insert(highlights,
-        { line = line_idx, col = current_col, end_col = current_col + #status_icon, hl = status_hl })
-
-      current_col = current_col + #status_icon + 1
-      for _, icon in ipairs({ x_icon, y_icon }) do
-        if icon == " " then
-          current_col = current_col + 1
-        else
-          table.insert(highlights, {
-            line = line_idx,
-            col = current_col,
-            end_col = current_col + #icon,
-            hl = icon_highlights[icon],
-          })
-          current_col = current_col + #icon
-        end
+        table.insert(highlights, { line = #lines - 1, col = 0, full_line = true, hl = "ReviewLine" })
       end
     end
 
     table.insert(lines, "")
-    table.insert(lines, string.rep("─", state.width - 2))
   end
-
-  table.insert(lines, " Menu:")
-  table.insert(lines, " <CR>  Open diff")
-  table.insert(lines, " s     Stage")
-  table.insert(lines, " r     Unstage")
-  table.insert(lines, " q     Close")
-  table.insert(lines, "")
-
-  table.insert(lines, " Buffer:")
-  table.insert(lines, " s     Stage/Unstage hunk")
-  table.insert(lines, " S     Stage buffer")
-  table.insert(lines, " R     Unstage buffer")
-  table.insert(lines, " ]]    Next file")
-  table.insert(lines, " [[    Previous file")
 
   vim.api.nvim_buf_set_lines(state.buf, 0, -1, false, lines)
 
@@ -279,7 +285,6 @@ local function open_diff()
 
   vim.cmd("silent! Gvdiffsplit HEAD")
   vim.cmd("wincmd x")
-  vim.cmd("set wrap")
 
   if state.win and vim.api.nvim_win_is_valid(state.win) then
     vim.api.nvim_win_set_width(state.win, state.width)
@@ -475,6 +480,7 @@ function M.open()
   })
 
   vim.wo[state.win].winfixwidth = true
+  vim.api.nvim_set_option_value('wrap', false, { win = state.win })
 
   setup_keymaps()
   -- TODO: setup autocmds only once

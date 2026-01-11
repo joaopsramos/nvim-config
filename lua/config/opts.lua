@@ -19,9 +19,9 @@ opt.splitbelow = true
 opt.splitright = true
 opt.linebreak = true
 opt.scrolloff = 5
-opt.shiftround = true -- Round indent
+opt.shiftround = true  -- Round indent
 opt.signcolumn = "yes" -- Avoid shift
-opt.list = true -- Show some invisible characters (tabs...
+opt.list = true        -- Show some invisible characters (tabs...
 opt.listchars:append({ trail = "", tab = " " })
 opt.splitkeep = "screen"
 opt.virtualedit = "block"
@@ -33,6 +33,14 @@ opt.relativenumber = true
 -- opt.scrolloff = 100
 opt.cmdheight = 1
 opt.fillchars:append({ diff = "╱" })
+opt.diffopt = {
+  'internal',
+  'filler',
+  'closeoff',
+  'algorithm:histogram',
+  'indent-heuristic',
+  'iwhite'
+}
 
 if os.getenv("XDG_CURRENT_DESKTOP") == "Hyprland" then
   vim.g.clipboard = {
