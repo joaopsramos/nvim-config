@@ -44,6 +44,14 @@ return {
 
       { "<leader>fh",   ":Git log -p -- <C-r>%<CR>",    desc = "Git file history",   silent = true },
     },
+    init = function()
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "fugitive", },
+        callback = function()
+          vim.bo.modifiable = false
+        end,
+      })
+    end,
   },
   {
     "lewis6991/gitsigns.nvim",
