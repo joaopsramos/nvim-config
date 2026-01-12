@@ -1,268 +1,119 @@
+local config = require("review.config")
+local git = require("review.git")
+local ui = require("review.ui")
+
 local M = {}
 
+--- Line offset for cursor positioning (accounting for header lines)
+local LINE_OFFSET = 3
+
+--- @class ChangeTypes
+--- @field added boolean?
+--- @field modified boolean?
+--- @field deleted boolean?
+--- @field renamed boolean?
+--- @field untracked boolean?
+
+--- @class FileEntry
+--- @field path string
+--- @field output string
+--- @field x_icon string
+--- @field y_icon string
+--- @field staged boolean
+--- @field unstaged boolean
+--- @field change_types ChangeTypes
+
+--- @class ReviewState
+--- @field buf number|nil
+--- @field win number|nil
+--- @field files FileEntry[]
+--- @field current_idx number
+--- @field last_opened_file_idx number|nil
+--- @field global_keymaps table List of global keymap IDs to clean up
 local state = {
   buf = nil,
   win = nil,
-  width = 40,
   files = {},
   current_idx = 0,
   last_opened_file_idx = nil,
+  global_keymaps = {},
 }
-
-local porcelain_status = {
-  A = "added",
-  M = "modified",
-  D = "deleted",
-  R = "renamed",
-  ["?"] = "untracked",
-}
-
-local icons = {
-  staged = "[x]",
-  unstaged = "[ ]",
-  staged_unstaged = "[-]",
-  A = "A",
-  M = "M",
-  D = "D",
-  R = "R",
-  ["?"] = "?",
-}
-
-local icon_highlights = {
-  A = "ReviewAdded",
-  M = "ReviewModified",
-  D = "ReviewDeleted",
-  R = "ReviewRenamed",
-  ["?"] = "ReviewUntracked",
-}
-
-local idx_offset = 3
-
-local function parse_git_status_line(line)
-  if line == "" then
-    return nil
-  end
-
-  local file = { change_types = {} }
-  local x, y, output = line:match("^(.)(.)%s*(.+)$")
-
-  local path = output
-
-  if string.find(output, "->", 1, true) then
-    local paths = vim.split(output, "->")
-    path = vim.trim(paths[2])
-  end
-
-  file.path = vim.trim(path)
-  file.output = vim.trim(output)
-  file.x_icon = x
-  file.y_icon = y
-
-  local x_status = porcelain_status[x]
-  local y_status = porcelain_status[y]
-
-  if x == " " then
-    file.staged = false
-  else
-    file.change_types[x_status] = true
-    file.staged = x ~= "?"
-  end
-
-  if y == " " then
-    file.unstaged = false
-  else
-    file.change_types[y_status] = true
-    file.unstaged = true
-  end
-
-  return file
-end
-
-local function update_files()
-  local files = {}
-
-  local output = vim.fn.systemlist("git status --porcelain")
-  for _, line in ipairs(output) do
-    local file = parse_git_status_line(line)
-
-    if file then
-      table.insert(files, file)
-    end
-  end
-
-  table.sort(files, function(a, b)
-    return a.path < b.path
-  end)
-
-  state.files = files
-end
-
-local function refresh()
-  update_files()
-
-  if #state.files == 0 then
-    state.current_idx = 0
-    return
-  end
-
-  if state.current_idx == 0 and #state.files > 0 then
-    state.current_idx = 1
-  end
-
-  if state.current_idx > #state.files then
-    state.current_idx = #state.files
-    return
-  end
-end
-
-local function refresh_one(idx)
-  local status = vim.fn.system("git status --porcelain -- " .. state.files[idx].path)
-  local updated_file = parse_git_status_line(status)
-
-  if not updated_file then
-    refresh()
-    return
-  end
-
-  local types = updated_file.change_types
-
-  -- FIXME: when unstaging a renamed file, the cursor do not goes to the correct file
-  if types.added or types.deleted or types.renamed or types.untracked then
-    refresh()
-    return
-  end
-
-  state.files[idx] = updated_file
-end
-
-local function get_icons(file)
-  local x_icon = icons[file.x_icon] or " "
-  local y_icon = icons[file.y_icon] or " "
-
-  if file.staged and file.unstaged then
-    return x_icon, y_icon
-  end
-
-  if file.staged then
-    return x_icon, " "
-  else
-    return y_icon, " "
-  end
-end
-
-local function render_file_line(file, lines, highlights)
-  local x_icon, y_icon = get_icons(file)
-
-  local status_icon
-  local status_hl
-  if file.staged and file.unstaged then
-    status_icon = icons.staged_unstaged
-    status_hl = "ReviewModified"
-  elseif file.staged then
-    status_icon = icons.staged
-    status_hl = "ReviewStaged"
-  else
-    status_icon = icons.unstaged
-    status_hl = "ReviewUnstaged"
-  end
-
-  local filename = vim.fn.fnamemodify(file.output, ":t")
-  local dir      = vim.fn.fnamemodify(file.output, ":h")
-
-  if file.change_types.renamed then
-    local paths = vim.split(file.output, "->")
-    local filename_before, filename_after = vim.fn.fnamemodify(paths[1], ":t"), vim.fn.fnamemodify(paths[2], ":t")
-    local dir_before, dir_after = vim.fn.fnamemodify(paths[1], ":h"), vim.fn.fnamemodify(paths[2], ":h")
-
-    filename = filename_before .. "-> " .. filename_after
-    dir = dir_before .. " ->" .. dir_after
-  end
-
-  if dir == "." then
-    dir = ""
-  end
-
-  local line = string.format(" %s %s%s %s %s", status_icon, x_icon, y_icon, filename, dir)
-  table.insert(lines, line)
-
-  local line_idx = #lines - 1
-  local current_col = 1
-
-  table.insert(highlights,
-    { line = line_idx, col = #line - #dir, end_col = #line, hl = "Comment" })
-
-  table.insert(highlights,
-    { line = line_idx, col = current_col, end_col = current_col + #status_icon, hl = status_hl })
-
-  current_col = current_col + #status_icon + 1
-  for _, icon in ipairs({ x_icon, y_icon }) do
-    if icon == " " then
-      current_col = current_col + 1
-    else
-      table.insert(highlights, {
-        line = line_idx,
-        col = current_col,
-        end_col = current_col + #icon,
-        hl = icon_highlights[icon],
-      })
-      current_col = current_col + #icon
-    end
-  end
-end
 
 local function render()
-  if not state.buf or not vim.api.nvim_buf_is_valid(state.buf) then
+  ui.render(state.buf, state.files, state.current_idx)
+end
+
+local function is_win_valid()
+  return state.win and vim.api.nvim_win_is_valid(state.win)
+end
+
+local function update_cursor_pos()
+  if is_win_valid() then
+    local line = math.max(1, state.current_idx + LINE_OFFSET)
+    vim.api.nvim_win_set_cursor(state.win, { line, 0 })
+  end
+end
+
+--- @param callback function|nil
+local function refresh(callback)
+  git.get_status(function(files, err)
+    if err then
+      vim.notify("Failed to get git status: " .. err, vim.log.levels.ERROR)
+      return
+    end
+
+    state.files = files or {}
+
+    if #state.files == 0 then
+      state.current_idx = 0
+    elseif state.current_idx == 0 and #state.files > 0 then
+      state.current_idx = 1
+    elseif state.current_idx > #state.files then
+      state.current_idx = #state.files
+    end
+
+    if callback then
+      callback()
+    end
+  end)
+end
+
+--- @param idx number
+--- @param callback function|nil
+local function refresh_one(idx, callback)
+  if idx < 1 or idx > #state.files then
     return
   end
 
-  vim.bo[state.buf].modifiable = true
-
-  local lines = {}
-  local highlights = {}
-
-  table.insert(lines, " Git Review")
-  table.insert(lines, "")
-  table.insert(highlights, { line = 0, col = 0, end_col = #lines[1], hl = "Title" })
-
-  if #state.files == 0 then
-    table.insert(lines, " No changes to review")
-    table.insert(highlights, { line = 2, col = 0, end_col = #lines[3], hl = "Comment" })
-  else
-    table.insert(lines, string.format(" Changes (%d)", #state.files))
-
-    for i, file in ipairs(state.files) do
-      render_file_line(file, lines, highlights)
-
-      if i == state.current_idx then
-        table.insert(highlights, { line = #lines - 1, col = 0, full_line = true, hl = "ReviewLine" })
-      end
+  local file = state.files[idx]
+  git.get_file_status(file.path, function(updated_file, err)
+    if err or not updated_file then
+      -- File may have been removed or changed significantly, do full refresh
+      refresh(callback)
+      return
     end
 
-    table.insert(lines, "")
-  end
+    local types = updated_file.change_types
 
-  vim.api.nvim_buf_set_lines(state.buf, 0, -1, false, lines)
-
-  -- Apply highlights
-  local ns = vim.api.nvim_create_namespace("review.nvim")
-  vim.api.nvim_buf_clear_namespace(state.buf, ns, 0, -1)
-
-  for _, hl in ipairs(highlights) do
-    if hl.full_line then
-      vim.api.nvim_buf_set_extmark(state.buf, ns, hl.line, hl.col, { hl_eol = true, line_hl_group = hl.hl })
-    else
-      vim.api.nvim_buf_set_extmark(state.buf, ns, hl.line, hl.col, { end_col = hl.end_col, hl_group = hl.hl })
+    if types.added or types.deleted or types.renamed or types.untracked then
+      refresh(callback)
+      return
     end
-  end
 
-  vim.bo[state.buf].modifiable = false
+    state.files[idx] = updated_file
+    if callback then
+      callback()
+    end
+  end)
 end
 
 local function close_diff_windows()
   for _, win in ipairs(vim.api.nvim_list_wins()) do
-    local buf = vim.api.nvim_win_get_buf(win)
-    if buf ~= state.buf and vim.api.nvim_win_is_valid(win) then
-      pcall(vim.api.nvim_win_close, win, false)
+    if win ~= state.win and vim.api.nvim_win_is_valid(win) then
+      local buf = vim.api.nvim_win_get_buf(win)
+      if buf ~= state.buf then
+        pcall(vim.api.nvim_win_close, win, false)
+      end
     end
   end
 end
@@ -277,7 +128,6 @@ local function open_diff()
 
   close_diff_windows()
 
-  -- Focus sidebar and create new window to the right
   vim.api.nvim_set_current_win(state.win)
   vim.cmd("vertical botright new")
 
@@ -286,48 +136,14 @@ local function open_diff()
   vim.cmd("silent! Gvdiffsplit HEAD")
   vim.cmd("wincmd x")
 
-  if state.win and vim.api.nvim_win_is_valid(state.win) then
-    vim.api.nvim_win_set_width(state.win, state.width)
+  if is_win_valid() then
+    vim.api.nvim_win_set_width(state.win, config.opts.width)
   end
 
   vim.cmd("wincmd =")
   vim.cmd("wincmd l")
 
   state.last_opened_file_idx = state.current_idx
-end
-
-local function move_cursor()
-  if state.win and vim.api.nvim_win_is_valid(state.win) then
-    vim.api.nvim_win_set_cursor(state.win, { state.current_idx + idx_offset, 0 })
-  end
-end
-
-local function stage(to_stage, idx)
-  idx = idx or state.current_idx
-  if idx == 0 or idx > #state.files then
-    return
-  end
-
-  local file = state.files[idx]
-  local filepath = vim.fn.fnameescape(file.path)
-
-  if to_stage then
-    vim.fn.system("git add " .. filepath)
-  else
-    if file.change_types.renamed then
-      local paths = vim.split(file.output, "->")
-      vim.fn.system(string.format("git restore --staged %s %s", paths[1], paths[2]))
-      refresh()
-      render()
-      return
-    else
-      vim.fn.system("git restore --staged " .. filepath)
-    end
-  end
-
-  refresh_one(idx)
-  render()
-  move_cursor()
 end
 
 local function next_file()
@@ -341,7 +157,7 @@ local function next_file()
   end
 
   render()
-  move_cursor()
+  update_cursor_pos()
 end
 
 local function prev_file()
@@ -355,139 +171,243 @@ local function prev_file()
   end
 
   render()
-  move_cursor()
+  update_cursor_pos()
+end
+
+--- @param to_stage boolean
+--- @param idx number|nil File index (defaults to current)
+local function stage(to_stage, idx)
+  idx = idx or state.current_idx
+  if idx == 0 or idx > #state.files then
+    return
+  end
+
+  local file = state.files[idx]
+
+  if to_stage then
+    git.stage_file(file.path, function(success, err)
+      if not success then
+        vim.notify("Failed to stage file: " .. (err or "unknown error"), vim.log.levels.ERROR)
+        return
+      end
+      refresh_one(idx, function()
+        render()
+        update_cursor_pos()
+      end)
+    end)
+
+    return
+  end
+
+  -- For renamed files, unstage both old and new paths
+  if file.change_types.renamed then
+    local paths = vim.split(file.output, "->")
+    git.unstage_renamed_file(paths[1], paths[2], function(success, err)
+      if not success then
+        vim.notify("Failed to unstage file: " .. (err or "unknown error"), vim.log.levels.ERROR)
+        return
+      end
+      refresh(function()
+        render()
+        update_cursor_pos()
+      end)
+    end)
+
+    return
+  end
+
+  git.unstage_file(file.path, function(success, err)
+    if not success then
+      vim.notify("Failed to unstage file: " .. (err or "unknown error"), vim.log.levels.ERROR)
+      return
+    end
+    refresh_one(idx, function()
+      render()
+      update_cursor_pos()
+    end)
+  end)
+end
+
+local function stage_from_buffer()
+  if not state.last_opened_file_idx or not state.files[state.last_opened_file_idx] then
+    return
+  end
+
+  local file = state.files[state.last_opened_file_idx]
+
+  git.stage_file(file.path, function(success, err)
+    if not success then
+      vim.notify("Failed to stage file: " .. (err or "unknown error"), vim.log.levels.ERROR)
+      return
+    end
+
+    refresh_one(state.last_opened_file_idx, function()
+      render()
+      next_file()
+      open_diff()
+    end)
+  end)
+end
+
+local function unstage_from_buffer()
+  if not state.last_opened_file_idx or not state.files[state.last_opened_file_idx] then
+    return
+  end
+
+  local file = state.files[state.last_opened_file_idx]
+  local changes = file.change_types
+
+  if changes.deleted or changes.added or changes.renamed then
+    stage(false, state.last_opened_file_idx)
+    return
+  end
+
+  local ok, gitsigns = pcall(require, "gitsigns")
+  if not ok then
+    vim.notify("gitsigns.nvim is required for buffer reset", vim.log.levels.WARN)
+    return
+  end
+
+  gitsigns.reset_buffer_index(function()
+    refresh_one(state.last_opened_file_idx, function()
+      render()
+    end)
+  end)
+end
+
+local function toggle_hunk_staging()
+  local ok, gitsigns = pcall(require, "gitsigns")
+  if not ok then
+    vim.notify("gitsigns.nvim is required for hunk staging", vim.log.levels.WARN)
+    return
+  end
+
+  if not state.last_opened_file_idx then
+    return
+  end
+
+  gitsigns.stage_hunk(nil, nil, function()
+    refresh_one(state.last_opened_file_idx, function()
+      render()
+    end)
+  end)
 end
 
 local function close()
-  if state.win and vim.api.nvim_win_is_valid(state.win) then
+  for _, map_id in ipairs(state.global_keymaps) do
+    pcall(vim.keymap.del, "n", map_id)
+  end
+  state.global_keymaps = {}
+
+  if is_win_valid() then
     vim.api.nvim_win_close(state.win, true)
   end
-  -- TODO: Do not delete buffer
-  if state.buf and vim.api.nvim_buf_is_valid(state.buf) then
-    vim.api.nvim_buf_delete(state.buf, { force = true })
-  end
+
   state.win = nil
-  state.buf = nil
 end
 
-local function setup_keymaps()
+local function setup_buffer_keymaps()
   local opts = { buffer = state.buf, silent = true, nowait = true }
 
   -- stylua: ignore start
   vim.keymap.set("n", "<CR>", open_diff, opts)
-  vim.keymap.set("n", "j", function() next_file() end, opts)
-  vim.keymap.set("n", "k", function() prev_file() end, opts)
+  vim.keymap.set("n", "j", next_file, opts)
+  vim.keymap.set("n", "k", prev_file, opts)
   vim.keymap.set("n", "s", function() stage(true) end, opts)
   vim.keymap.set("n", "u", function() stage(false) end, opts)
   vim.keymap.set("n", "q", close, opts)
-  -- stylua: ignore end
+  --stylua: ignore end
+end
 
-  -- Global keymaps
+local function setup_global_keymaps()
+  for _, map_id in ipairs(state.global_keymaps) do
+    pcall(vim.keymap.del, "n", map_id)
+  end
+  state.global_keymaps = { "]]", "[[", "S", "s", "R" }
+
+  local global_opts = { silent = true }
+
   vim.keymap.set("n", "]]", function()
-    if state.win and vim.api.nvim_win_is_valid(state.win) then
+    if is_win_valid() then
       next_file()
       open_diff()
     end
-  end)
+  end, global_opts)
 
   vim.keymap.set("n", "[[", function()
-    if state.win and vim.api.nvim_win_is_valid(state.win) then
+    if is_win_valid() then
       prev_file()
       open_diff()
     end
-  end)
+  end, global_opts)
 
-  vim.keymap.set("n", "S", function()
-    if not state.last_opened_file_idx then
-      return
-    end
-
-    vim.fn.system("git add " .. state.files[state.last_opened_file_idx].path)
-
-    refresh_one(state.last_opened_file_idx)
-    next_file()
-    open_diff()
-  end)
-
-  local gitsigns = require("gitsigns")
-
-  vim.keymap.set("n", "s", function()
-    gitsigns.stage_hunk(nil, nil, function()
-      refresh_one(state.last_opened_file_idx)
-      render()
-    end)
-  end)
-
-  vim.keymap.set("n", "R", function()
-    local file = state.files[state.last_opened_file_idx]
-    local changes = file.change_types
-    if changes.deleted or changes.added or changes.renamed then
-      stage(false, state.last_opened_file_idx)
-      return
-    end
-
-    gitsigns.reset_buffer_index(function()
-      refresh_one(state.last_opened_file_idx)
-      render()
-    end)
-  end)
+  vim.keymap.set("n", "S", stage_from_buffer, global_opts)
+  vim.keymap.set("n", "s", toggle_hunk_staging, global_opts)
+  vim.keymap.set("n", "R", unstage_from_buffer, global_opts)
 end
 
 local function setup_autocmds()
+  local augroup = vim.api.nvim_create_augroup("ReviewNvim", { clear = true })
+
   vim.api.nvim_create_autocmd({ "BufEnter", "BufWinEnter" }, {
+    group = augroup,
     buffer = state.buf,
     callback = function()
-      refresh()
-      render()
+      refresh(function()
+        render()
+      end)
     end,
   })
 
   vim.api.nvim_create_autocmd("BufHidden", {
+    group = augroup,
     buffer = state.buf,
     once = true,
     callback = function()
-      vim.keymap.del("n", "s")
-      vim.keymap.del("n", "S")
-      vim.keymap.del("n", "R")
-      vim.keymap.del("n", "]]")
-      vim.keymap.del("n", "[[")
+      for _, map_id in ipairs(state.global_keymaps) do
+        pcall(vim.keymap.del, "n", map_id)
+      end
+      state.global_keymaps = {}
     end,
   })
 end
 
 function M.open()
-  if state.win and vim.api.nvim_win_is_valid(state.win) then
+  if is_win_valid() then
     close()
     return
   end
 
-  refresh()
+  refresh(function()
+    if #state.files == 0 then
+      vim.notify("No changes to review", vim.log.levels.INFO, { title = "Review" })
+      return
+    end
 
-  if #state.files == 0 then
-    vim.notify("No changes to review", vim.log.levels.INFO, { title = "Review" })
-    return
-  end
+    if not state.buf or not vim.api.nvim_buf_is_valid(state.buf) then
+      state.buf = vim.api.nvim_create_buf(false, true)
+      vim.bo[state.buf].buftype = "nofile"
+      vim.bo[state.buf].filetype = "review"
 
-  state.buf = vim.api.nvim_create_buf(false, true)
-  vim.bo[state.buf].buftype = "nofile"
-  vim.bo[state.buf].filetype = "review"
+      setup_buffer_keymaps()
+      setup_autocmds()
+    end
 
-  state.win = vim.api.nvim_open_win(state.buf, true, {
-    win = -1,
-    split = "left",
-    width = state.width,
-    style = "minimal",
-  })
+    state.win = vim.api.nvim_open_win(state.buf, true, {
+      win = -1,
+      split = "left",
+      width = config.opts.width,
+      style = "minimal",
+    })
 
-  vim.wo[state.win].winfixwidth = true
-  vim.api.nvim_set_option_value('wrap', false, { win = state.win })
+    vim.wo[state.win].winfixwidth = true
+    vim.wo[state.win].wrap = false
 
-  setup_keymaps()
-  -- TODO: setup autocmds only once
-  setup_autocmds()
-  render()
-  move_cursor()
-  open_diff()
+    setup_global_keymaps()
+    render()
+    update_cursor_pos()
+    open_diff()
+  end)
 end
 
 return M
