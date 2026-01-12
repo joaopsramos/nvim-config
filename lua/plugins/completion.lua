@@ -10,7 +10,21 @@ return {
   ---@module 'blink.cmp'
   opts_extend = { "sources.default" },
   opts = {
-    keymap = { preset = "super-tab" },
+    keymap = {
+      preset = "super-tab",
+      ["<CR>"] = {
+        function(cmp)
+          if cmp.is_visible() then
+            local item = cmp.get_selected_item()
+            local kind = vim.lsp.protocol.CompletionItemKind
+            if item and item.kind == kind.Snippet or item.kind == kind.Property then
+              return cmp.accept()
+            end
+          end
+        end,
+        "fallback",
+      },
+    },
     completion = {
       keyword = { range = "full" },
       list = {
