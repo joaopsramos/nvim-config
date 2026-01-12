@@ -7,17 +7,33 @@ return {
     },
     keys = {
       -- stylua: ignore start
-      { "<F1>",       function() require("dap").continue() end,                                             desc = "Start/Continue debugging" },
-      { "<F2>",       function() require("dap").step_into() end,                                            desc = "Step into" },
-      { "<F3>",       function() require("dap").step_over() end,                                            desc = "Step over" },
-      { "<F4>",       function() require("dap").step_out() end,                                             desc = "Step out" },
-      { "<F5>",       function() require("dap").toggle_breakpoint() end,                                    desc = "Toggle breakpoint" },
-      { "<F6>",       function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end, desc = "Set Conditional Breakpoint" },
-      { "<F7>",       function() require("dap").set_breakpoint(nil, nil, vim.fn.input("Log: ")) end,        desc = "Set pog point" },
-      { "<F8>",       function() require("dap").run_to_cursor() end,                                        desc = "Run to cursor" },
-      { "<F11>",      function() require("dap").restart() end,                                              desc = "Restart debugging" },
-      { "<F12>",      function() require("dap").terminate() end,                                            desc = "Terminate debugging" },
-      { "<leader>dc", function() require("dap").clear_breakpoints() end,                                    desc = "Clear all breakpoints" },
+      { "<F1>", function() require("dap").continue() end,          desc = "Start/Continue debugging" },
+      { "<F2>", function() require("dap").step_into() end,         desc = "Step into" },
+      { "<F3>", function() require("dap").step_over() end,         desc = "Step over" },
+      { "<F4>", function() require("dap").step_out() end,          desc = "Step out" },
+      { "<F5>", function() require("dap").toggle_breakpoint() end, desc = "Toggle breakpoint" },
+      {
+        "<F6>",
+        function()
+          local input = vim.fn.input("Breakpoint condition: ")
+          if input == "" then return end
+          require("dap").set_breakpoint(input)
+        end,
+        desc = "Set Conditional Breakpoint"
+      },
+      {
+        "<F7>",
+        function()
+          local input = vim.fn.input("Log: ")
+          if input == "" then return end
+          require("dap").set_breakpoint(nil, nil, input)
+        end,
+        desc = "Set pog point"
+      },
+      { "<F8>",       function() require("dap").run_to_cursor() end,     desc = "Run to cursor" },
+      { "<F11>",      function() require("dap").restart() end,           desc = "Restart debugging" },
+      { "<F12>",      function() require("dap").terminate() end,         desc = "Terminate debugging" },
+      { "<leader>dc", function() require("dap").clear_breakpoints() end, desc = "Clear all breakpoints" },
       -- stylua: ignore end
     },
     config = function()
@@ -137,13 +153,9 @@ return {
             type = "coreclr",
             name = "Test",
             request = "attach",
-            program = "dotnet",
-            args = { "test" },
-            processId = "${command:pickProcess}",
-            exitAfterTaskReturns = false,
-            env = {
-              VSTEST_HOST_DEBUG = "1",
-            },
+            processId = function()
+              return require("dap.utils").pick_process({ filter = "dotnet" })
+            end,
           },
         },
       }
@@ -193,8 +205,8 @@ return {
     },
     -- stylua: ignore
     keys = {
-      { "<F9>",       ":DapViewToggle<CR><C-w>j", desc="Toggle DAP view", silent = true },
-      { "<leader>dw", ":DapViewWatch<CR>",       desc="Watch variable in DAP view", silent = true },
+      { "<F9>",       ":DapViewToggle<CR><C-w>j", desc = "Toggle DAP view",            silent = true },
+      { "<leader>dw", ":DapViewWatch<CR>",        desc = "Watch variable in DAP view", silent = true },
     },
     config = function(_, opts)
       local dap = require("dap")
