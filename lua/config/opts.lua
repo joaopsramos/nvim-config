@@ -39,7 +39,6 @@ opt.diffopt = {
   "closeoff",
   "algorithm:histogram",
   "indent-heuristic",
-  "iwhite",
 }
 
 if os.getenv("XDG_CURRENT_DESKTOP") == "Hyprland" then

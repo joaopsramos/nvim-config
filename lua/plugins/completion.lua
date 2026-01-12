@@ -46,7 +46,7 @@ return {
       },
     },
     cmdline = {
-      keymap = { preset = "inherit" },
+      keymap = { preset = "inherit", ["<CR>"] = { "fallback" } },
       completion = { menu = { auto_show = true } },
     },
     -- Default list of enabled providers defined so that you can extend it

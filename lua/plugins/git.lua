@@ -21,32 +21,34 @@ return {
         desc = "Toggle fugitive",
         silent = true
       },
-      { "<leader>gi",   ":Git<space>",                  desc = "Run git command" },
+      { "<leader>gi",   ":Git<space>",                                        desc = "Run git command" },
 
-      { "<leader>gl",   ":Git log<CR>",                 desc = "Git log",            silent = true },
+      { "<leader>gl",   ":Git log<CR>",                                       desc = "Git log",                              silent = true },
 
-      { "<leader>gci",  ':Git commit -m ""<Left>',      desc = "Git commit" },
+      { "<leader>gci",  ':Git commit -m ""<Left>',                            desc = "Git commit" },
 
-      { "<leader>gp",   ":Git pull<CR>",                desc = "Git pull",           silent = true },
-      { "<leader>gP",   ":Git push -u origin HEAD<CR>", desc = "Git push",           silent = true },
+      { "<leader>gp",   ":Git pull<CR>",                                      desc = "Git pull",                             silent = true },
+      { "<leader>gP",   ":Git push -u origin HEAD<CR>",                       desc = "Git push",                             silent = true },
 
-      { "<leader>gsw",  ":Git switch<space>",           desc = "Git switch" },
-      { "<leader>gsb",  ":Git switch --create<space>",  desc = "Git switch --create" },
-      { "<leader>gsm",  ":Git switch main<CR>",         desc = "Git switch main",    silent = true },
-      { "<leader>gsk",  ":Git switch -<CR>",            desc = "Git switch back",    silent = true },
+      { "<leader>gsw",  ":Git switch<space>",                                 desc = "Git switch" },
+      { "<leader>gsb",  ":Git switch --create<space>",                        desc = "Git switch --create" },
+      { "<leader>gsm",  ":Git switch main<CR>",                               desc = "Git switch main",                      silent = true },
+      { "<leader>gsk",  ":Git switch -<CR>",                                  desc = "Git switch back",                      silent = true },
 
-      { "<leader>gsth", ":Git stash<CR>",               desc = "Git stash",          silent = true },
-      { "<leader>gsta", ":Git stash apply<CR>",         desc = "Git stash apply",    silent = true },
-      { "<leader>gstp", ":Git stash pop<CR>",           desc = "Git stash pop",      silent = true },
+      { "<leader>gsth", ":Git stash<CR>",                                     desc = "Git stash",                            silent = true },
+      { "<leader>gsta", ":Git stash apply<CR>",                               desc = "Git stash apply",                      silent = true },
+      { "<leader>gstp", ":Git stash pop<CR>",                                 desc = "Git stash pop",                        silent = true },
 
-      { "<leader>gbd",  ":Git branch -d<space>",        desc = "Git branch -d" },
-      { "<leader>gbD",  ":Git branch -D<space>",        desc = "Git branch -D" },
+      { "<leader>gbd",  ":Git branch -d<space>",                              desc = "Git branch -d" },
+      { "<leader>gbD",  ":Git branch -D<space>",                              desc = "Git branch -D" },
 
-      { "<leader>fh",   ":Git log -p -- <C-r>%<CR>",    desc = "Git file history",   silent = true },
+      { "<leader>fh",   ":Git log -p -- <C-r>%<CR>",                          desc = "Git file history",                     silent = true },
+      { "[h",           function() require("utils").navigate_history(-1) end, desc = "Open current file at previous commit", silent = true },
+      { "]h",           function() require("utils").navigate_history(1) end,  desc = "Open current file at next commit",     silent = true },
     },
     init = function()
       vim.api.nvim_create_autocmd("FileType", {
-        pattern = { "fugitive", },
+        pattern = { "fugitive" },
         callback = function()
           vim.bo.modifiable = false
         end,
