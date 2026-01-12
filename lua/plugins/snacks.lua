@@ -10,12 +10,8 @@ return {
     _G.bt = function()
       Snacks.debug.backtrace()
     end
-    if vim.fn.has("nvim-0.11") == 1 then
-      vim._print = function(_, ...)
-        dd(...)
-      end
-    else
-      vim.print = dd
+    vim._print = function(_, ...)
+      dd(...)
     end
   end,
   opts = {

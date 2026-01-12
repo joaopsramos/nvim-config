@@ -126,7 +126,9 @@ function M.render(buf, files, current_idx)
     table.insert(lines, "")
   end
 
+  vim.bo[buf].modifiable = true
   vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  vim.bo[buf].modifiable = false
 
   -- Apply highlights
   local ns = vim.api.nvim_create_namespace("review.nvim")

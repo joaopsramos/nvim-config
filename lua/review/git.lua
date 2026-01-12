@@ -152,4 +152,19 @@ function M.unstage_renamed_file(old_path, new_path, callback)
   end)
 end
 
+--- @param filepath string
+--- @param callback function|nil
+function M.restore_file(filepath, callback)
+  callback = callback or function(_, _) end
+  vim.system({ "git", "restore", vim.trim(filepath) }, { text = true }, function(obj)
+    vim.schedule(function()
+      if obj.code ~= 0 then
+        callback(false, obj.stderr or "Failed to restore file")
+      else
+        callback(true, nil)
+      end
+    end)
+  end)
+end
+
 return M
