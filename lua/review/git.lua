@@ -35,7 +35,7 @@ function M.parse_status_line(line)
 
   -- Handle renamed files (format: "old -> new")
   if output:find("->", 1, true) then
-    local paths = vim.split(output, "->")
+    local paths = vim.split(output, " -> ", { plain = true })
     path = paths[2] or path
     file.path = vim.trim(path)
   end
@@ -69,21 +69,30 @@ function M.get_status(callback)
       return
     end
 
-    local files = {}
+    local staged_files = {}
+    local unstaged_files = {}
+
     for _, line in ipairs(vim.split(obj.stdout or "", "\n")) do
       local file = M.parse_status_line(line)
-      if file then
-        table.insert(files, file)
+      if file and file.staged then
+        table.insert(staged_files, file)
+      end
+
+      if file and file.unstaged then
+        table.insert(unstaged_files, file)
       end
     end
 
-    -- Sort files by path
-    table.sort(files, function(a, b)
+    table.sort(staged_files, function(a, b)
+      return a.path < b.path
+    end)
+
+    table.sort(unstaged_files, function(a, b)
       return a.path < b.path
     end)
 
     vim.schedule(function()
-      callback(files, nil)
+      callback({ staged = staged_files, unstaged = unstaged_files }, nil)
     end)
   end)
 end

@@ -10,26 +10,21 @@ local ICON_HIGHLIGHTS = {
   ["?"] = "ReviewUntracked",
 }
 
---- @param file table
---- @return string, string Status
+--- @param file FileEntry
+--- @return string Status, string Status
 local function get_file_icons(file)
   local icons = config.opts.icons
   local x_icon = icons[file.x_icon] or " "
   local y_icon = icons[file.y_icon] or " "
 
-  if file.staged and file.unstaged then
-    return x_icon, y_icon
-  elseif file.staged then
-    return x_icon, " "
-  else
-    return y_icon, " "
-  end
+  return x_icon, y_icon
 end
 
---- @param file table
+--- @param file FileEntry
+--- @param section Section?
 --- @param lines table Lines buffer to append to
 --- @param highlights table Highlights buffer to append to
-local function render_file_line(file, lines, highlights)
+local function render_file_line(file, section, lines, highlights)
   local x_icon, y_icon = get_file_icons(file)
 
   local status_icon, status_hl
@@ -48,7 +43,7 @@ local function render_file_line(file, lines, highlights)
   local dir = vim.fn.fnamemodify(file.output, ":h")
 
   if file.change_types.renamed then
-    local paths = vim.split(file.output, "->")
+    local paths = vim.split(file.output, " -> ", { plain = true })
     local filename_before = vim.fn.fnamemodify(paths[1], ":t")
     local filename_after = vim.fn.fnamemodify(paths[2], ":t")
     local dir_before = vim.fn.fnamemodify(paths[1], ":h")
@@ -58,13 +53,24 @@ local function render_file_line(file, lines, highlights)
       filename = filename_before .. " -> " .. filename_after
       dir = dir_before .. " -> " .. dir_after
     end
+
+    if dir_before == dir_after then
+      dir = dir_before
+    end
   end
 
   if dir == "." then
     dir = ""
   end
 
-  local line = string.format(" %s %s%s %s %s", status_icon, x_icon, y_icon, filename, dir)
+  local section_icon = " "
+  if section == "staged" then
+    section_icon = x_icon
+  elseif section == "unstaged" then
+    section_icon = y_icon
+  end
+
+  local line = string.format(" %s %s %s %s", status_icon, section_icon, filename, dir)
   table.insert(lines, line)
 
   local line_idx = #lines - 1
@@ -78,25 +84,22 @@ local function render_file_line(file, lines, highlights)
   -- Highlight status icon
   table.insert(highlights, { line = line_idx, col = current_col, end_col = current_col + #status_icon, hl = status_hl })
 
-  -- Highlight change type icons
+  -- Highlight section icon
   current_col = current_col + #status_icon + 1
-  for _, icon in ipairs({ x_icon, y_icon }) do
-    if icon ~= " " then
-      table.insert(highlights, {
-        line = line_idx,
-        col = current_col,
-        end_col = current_col + #icon,
-        hl = ICON_HIGHLIGHTS[icon] or "Normal",
-      })
-    end
-    current_col = current_col + #icon
-  end
+  table.insert(highlights, {
+    line = line_idx,
+    col = current_col,
+    end_col = current_col + #section_icon,
+    hl = ICON_HIGHLIGHTS[section_icon] or "Normal",
+  })
 end
 
 --- @param buf number
---- @param files table
+--- @param staged_files FileEntry[]
+--- @param unstaged_files FileEntry[]
 --- @param current_idx number
-function M.render(buf, files, current_idx)
+--- @param current_section Section?
+function M.render(buf, unstaged_files, staged_files, current_idx, current_section)
   if not buf or not vim.api.nvim_buf_is_valid(buf) then
     return
   end
@@ -108,18 +111,35 @@ function M.render(buf, files, current_idx)
   table.insert(lines, "")
   table.insert(highlights, { line = 0, col = 0, end_col = #lines[1], hl = "Title" })
 
-  if #files == 0 then
+  if #unstaged_files == 0 and #staged_files == 0 then
     table.insert(lines, " No changes to review")
     table.insert(highlights, { line = 2, col = 0, end_col = #lines[3], hl = "Comment" })
   else
-    table.insert(lines, string.format(" Changes (%d)", #files))
+    if #unstaged_files > 0 then
+      table.insert(lines, string.format(" Unstaged (%d)", #unstaged_files))
 
-    for i, file in ipairs(files) do
-      render_file_line(file, lines, highlights)
+      for i, file in ipairs(unstaged_files) do
+        render_file_line(file, "unstaged", lines, highlights)
 
-      -- Highlight current line
-      if i == current_idx then
-        table.insert(highlights, { line = #lines - 1, col = 0, full_line = true, hl = "ReviewLine" })
+        -- Highlight current line
+        if i == current_idx and current_section == "unstaged" then
+          table.insert(highlights, { line = #lines - 1, col = 0, full_line = true, hl = "ReviewLine" })
+        end
+      end
+
+      table.insert(lines, "")
+    end
+
+    if #staged_files > 0 then
+      table.insert(lines, string.format(" Staged (%d)", #staged_files))
+
+      for i, file in ipairs(staged_files) do
+        render_file_line(file, "staged", lines, highlights)
+
+        -- Highlight current line
+        if i == current_idx and current_section == "staged" then
+          table.insert(highlights, { line = #lines - 1, col = 0, full_line = true, hl = "ReviewLine" })
+        end
       end
     end
 

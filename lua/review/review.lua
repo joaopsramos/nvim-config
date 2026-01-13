@@ -4,8 +4,11 @@ local ui = require("review.ui")
 
 local M = {}
 
---- Line offset for cursor positioning (accounting for header lines)
-local LINE_OFFSET = 3
+--- Offsets for cursor positioning (accounting for header lines)
+local STAGED_IDX_OFFSET = 2
+local UNSTAGED_IDX_OFFSET = 3
+
+--- @alias Section "staged" | "unstaged"
 
 --- @class ChangeTypes
 --- @field added boolean?
@@ -23,19 +26,25 @@ local LINE_OFFSET = 3
 --- @field unstaged boolean
 --- @field change_types ChangeTypes
 
---- @class ReviewState
+--- @class State
 --- @field buf number|nil
 --- @field win number|nil
---- @field files FileEntry[]
+--- @field staged_files FileEntry[]
+--- @field unstaged_files FileEntry[]
 --- @field current_idx number
---- @field last_opened_file_idx number|nil
+--- @field current_section Section?
+--- @field last_opened_file_idx number?
+--- @field last_opened_file_section Section?
 --- @field diff_keymaps table[] -- Keymaps to be cleared on close
 local state = {
   buf = nil,
   win = nil,
-  files = {},
+  staged_files = {},
+  unstaged_files = {},
   current_idx = 0,
+  current_section = nil,
   last_opened_file_idx = nil,
+  last_opened_file_section = nil,
   diff_keymaps = {},
 }
 
@@ -43,7 +52,7 @@ local state = {
 local setup_diff_keymaps
 
 local function render()
-  ui.render(state.buf, state.files, state.current_idx)
+  ui.render(state.buf, state.unstaged_files, state.staged_files, state.current_idx, state.current_section)
 end
 
 local function is_win_valid()
@@ -51,10 +60,78 @@ local function is_win_valid()
 end
 
 local function update_cursor_pos()
-  if is_win_valid() then
-    local line = math.max(1, state.current_idx + LINE_OFFSET)
-    vim.api.nvim_win_set_cursor(state.win, { line, 0 })
+  if not is_win_valid() then
+    return
   end
+
+  local position = 0
+
+  if state.current_section == "unstaged" then
+    position = state.current_idx + UNSTAGED_IDX_OFFSET
+  elseif state.current_section == "staged" then
+    position = state.current_idx + #state.unstaged_files + UNSTAGED_IDX_OFFSET
+
+    if #state.unstaged_files > 0 then
+      position = position + STAGED_IDX_OFFSET
+    end
+  end
+
+  vim.api.nvim_win_set_cursor(state.win, { position, 0 })
+end
+
+local function update_current_idx(direction)
+  direction = direction or 0
+  local staged_len = #state.staged_files
+  local unstaged_len = #state.unstaged_files
+
+  if not state.current_section then
+    if staged_len > 0 then
+      state.current_section = "staged"
+    elseif unstaged_len > 0 then
+      state.current_section = "unstaged"
+    else
+      return
+    end
+
+    state.current_idx = 1
+  end
+
+  local section = state.current_section
+  local idx = state.current_idx + direction
+  local current_len = (section == "staged") and staged_len or unstaged_len
+  local other_len = (section == "staged") and unstaged_len or staged_len
+  local other_name = (section == "staged") and "unstaged" or "staged"
+
+  -- Wrap/switch sections
+  if idx <= 0 then
+    if other_len > 0 then
+      section = other_name
+      idx = other_len
+    else
+      idx = current_len -- Wrap within same section
+    end
+  elseif idx > current_len then
+    if other_len > 0 then
+      section = other_name
+      idx = 1
+    else
+      idx = 1 -- Wrap within same section
+    end
+  end
+
+  state.current_idx = idx
+  state.current_section = section
+end
+
+local function get_file(idx, section)
+  idx = idx or state.current_idx
+  section = section or state.current_section
+
+  if state.current_section == "staged" then
+    return state.staged_files[state.current_idx]
+  end
+
+  return state.unstaged_files[state.current_idx]
 end
 
 --- @param callback function|nil
@@ -65,15 +142,10 @@ local function refresh(callback)
       return
     end
 
-    state.files = files or {}
+    state.staged_files = files.staged or {}
+    state.unstaged_files = files.unstaged or {}
 
-    if #state.files == 0 then
-      state.current_idx = 0
-    elseif state.current_idx == 0 and #state.files > 0 then
-      state.current_idx = 1
-    elseif state.current_idx > #state.files then
-      state.current_idx = #state.files
-    end
+    update_current_idx()
 
     if callback then
       callback()
@@ -82,33 +154,35 @@ local function refresh(callback)
 end
 
 --- @param idx number
+--- @param section Section?
 --- @param callback function|nil
-local function refresh_one(idx, callback)
-  local file = state.files[idx]
-
-  if not file then
-    return
-  end
-
-  git.get_file_status(file.path, function(updated_file, err)
-    if err or not updated_file then
-      -- File may have been removed or changed significantly, do full refresh
-      refresh(callback)
-      return
-    end
-
-    local types = updated_file.change_types
-
-    if types.added or types.deleted or types.renamed or types.untracked then
-      refresh(callback)
-      return
-    end
-
-    state.files[idx] = updated_file
-    if callback then
-      callback()
-    end
-  end)
+local function refresh_one(idx, section, callback)
+  refresh(callback)
+  -- local file = get_file()
+  --
+  -- if not file then
+  --   return
+  -- end
+  --
+  -- git.get_file_status(file.path, function(updated_file, err)
+  --   if err or not updated_file then
+  --     -- File may have been removed or changed significantly, do full refresh
+  --     refresh(callback)
+  --     return
+  --   end
+  --
+  --   local types = updated_file.change_types
+  --
+  --   if types.added or types.deleted or types.renamed or types.untracked then
+  --     refresh(callback)
+  --     return
+  --   end
+  --
+  --   state.staged_files[idx] = updated_file
+  --   if callback then
+  --     callback()
+  --   end
+  -- end)
 end
 
 local function close_diff_windows()
@@ -123,11 +197,12 @@ local function close_diff_windows()
 end
 
 local function open_diff()
-  if state.current_idx == 0 or state.current_idx > #state.files then
+  local file = get_file()
+
+  if not file then
     return
   end
 
-  local file = state.files[state.current_idx]
   local filepath = vim.fn.getcwd() .. "/" .. file.path
 
   close_diff_windows()
@@ -149,53 +224,41 @@ local function open_diff()
   setup_diff_keymaps(vim.api.nvim_get_current_buf())
 
   state.last_opened_file_idx = state.current_idx
+  state.last_opened_file_section = state.current_section
 end
 
 local function next_file()
-  if #state.files == 0 then
-    return
-  end
-
-  state.current_idx = state.current_idx + 1
-  if state.current_idx > #state.files then
-    state.current_idx = 1
-  end
-
+  update_current_idx(1)
   render()
   update_cursor_pos()
 end
 
 local function prev_file()
-  if #state.files == 0 then
-    return
-  end
-
-  state.current_idx = state.current_idx - 1
-  if state.current_idx < 1 then
-    state.current_idx = #state.files
-  end
-
+  update_current_idx(-1)
   render()
   update_cursor_pos()
 end
 
 --- @param to_stage boolean
---- @param idx number|nil File index (defaults to current)
-local function stage(to_stage, idx)
+--- @param idx number | nil File index (defaults to current)
+--- @param section Section? File section (defaults to current)
+local function stage(to_stage, idx, section)
   idx = idx or state.current_idx
-  if idx == 0 or idx > #state.files then
+  section = section or state.current_section
+
+  local file = get_file(idx, section)
+
+  if not file then
     return
   end
 
-  local file = state.files[idx]
-
-  if to_stage then
+  if to_stage and file.unstaged then
     git.stage_file(file.path, function(success, err)
       if not success then
         vim.notify("Failed to stage file: " .. (err or "unknown error"), vim.log.levels.ERROR)
         return
       end
-      refresh_one(idx, function()
+      refresh_one(idx, section, function()
         render()
         update_cursor_pos()
       end)
@@ -226,7 +289,7 @@ local function stage(to_stage, idx)
       vim.notify("Failed to unstage file: " .. (err or "unknown error"), vim.log.levels.ERROR)
       return
     end
-    refresh_one(idx, function()
+    refresh_one(idx, section, function()
       render()
       update_cursor_pos()
     end)
@@ -234,9 +297,9 @@ local function stage(to_stage, idx)
 end
 
 local function stage_from_buffer()
-  local file = state.files[state.last_opened_file_idx]
+  local file = get_file(state.last_opened_file_idx, state.last_opened_file_section)
 
-  if not file then
+  if not file or not file.unstaged then
     return
   end
 
@@ -246,7 +309,7 @@ local function stage_from_buffer()
       return
     end
 
-    refresh_one(state.last_opened_file_idx, function()
+    refresh_one(state.last_opened_file_idx, state.last_opened_file_section, function()
       render()
       next_file()
       open_diff()
@@ -255,9 +318,9 @@ local function stage_from_buffer()
 end
 
 local function unstage_from_buffer()
-  local file = state.files[state.last_opened_file_idx]
+  local file = get_file(state.last_opened_file_idx, state.last_opened_file_section)
 
-  if not file then
+  if not file or not file.staged then
     return
   end
 
@@ -275,7 +338,7 @@ local function unstage_from_buffer()
   end
 
   gitsigns.reset_buffer_index(function()
-    refresh_one(state.last_opened_file_idx, function()
+    refresh_one(state.last_opened_file_idx, state.last_opened_file_section, function()
       render()
     end)
   end)
@@ -288,14 +351,14 @@ local function toggle_hunk_staging()
     return
   end
 
-  local file = state.files[state.last_opened_file_idx]
+  local file = get_file(state.last_opened_file_idx, state.last_opened_file_section)
 
   if not file or file.change_types.deleted then
     return
   end
 
   gitsigns.stage_hunk(nil, nil, function()
-    refresh_one(state.last_opened_file_idx, function()
+    refresh_one(state.last_opened_file_idx, state.last_opened_file_section, function()
       render()
     end)
   end)
@@ -303,9 +366,11 @@ end
 
 -- TODO: Make it work for all types of files, and handle both staged and unstaged
 -- do not forget to provide a way to revert the restore
-local function restore_file(idx)
+local function restore_file(idx, section)
   idx = idx or state.current_idx
-  local file = state.files[idx]
+  section = section or state.current_section
+
+  local file = get_file(idx, section)
 
   if not file or file.staged or not file.change_types.deleted then
     return
@@ -317,7 +382,7 @@ local function restore_file(idx)
       return
     end
 
-    refresh_one(idx, function()
+    refresh_one(idx, section, function()
       vim.notify("File restored: " .. file.path, vim.log.levels.INFO)
 
       render()
@@ -409,7 +474,7 @@ function M.open()
   end
 
   refresh(function()
-    if #state.files == 0 then
+    if #state.staged_files == 0 and #state.unstaged_files == 0 then
       vim.notify("No changes to review", vim.log.levels.INFO, { title = "Review" })
       return
     end
@@ -436,10 +501,24 @@ function M.open()
     vim.wo[state.win].winfixwidth = true
     vim.wo[state.win].wrap = false
 
-    for idx, file in ipairs(state.files) do
+    -- reset current idx to match current file if possible
+    state.current_idx = 0
+
+    for i, file in ipairs(state.staged_files) do
       if file.path == current_file then
-        state.current_idx = idx
+        state.current_idx = i
+        state.current_section = "staged"
         break
+      end
+    end
+
+    if state.current_idx == 0 then
+      for i, file in ipairs(state.unstaged_files) do
+        if file.path == current_file then
+          state.current_idx = i
+          state.current_section = "unstaged"
+          break
+        end
       end
     end
 

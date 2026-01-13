@@ -95,7 +95,7 @@ return {
         { "<leader>ie", group = "IEx" },
         { "<leader>g",  group = "Git" },
         { "<leader>gb", group = "Git branch" },
-        { "<leader>gs", group = "Git stash" },
+        { "<leader>gst", group = "Git stash" },
         { "<leader>h",  group = "Hunks and Harpoon" },
         { "<leader>t",  group = "Tests and Tabs" },
         { "<leader>n",  group = "Neotest and Notifications" },
