@@ -79,7 +79,7 @@ local function update_cursor_pos()
   vim.api.nvim_win_set_cursor(state.win, { position, 0 })
 end
 
-local function update_current_idx(direction)
+local function move_idx(direction)
   direction = direction or 0
   local staged_len = #state.staged_files
   local unstaged_len = #state.unstaged_files
@@ -92,8 +92,6 @@ local function update_current_idx(direction)
     else
       return
     end
-
-    state.current_idx = 1
   end
 
   local section = state.current_section
@@ -101,6 +99,15 @@ local function update_current_idx(direction)
   local current_len = (section == "staged") and staged_len or unstaged_len
   local other_len = (section == "staged") and unstaged_len or staged_len
   local other_name = (section == "staged") and "unstaged" or "staged"
+
+  -- keep idx in current section if no movement
+  if direction == 0 then
+    if idx > current_len and current_len ~= 0 then
+      state.current_idx = current_len
+      state.current_section = section
+      return
+    end
+  end
 
   -- Wrap/switch sections
   if idx <= 0 then
@@ -121,6 +128,40 @@ local function update_current_idx(direction)
 
   state.current_idx = idx
   state.current_section = section
+end
+
+local function move_idx_to_top()
+  state.current_idx = 1
+
+  local section
+  if #state.unstaged_files > 0 then
+    section = "unstaged"
+  elseif #state.staged_files > 0 then
+    section = "staged"
+  end
+
+  state.current_section = section
+
+  render()
+  update_cursor_pos()
+end
+
+local function move_idx_to_bottom()
+  local idx = 1
+  local section = nil
+  if #state.staged_files > 0 then
+    idx = #state.staged_files
+    section = "staged"
+  elseif #state.unstaged_files > 0 then
+    idx = #state.unstaged_files
+    section = "unstaged"
+  end
+
+  state.current_idx = idx
+  state.current_section = section
+
+  render()
+  update_cursor_pos()
 end
 
 local function get_file(idx, section)
@@ -145,7 +186,7 @@ local function refresh(callback)
     state.staged_files = files.staged or {}
     state.unstaged_files = files.unstaged or {}
 
-    update_current_idx()
+    move_idx()
 
     if callback then
       callback()
@@ -228,120 +269,67 @@ local function open_diff()
 end
 
 local function next_file()
-  update_current_idx(1)
+  move_idx(1)
   render()
   update_cursor_pos()
 end
 
 local function prev_file()
-  update_current_idx(-1)
+  move_idx(-1)
   render()
   update_cursor_pos()
 end
 
 --- @param to_stage boolean
---- @param idx number | nil File index (defaults to current)
---- @param section Section? File section (defaults to current)
-local function stage(to_stage, idx, section)
-  idx = idx or state.current_idx
-  section = section or state.current_section
+--- @param opts? table
+--- @param callback function?
+local function stage(to_stage, opts, callback)
+  opts = vim.tbl_extend("force", { idx = state.current_idx, section = state.current_section }, opts or {})
+  local file = get_file(opts.idx, opts.section)
+  local paths = { opts["path"] or file["path"] }
+  local action = to_stage and git.stage or git.unstage
 
-  local file = get_file(idx, section)
+  if to_stage and not file.unstaged then
+    return
+  elseif not to_stage and not file.staged then
+    return
+  end
+
+  -- For renamed files, unstage both old and new paths
+  if not to_stage and file.change_types.renamed then
+    paths = vim.split(file.output, " -> ", { plain = true })
+  end
+
+  if #paths == 0 then
+    return
+  end
+
+  action(paths, function(success, err)
+    if not success then
+      local action_str = to_stage and "stage" or "unstage"
+      vim.notify(string.format("Failed to %s: %s ", action_str, err or "unknown error"), vim.log.levels.ERROR)
+      return
+    end
+
+    refresh(function()
+      render()
+      update_cursor_pos()
+
+      if callback then
+        callback()
+      end
+    end)
+  end)
+end
+
+local function stage_from_buffer(to_stage)
+  local file = get_file(state.last_opened_file_idx, state.last_opened_file_section)
 
   if not file then
     return
   end
 
-  if to_stage and file.unstaged then
-    git.stage_file(file.path, function(success, err)
-      if not success then
-        vim.notify("Failed to stage file: " .. (err or "unknown error"), vim.log.levels.ERROR)
-        return
-      end
-      refresh_one(idx, section, function()
-        render()
-        update_cursor_pos()
-      end)
-    end)
-
-    return
-  end
-
-  -- For renamed files, unstage both old and new paths
-  if file.change_types.renamed then
-    local paths = vim.split(file.output, "->")
-    git.unstage_renamed_file(paths[1], paths[2], function(success, err)
-      if not success then
-        vim.notify("Failed to unstage file: " .. (err or "unknown error"), vim.log.levels.ERROR)
-        return
-      end
-      refresh(function()
-        render()
-        update_cursor_pos()
-      end)
-    end)
-
-    return
-  end
-
-  git.unstage_file(file.path, function(success, err)
-    if not success then
-      vim.notify("Failed to unstage file: " .. (err or "unknown error"), vim.log.levels.ERROR)
-      return
-    end
-    refresh_one(idx, section, function()
-      render()
-      update_cursor_pos()
-    end)
-  end)
-end
-
-local function stage_from_buffer()
-  local file = get_file(state.last_opened_file_idx, state.last_opened_file_section)
-
-  if not file or not file.unstaged then
-    return
-  end
-
-  git.stage_file(file.path, function(success, err)
-    if not success then
-      vim.notify("Failed to stage file: " .. (err or "unknown error"), vim.log.levels.ERROR)
-      return
-    end
-
-    refresh_one(state.last_opened_file_idx, state.last_opened_file_section, function()
-      render()
-      next_file()
-      open_diff()
-    end)
-  end)
-end
-
-local function unstage_from_buffer()
-  local file = get_file(state.last_opened_file_idx, state.last_opened_file_section)
-
-  if not file or not file.staged then
-    return
-  end
-
-  local changes = file.change_types
-
-  if changes.deleted or changes.added or changes.renamed then
-    stage(false, state.last_opened_file_idx)
-    return
-  end
-
-  local ok, gitsigns = pcall(require, "gitsigns")
-  if not ok then
-    vim.notify("gitsigns.nvim is required for buffer reset", vim.log.levels.WARN)
-    return
-  end
-
-  gitsigns.reset_buffer_index(function()
-    refresh_one(state.last_opened_file_idx, state.last_opened_file_section, function()
-      render()
-    end)
-  end)
+  stage(to_stage, { idx = state.last_opened_file_idx, section = state.last_opened_file_section }, open_diff)
 end
 
 local function toggle_hunk_staging()
@@ -364,19 +352,18 @@ local function toggle_hunk_staging()
   end)
 end
 
--- TODO: Make it work for all types of files, and handle both staged and unstaged
--- do not forget to provide a way to revert the restore
-local function restore_file(idx, section)
+-- TODO: Provide a way to revert the discard
+local function discard_changes(idx, section)
   idx = idx or state.current_idx
   section = section or state.current_section
 
   local file = get_file(idx, section)
 
-  if not file or file.staged or not file.change_types.deleted then
+  if not file then
     return
   end
 
-  git.restore_file(file.path, function(success, err)
+  git.discard_changes(file, function(success, err)
     if not success then
       vim.notify("Failed to restore file: " .. (err or "unknown error"), vim.log.levels.ERROR)
       return
@@ -386,7 +373,12 @@ local function restore_file(idx, section)
       vim.notify("File restored: " .. file.path, vim.log.levels.INFO)
 
       render()
-      open_diff()
+      update_cursor_pos()
+
+      -- if the discarded file is currently opened in diff, open diff of a new file
+      if state.last_opened_file_idx == idx and state.last_opened_file_section == section then
+        open_diff()
+      end
     end)
   end)
 end
@@ -406,10 +398,14 @@ local function setup_menu_keymaps()
   vim.keymap.set("n", "<CR>", open_diff, opts)
   vim.keymap.set("n", "j", next_file, opts)
   vim.keymap.set("n", "k", prev_file, opts)
+  vim.keymap.set("n", "gg", move_idx_to_top, opts)
+  vim.keymap.set("n", "G", move_idx_to_bottom, opts)
   vim.keymap.set("n", "s", function() stage(true) end, opts)
+  vim.keymap.set("n", "S", function() stage(true, { path = "." }) end, opts)
   vim.keymap.set("n", "u", function() stage(false) end, opts)
+  vim.keymap.set("n", "U", function() stage(false, { path = "." }) end, opts)
   vim.keymap.set("n", "q", close, opts)
-  vim.keymap.set("n", "X", restore_file, opts)
+  vim.keymap.set("n", "X", discard_changes, opts)
   --stylua: ignore end
 end
 
@@ -430,12 +426,14 @@ setup_diff_keymaps = function(buf)
     end
   end, opts)
 
-  vim.keymap.set("n", "S", stage_from_buffer, opts)
+  -- stylua: ignore start
+  vim.keymap.set("n", "S", function() stage_from_buffer(true) end, opts)
   vim.keymap.set("n", "s", toggle_hunk_staging, opts)
-  vim.keymap.set("n", "R", unstage_from_buffer, opts)
+  vim.keymap.set("n", "R", function() stage_from_buffer(false) end, opts)
   vim.keymap.set("n", "X", function()
-    restore_file(state.last_opened_file_idx)
+    discard_changes(state.last_opened_file_idx, state.last_opened_file_section)
   end, opts)
+  -- stylua: ignore end
 
   for _, map_id in ipairs({ "]]", "[[", "S", "s", "R", "X" }) do
     table.insert(state.diff_keymaps, { map_id = map_id, buffer = buf })
@@ -520,6 +518,10 @@ function M.open()
           break
         end
       end
+    end
+
+    if state.current_idx == 0 then
+      state.current_idx = 1
     end
 
     render()

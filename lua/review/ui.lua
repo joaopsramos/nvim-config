@@ -12,7 +12,7 @@ local ICON_HIGHLIGHTS = {
 
 --- @param file FileEntry
 --- @return string Status, string Status
-local function get_file_icons(file)
+local function get_change_type_icon(file)
   local icons = config.opts.icons
   local x_icon = icons[file.x_icon] or " "
   local y_icon = icons[file.y_icon] or " "
@@ -20,12 +20,32 @@ local function get_file_icons(file)
   return x_icon, y_icon
 end
 
+local function get_file_icon(file)
+  local icon = { glyph = "", hl = "Normal" }
+  local ok, mini_icons = pcall(require, "mini.icons")
+  if not ok then
+    return icon
+  end
+
+  local filename = vim.fn.fnamemodify(file.path, ":t")
+  local glyph, hl = mini_icons.get("file", filename)
+
+  if not glyph then
+    return icon
+  end
+
+  icon.glyph = glyph .. " "
+  icon.hl = hl or "Normal"
+
+  return icon
+end
+
 --- @param file FileEntry
 --- @param section Section?
 --- @param lines table Lines buffer to append to
 --- @param highlights table Highlights buffer to append to
 local function render_file_line(file, section, lines, highlights)
-  local x_icon, y_icon = get_file_icons(file)
+  local x_icon, y_icon = get_change_type_icon(file)
 
   local status_icon, status_hl
   if file.staged and file.unstaged then
@@ -63,14 +83,16 @@ local function render_file_line(file, section, lines, highlights)
     dir = ""
   end
 
-  local section_icon = " "
+  local change_type_icon = " "
   if section == "staged" then
-    section_icon = x_icon
+    change_type_icon = x_icon
   elseif section == "unstaged" then
-    section_icon = y_icon
+    change_type_icon = y_icon
   end
 
-  local line = string.format(" %s %s %s %s", status_icon, section_icon, filename, dir)
+  local file_icon = get_file_icon(file)
+
+  local line = string.format(" %s%s %s%s %s", status_icon, change_type_icon, file_icon.glyph, filename, dir)
   table.insert(lines, line)
 
   local line_idx = #lines - 1
@@ -83,14 +105,22 @@ local function render_file_line(file, section, lines, highlights)
 
   -- Highlight status icon
   table.insert(highlights, { line = line_idx, col = current_col, end_col = current_col + #status_icon, hl = status_hl })
+  current_col = current_col + #status_icon
 
   -- Highlight section icon
-  current_col = current_col + #status_icon + 1
   table.insert(highlights, {
     line = line_idx,
     col = current_col,
-    end_col = current_col + #section_icon,
-    hl = ICON_HIGHLIGHTS[section_icon] or "Normal",
+    end_col = current_col + #change_type_icon,
+    hl = ICON_HIGHLIGHTS[change_type_icon] or "Normal",
+  })
+  current_col = current_col + #change_type_icon + 1
+
+  table.insert(highlights, {
+    line = line_idx,
+    col = current_col,
+    end_col = current_col + #file_icon.glyph,
+    hl = file_icon.hl,
   })
 end
 
@@ -109,14 +139,24 @@ function M.render(buf, unstaged_files, staged_files, current_idx, current_sectio
 
   table.insert(lines, " Git Review")
   table.insert(lines, "")
-  table.insert(highlights, { line = 0, col = 0, end_col = #lines[1], hl = "Title" })
+  table.insert(highlights, { line = 0, col = 1, end_col = #lines[1], hl = "Title" })
 
   if #unstaged_files == 0 and #staged_files == 0 then
     table.insert(lines, " No changes to review")
-    table.insert(highlights, { line = 2, col = 0, end_col = #lines[3], hl = "Comment" })
+    table.insert(highlights, { line = 2, col = 1, end_col = #lines[3], hl = "Comment" })
   else
     if #unstaged_files > 0 then
-      table.insert(lines, string.format(" Unstaged (%d)", #unstaged_files))
+      local title = "Unstaged"
+      local count = tostring(#unstaged_files)
+      local title_end_col = 1 + #title
+      table.insert(lines, string.format(" %s (%s)", title, count))
+      table.insert(highlights, { line = #lines - 1, col = 1, end_col = title_end_col, hl = "ReviewStatusTitle" })
+      table.insert(highlights, {
+        line = #lines - 1,
+        col = title_end_col + 2,
+        end_col = title_end_col + 2 + #count,
+        hl = "ReviewStatusCount",
+      })
 
       for i, file in ipairs(unstaged_files) do
         render_file_line(file, "unstaged", lines, highlights)
@@ -131,7 +171,17 @@ function M.render(buf, unstaged_files, staged_files, current_idx, current_sectio
     end
 
     if #staged_files > 0 then
-      table.insert(lines, string.format(" Staged (%d)", #staged_files))
+      local title = "Staged"
+      local count = tostring(#staged_files)
+      local title_end_col = 1 + #title
+      table.insert(lines, string.format(" %s (%s)", title, count))
+      table.insert(highlights, { line = #lines - 1, col = 1, end_col = title_end_col, hl = "ReviewStatusTitle" })
+      table.insert(highlights, {
+        line = #lines - 1,
+        col = title_end_col + 2,
+        end_col = title_end_col + 2 + #count,
+        hl = "ReviewStatusCount",
+      })
 
       for i, file in ipairs(staged_files) do
         render_file_line(file, "staged", lines, highlights)

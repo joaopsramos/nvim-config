@@ -115,11 +115,18 @@ function M.get_file_status(filepath, callback)
   end)
 end
 
---- @param filepath string
+--- @param paths string | string[]
 --- @param callback function|nil
-function M.stage_file(filepath, callback)
+function M.stage(paths, callback)
   callback = callback or function(_, _) end
-  vim.system({ "git", "add", filepath }, { text = true }, function(obj)
+
+  if type(paths) == "string" then
+    paths = { paths }
+  end
+
+  local cmd = { "git", "add", table.concat(paths, " ") }
+
+  vim.system(cmd, { text = true }, function(obj)
     vim.schedule(function()
       if obj.code ~= 0 then
         callback(false, obj.stderr or "Failed to stage file")
@@ -130,11 +137,18 @@ function M.stage_file(filepath, callback)
   end)
 end
 
---- @param filepath string
+--- @param paths string | string[]
 --- @param callback function|nil
-function M.unstage_file(filepath, callback)
+function M.unstage(paths, callback)
   callback = callback or function(_, _) end
-  vim.system({ "git", "restore", "--staged", filepath }, { text = true }, function(obj)
+
+  if type(paths) == "string" then
+    paths = { paths }
+  end
+
+  local cmd = { "git", "restore", "--staged", table.concat(paths, " ") }
+
+  vim.system(cmd, { text = true }, function(obj)
     vim.schedule(function()
       if obj.code ~= 0 then
         callback(false, obj.stderr or "Failed to unstage file")
@@ -145,27 +159,22 @@ function M.unstage_file(filepath, callback)
   end)
 end
 
---- @param old_path string
---- @param new_path string
+--- @param file FileEntry
 --- @param callback function|nil
-function M.unstage_renamed_file(old_path, new_path, callback)
+function M.discard_changes(file, callback)
   callback = callback or function(_, _) end
-  vim.system({ "git", "restore", "--staged", vim.trim(old_path), vim.trim(new_path) }, { text = true }, function(obj)
-    vim.schedule(function()
-      if obj.code ~= 0 then
-        callback(false, obj.stderr or "Failed to unstage renamed file")
-      else
-        callback(true, nil)
-      end
-    end)
-  end)
-end
 
---- @param filepath string
---- @param callback function|nil
-function M.restore_file(filepath, callback)
-  callback = callback or function(_, _) end
-  vim.system({ "git", "restore", vim.trim(filepath) }, { text = true }, function(obj)
+  if not file.change_types.deleted then
+    local confirm = vim.fn.confirm("Are you sure you want to discard changes to " .. file.path .. "?", "&Yes\n&No", 2)
+    if confirm ~= 1 then
+      callback(false, "Discard cancelled by user")
+      return
+    end
+  end
+
+  local cmd = { "git", "checkout", "@", "--", file.path }
+
+  vim.system(cmd, { text = true }, function(obj)
     vim.schedule(function()
       if obj.code ~= 0 then
         callback(false, obj.stderr or "Failed to restore file")

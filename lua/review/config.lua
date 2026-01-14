@@ -9,9 +9,9 @@ local M = {}
 M.defaults = {
   width = 40,
   icons = {
-    staged = "[x]",
-    unstaged = "[ ]",
-    staged_unstaged = "[-]",
+    staged = "[x] ",
+    unstaged = "[ ] ",
+    staged_unstaged = "[-] ",
     A = "A",
     M = "M",
     D = "D",
@@ -28,6 +28,8 @@ M.defaults = {
     ReviewDeleted = { fg = "#ED8796" },
     ReviewFileDir = { bg = "#8087A2" },
     ReviewLine = { bg = "#494D64" },
+    ReviewStatusTitle = { fg = "#C6A0F6" },
+    ReviewStatusCount = { fg = "#F5A97F" },
   },
 }
 
