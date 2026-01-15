@@ -2,8 +2,6 @@ return {
   "saghen/blink.cmp",
   dependencies = {
     "rafamadriz/friendly-snippets",
-
-    "Kaiser-Yang/blink-cmp-avante",
   },
   -- use a release tag to download pre-built binaries
   version = "1.*",
@@ -12,6 +10,25 @@ return {
   opts = {
     keymap = {
       preset = "super-tab",
+      keymap = {
+        ["<Tab>"] = {
+          function(cmp)
+            if cmp.snippet_active() then
+              return cmp.accept()
+            else
+              return cmp.select_and_accept()
+            end
+          end,
+          function() -- sidekick next edit suggestion
+            local ok, sidekick = pcall(require, "sidekick")
+            if ok then
+              sidekick.nes_jump_or_apply()
+            end
+          end,
+          "snippet_forward",
+          "fallback",
+        },
+      },
       ["<CR>"] = {
         function(cmp)
           if cmp.is_visible() then
@@ -28,7 +45,13 @@ return {
     completion = {
       keyword = { range = "full" },
       list = {
-        selection = { preselect = true, auto_insert = false },
+        selection = {
+          -- Do not preselect inside a snippet
+          preselect = function(ctx)
+            return not require("blink.cmp").snippet_active({ direction = 1 })
+          end,
+          auto_insert = false,
+        },
       },
       documentation = {
         auto_show = true,
@@ -52,7 +75,7 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { "lsp", "path", "snippets", "buffer", "avante" },
+      default = { "lsp", "path", "snippets", "buffer" },
       providers = {
         lsp = {
           async = true,
@@ -67,10 +90,6 @@ return {
           min_keyword_length = function()
             return vim.fn.getcmdtype() == "" and 4 or 0
           end,
-        },
-        avante = {
-          module = "blink-cmp-avante",
-          name = "Avante",
         },
       },
     },

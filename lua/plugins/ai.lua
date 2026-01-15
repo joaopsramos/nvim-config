@@ -19,7 +19,32 @@ return {
     },
   },
   {
+    "NickvanDyke/opencode.nvim",
+    dependencies = {
+      { "folke/snacks.nvim", opts = { input = {}, picker = {}, terminal = {} } },
+    },
+    config = function()
+      vim.g.opencode_opts = {
+        -- Your configuration, if any — see `lua/opencode/config.lua`, or "goto definition".
+      }
+
+      -- Required for `opts.events.reload`.
+      vim.o.autoread = true
+
+      -- stylua: ignore start
+      vim.keymap.set({ "n", "x" }, "<leader>oo", function() require("opencode").ask("@this: ", { submit = true }) end, { desc = "Ask opencode" })
+      vim.keymap.set({ "n", "x" }, "<leader>o?", function() require("opencode").select() end, { desc = "Execute opencode action…" })
+      vim.keymap.set({ "n", "t" }, "<C-.>", function() require("opencode").toggle() end, { desc = "Toggle opencode" })
+      vim.keymap.set({ "n", "x" }, "go", function() return require("opencode").operator("@this ") end, { expr = true, desc = "Add range to opencode" })
+      vim.keymap.set("n", "goo", function() return require("opencode").operator("@this ") .. "_" end, { expr = true, desc = "Add line to opencode" })
+      vim.keymap.set("n", "<AS-u>", function() require("opencode").command("session.half.page.up") end, { desc = "opencode half page up" })
+      vim.keymap.set("n", "<AS-d>", function() require("opencode").command("session.half.page.down") end, { desc = "opencode half page down" })
+      -- stylua: ignore end
+    end,
+  },
+  {
     "folke/sidekick.nvim",
+    event = "VeryLazy",
     opts = {
       nes = {
         enabled = true,
@@ -27,7 +52,7 @@ return {
       cli = {
         mux = {
           backend = "tmux",
-          enabled = true,
+          enabled = false,
         },
       },
     },
@@ -49,76 +74,6 @@ return {
         end,
         expr = true,
         desc = "Goto/Apply Next Edit Suggestion",
-      },
-    },
-  },
-  {
-    "yetone/avante.nvim",
-    build = "make",
-    event = "VeryLazy",
-    version = false, -- Never set this value to "*"! Never!
-    opts = {
-      selector = {
-        provider = "snacks",
-      },
-      instructions_file = "avante.md",
-      provider = "copilot",
-      providers = {
-        copilot = {
-          --   endpoint = "https://api.anthropic.com",
-          model = "gpt-4.1",
-          --   timeout = 30000, -- Timeout in milliseconds
-          --   extra_request_body = {
-          --     temperature = 0.75,
-          --     max_tokens = 20480,
-          --   },
-        },
-      },
-      mode = "legacy",
-      auto_suggestions_provider = false,
-      behaviour = {
-        auto_apply_diff_after_generation = true,
-      },
-      windows = {
-        edit = {
-          border = "rounded",
-        },
-      },
-    },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      --- The below dependencies are optional,
-      -- "hrsh7th/nvim-cmp", -- autocompletion for avante commands and mentions
-      "folke/snacks.nvim", -- for input provider snacks
-      -- "nvim-tree/nvim-web-devicons", -- or nvim-mini/mini.icons
-      "nvim-mini/mini.icons",
-      "zbirenbaum/copilot.lua", -- for providers='copilot'
-      {
-        -- support for image pasting
-        "HakonHarnes/img-clip.nvim",
-        event = "VeryLazy",
-        opts = {
-          -- recommended settings
-          default = {
-            verbose = false,
-            embed_image_as_base64 = false,
-            prompt_for_file_name = false,
-            drag_and_drop = {
-              insert_mode = true,
-            },
-            -- required for Windows users
-            use_absolute_path = true,
-          },
-        },
-      },
-      {
-        -- Make sure to set this up properly if you have lazy=true
-        "MeanderingProgrammer/render-markdown.nvim",
-        opts = {
-          file_types = { "markdown", "Avante" },
-        },
-        ft = { "markdown", "Avante" },
       },
     },
   },
