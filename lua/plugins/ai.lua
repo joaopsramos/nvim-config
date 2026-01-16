@@ -58,14 +58,6 @@ return {
     },
     keys = {
       {
-        "<c-.>",
-        function()
-          require("sidekick.cli").toggle()
-        end,
-        desc = "Sidekick Toggle",
-        mode = { "n", "t", "i", "x" },
-      },
-      {
         "<tab>",
         function()
           if not require("sidekick").nes_jump_or_apply() then
