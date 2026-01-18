@@ -197,7 +197,7 @@ return {
         },
       },
       windows = {
-        height = 0.35,
+        size = 0.35,
       },
       help = {
         border = "rounded",
