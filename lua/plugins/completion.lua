@@ -34,7 +34,7 @@ return {
           if cmp.is_visible() then
             local item = cmp.get_selected_item()
             local kind = vim.lsp.protocol.CompletionItemKind
-            if item and item.kind == kind.Snippet or item.kind == kind.Property then
+            if item and item.kind == kind.Snippet then
               return cmp.accept()
             end
           end
