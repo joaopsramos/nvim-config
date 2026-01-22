@@ -13,6 +13,7 @@ return {
     highlights = {
       Normal = { link = "Normal" },
     },
+    auto_scroll = false,
   },
   init = function()
     vim.api.nvim_create_autocmd("VimLeavePre", {
