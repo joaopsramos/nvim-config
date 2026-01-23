@@ -75,8 +75,8 @@ return {
     "nvim-treesitter/nvim-treesitter-textobjects",
     branch = "main",
     init = function()
-      -- (Not sure about it) doc recommends setting this to true, but it breaks jumps between do/end blocks
-      vim.g.no_plugin_maps = true
+      -- doc recommends setting this to true, but it breaks jumps between do/end blocks
+      -- vim.g.no_plugin_maps = true
     end,
     config = function()
       require("nvim-treesitter-textobjects").setup({
