@@ -73,7 +73,7 @@ map("n", "<leader>-", "<C-w>s", { desc = "Split window horizontally" })
 
 -- Terminal
 map("t", "<C-\\>", "<C-\\><C-n>")
-map("t", "<Esc>", "<C-\\><C-n>:close<CR>", { desc = "Close terminal" })
+-- map("t", "<Esc>", "<C-\\><C-n>:close<CR>", { desc = "Close terminal" })
 map("t", "<C-j>", "<C-\\><C-n><C-w>_")
 
 -- better up/down with line wrapped

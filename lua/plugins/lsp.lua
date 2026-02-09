@@ -28,7 +28,8 @@ return {
         ts_ls = {},
         emmet_language_server = {},
         omnisharp = {},
-        expert = {},
+        lexical = {},
+        terraform = { cmd = { get_ls_cmd("terraform-ls"), "serve" }, filetypes = { "terraform", "tf" } },
         ["rust-analyzer"] = { cmd = { get_ls_cmd("rust-analyzer") }, filetypes = { "rust" } },
         gopls = {
           settings = {
