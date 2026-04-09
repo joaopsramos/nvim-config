@@ -28,7 +28,12 @@ return {
         ts_ls = {},
         emmet_language_server = {},
         omnisharp = {},
-        lexical = {},
+        dexter = {
+          cmd = { "dexter", "lsp" },
+          root_markers = { ".dexter.db", ".git", "mix.exs" },
+          filetypes = { "elixir", "eelixir", "heex" },
+          init_options = { followDelegates = true },
+        },
         terraform = { cmd = { get_ls_cmd("terraform-ls"), "serve" }, filetypes = { "terraform", "tf" } },
         ["rust-analyzer"] = { cmd = { get_ls_cmd("rust-analyzer") }, filetypes = { "rust" } },
         gopls = {
